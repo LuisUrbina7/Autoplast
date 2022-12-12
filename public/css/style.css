@@ -1,0 +1,133 @@
+
+body{
+    background-color: #0d6efd0d;
+}
+body.thumb {
+ 
+    transform: scale(0.4);
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+}
+
+main {
+    min-height: 80vh;
+}
+
+[class*='container'] {
+    background-clip: content-box;
+}
+
+#fondo-encabezado{
+   
+    background: #0e3a9c;
+}
+.user-bg
+{
+   
+    background-color: #00d4ff;
+}
+#Autoplast{
+    font-weight: 700;
+}
+.responsive-btn{
+    background-color: #3bdeff;
+    color: #eee;
+}
+.nav-item {
+    background-color: #eeeeff;
+    background-clip: content-box;
+}
+.nav-menu li{
+    
+    width: 100%;
+}
+
+.nav-menu li a:hover{
+background-color: #7220fe;
+color: #eee;
+}
+.submenu {
+    background-color: #ffff;
+    color: #6e6e6ede;
+ }
+ .submenu a{
+    color: #6e6e6ede;
+ }
+
+ .submenu li a:hover{
+    background-color: #130231;
+ }
+
+
+/* ------------------- Pedidos----------*/
+.pedidos-pestañas{
+width: 33%;
+}
+/* ------------------- LOADER----------*/
+.contenedor-loader{
+    background-color: #F7F6FB;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        z-index: 99999;
+        transition: all 1.5s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        left: 0;
+        top: 0;
+    
+    }
+    
+    .loader,
+    .loader:before,
+    .loader:after{
+        border-radius: 50%;
+        width: 2.5em;
+        height: 2.5em;
+        animation: loader 1.5s infinite ease-in-out;
+    }
+    
+    .loader{
+        color:#7220fe;
+        font-size: 7px;
+        position: relative;
+        animation-delay: -0.16s;
+    }
+    .loader:before,
+    .loader:after{
+        content: '';
+        position:absolute;
+        top: 0;
+    }
+    
+    .loader:before{
+        left: -3.5em;
+        animation-delay: -0.32s;
+    }
+    .loader:after{
+        left: 3.5em;
+    }
+    
+    @keyframes loader{
+        0%,
+        80%,
+        100% {
+            box-shadow:0 2.5em 0 -1.3em;
+        }
+        40% {
+            box-shadow:0 2.5em 0 0;
+        }
+    
+    }
+
+.contenedor-direccion-indicador{
+padding: 0 10px;
+}
+
+.tb-detalles{
+    width: 50%;
+    }
+
+.tb-cc{
+        width: 8%;
+}
