@@ -6,13 +6,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap" rel="stylesheet">
-    <title>Document</title>
+
+    <title>Reporte</title>
     <style>
         * {
-            font-family: 'Open Sans', sans-serif;
+            font-family: sans-serif;
         }
 
         .tb-detalles {
@@ -145,12 +143,12 @@
 <body>
 
     <div class="invoice-box">
-        @foreach ($Compras as $factura)
+
         <table cellpadding="0" cellspacing="0">
             <tr>
                 <td class="w-25 text-center">
-                    <p><span class="h6"> NUMERO FACTURA :</span> <input type="text" size="10px" class="form-control" id="factura" value="{{$factura->id}}" id="idFactura"></p>
-                    @if ($factura->Estado=='Cancelada')
+                    <p><span class="h6"> NUMERO FACTURA :</span> <input type="text" size="10px" class="form-control" id="factura" value="{{$factura['id']}}" id="idFactura"></p>
+                    @if ($factura['Estado']=='Cancelada')
                     <span class="badge bg-secondary h4">CANCELADA</span>
                     @else
                     <span class="badge bg-warning h4">EN PROCESO</span>
@@ -177,17 +175,17 @@
         <div class="text-center">
             <h4>>>Detalles de la Compra realizada<< </h4>
         </div>
-        <table class="mt" cellpadding="0" cellspacing="0">
-            @foreach ($proveedors as $datos)
+        <table  cellpadding="0" cellspacing="0">
+            @foreach ($proveedores as $proveedor)
             <tr>
                 <td class="w-50 px-2 lh-2">
-                    <p><span class="bold"> Nomre :</span>{{$datos->Nombre}}</p>
-                    <p><span class="bold"> Direccion:</span>{{$datos->Direccion}}</p>
-                    <p><span class="bold"> Telefono :</span>{{$datos->Telefono}}</p>
+                    <p><span class="bold"> Nomre :</span>{{$proveedor->Nombre}}</p>
+                    <p><span class="bold"> Direccion:</span>{{$proveedor->Direccion}}</p>
+                    <p><span class="bold"> Telefono :</span>{{$proveedor->Telefono}}</p>
                 </td>
 
                 <td class="w-50 px-2 lh-2">
-                    <p><span class="bold"> Fecha :</span>{{$factura->Fecha}}</p>
+                    <p><span class="bold"> Fecha :</span>{{$factura['Fecha']}}</p>
                 </td>
             </tr>
             @endforeach
@@ -207,9 +205,9 @@
             </thead>
             <tbody id="tabla-cobranza">
 
-                @foreach ($detallesC as $detalle )
+                @foreach ($detalles as $detalle )
                 <tr>
-                <td> {{$detalle->Producto->Detalles}}</td>
+                    <td> {{$detalle->Producto->Detalles}}</td>
                     <td> {{$detalle->Cantidad}}</td>
                     <td> {{$detalle->Producto->Unidad}}</td>
                     <td> {{number_format($detalle->Precio,2)}}</td>
@@ -219,45 +217,44 @@
             </tbody>
 
             <tfoot>
-            @if ($factura->VendidoA==0)
-                
+                @if ($factura['VendidoA']==0)
+
                 <tr>
-                    <td colspan="2"></td>
+                    <td colspan="3"></td>
                     <td>Total :</td>
-                    <td>{{number_format($factura->VendidoB,2)}}</td>
+                    <td>{{number_format($factura['VendidoB'],2)}}</td>
                 </tr>
                 <tr>
-                    <td colspan="2"></td>
+                    <td colspan="3"></td>
                     <td>Pagado :</td>
-                    <td>{{number_format($factura->PagadoB,2)}}</td>
+                    <td>{{number_format($factura['PagadoB'],2)}}</td>
                 </tr>
                 <tr>
-                    <td colspan="2"></td>
+                    <td colspan="3"></td>
                     <td>Diferencia :</td>
-                    <td><input type="text" class="form-control" id="deuda" disabled value="{{number_format($factura->VendidoB-$factura->PagadoB,2)}}"></td>
+                    <td><input type="text" class="form-control" id="deuda" disabled value="{{number_format($factura['VendidoB']-$factura['PagadoB'],2)}}"></td>
                 </tr>
                 @else
                 <tr>
-                    <td colspan="2"></td>
+                    <td colspan="3"></td>
                     <td>Total :</td>
-                    <td>{{number_format($factura->VendidoA,2)}}</td>
+                    <td>{{number_format($factura['VendidoA'],2)}}</td>
                 </tr>
                 <tr>
-                    <td colspan="2"></td>
+                    <td colspan="3"></td>
                     <td>Pagado :</td>
-                    <td>{{number_format($factura->PagadoA,2)}}</td>
+                    <td>{{number_format($factura['PagadoA'],2)}}</td>
                 </tr>
                 <tr>
-                    <td colspan="2"></td>
-                    <td>Diferencia :</td>
-                    <td><input type="text" class="form-control" id="deuda" disabled  value="{{number_format($factura->VendidoA-$factura->PagadoA)}}"></td>
+                    <td colspan="3"></td>
+                    <td>Resta :</td>
+                    <td>{{number_format($factura['VendidoA']-$factura['PagadoA'],2)}}</td>
                 </tr>
-                    
+
                 @endif
-                
+
             </tfoot>
         </table>
-        @endforeach
 
         <div class="text-center" style="margin-top: 30px;">
             *Lorem ipsum dolor, sit amet consectetur adipisicing elit. Distinctio in quae laborum eligendi soluta hic quas reprehenderit molestiae facilis voluptatibus?*
@@ -267,7 +264,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+
 
 
 </body>

@@ -24,21 +24,19 @@
             <th>Zona</th>
             <th>Direccion</th>
             <th>Teléfono</th>
-            <th>Op</th>
+            <th>opciones</th>
         </tr>
     </thead>
     <tbody id="tabla-clientes">
     </tbody>
 </table>
 <!-- Modal -->
-<div class="modal fade" id="clientes-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="clientes-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Aztualizar</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h5 class="modal-title" id="exampleModalLabel">Actualizar</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="d-none">
@@ -93,9 +91,11 @@
                     </div>
                 </form>
             </div>
+
         </div>
     </div>
 </div>
+
 @endsection
 
 @section('js')
@@ -140,8 +140,8 @@
                     class: 'Telefono'
                 },
                 {
-                    data: 'Prueba',
-                    class: 'Prueba'
+                    data: 'opciones',
+                    class: 'opciones'
                 },
             ],
             "language": {
@@ -196,18 +196,24 @@
             url: 'clientes/actualizar/' + id,
             data: update,
             success: function(response) {
-                $('#clientes-modal').modal('hide');
                 $('#example').DataTable().ajax.reload();
+                cerrar_modal('#clientes-modal');
+                Swal.fire(
+                            'Excelente!',
+                            'Modificado correctamente.',
+                            'success',
+                        );
                 limpiar();
-            }, error: function(response) {
-                 console.log(response);
+            },
+            error: function(response) {
+                console.log(response);
                 Swal.fire(
                     'Error!',
                     'Algo ocurrió. ',
                     'error'
                 );
             }
-       });
+        });
 
     })
 
@@ -221,7 +227,8 @@
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Sí, borrar!'
+            confirmButtonText: 'Sí, borrar!',
+            cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
 
@@ -236,14 +243,15 @@
                             'success'
                         )
                         console.log(response.Mensaje);
-                    }, error: function(response) {
-                 console.log(response);
-                Swal.fire(
-                    'Error!',
-                    'Algo ocurrió. ',
-                    'error'
-                );
-            }
+                    },
+                    error: function(response) {
+                        console.log(response);
+                        Swal.fire(
+                            'Error!',
+                            'Algo ocurrió. ',
+                            'error'
+                        );
+                    }
                 });
             }
         });
@@ -258,6 +266,12 @@
         $('#txtAlias').val('');
         $('#txtDireccion').val('');
         $('#txtTelefono').val('');
+    }
+    function cerrar_modal(modal) {
+        $(modal).hide();
+        $('.modal-backdrop').remove();
+        $('body').css('padding-right', '');
+        $('body').removeClass('modal-open');
     }
 </script>
 @endsection

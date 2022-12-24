@@ -19,8 +19,7 @@
 <table id="example" class="table table-striped display nowrap" cellspacing="0" style="width:100%">
     <thead class="bg-danger text-light">
         <tr>
-            <th>Id</th>
-            <th>Codigo</th>
+            <th>#</th>
             <th>Detalles</th>
             <th>Stock</th>
             <th>Proveedor</th>
@@ -31,7 +30,6 @@
         @foreach ($datosM as $datos )
             <tr>
                 <td>{{$datos->id}}</td>
-                <td>{{$datos->Codigo}}</td>
                 <td>{{$datos->Detalles}}</td>
                 <td>{{$datos->Stock}}</td>
                 <td>{{$datos->Nombre}}</td>

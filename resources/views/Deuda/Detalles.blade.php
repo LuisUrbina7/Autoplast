@@ -78,34 +78,34 @@
             @if ($info->VendidoA==0)
                 
                 <tr>
-                    <td colspan="2"></td>
+                    <td colspan="3"></td>
                     <td>Total :</td>
                     <td>{{number_format($info->VendidoB,2)}}</td>
                 </tr>
                 <tr>
-                    <td colspan="2"></td>
+                    <td colspan="3"></td>
                     <td>Pagado :</td>
                     <td>{{number_format($info->PagadoB,2)}}</td>
                 </tr>
                 <tr>
-                    <td colspan="2"></td>
-                    <td>Diferencia :</td>
+                    <td colspan="3"></td>
+                    <td>Resta :</td>
                     <td><input type="text" class="form-control" id="deuda" disabled value="{{number_format($info->VendidoB-$info->PagadoB,2)}}"></td>
                 </tr>
                 @else
                 <tr>
-                    <td colspan="2"></td>
+                    <td colspan="3"></td>
                     <td>Total :</td>
                     <td>{{number_format($info->VendidoA,2)}}</td>
                 </tr>
                 <tr>
-                    <td colspan="2"></td>
+                    <td colspan="3"></td>
                     <td>Pagado :</td>
                     <td>{{number_format($info->PagadoA,2)}}</td>
                 </tr>
                 <tr>
-                    <td colspan="2"></td>
-                    <td>Diferencia :</td>
+                    <td colspan="3"></td>
+                    <td>Resta :</td>
                     <td><input type="text" class="form-control" id="deuda" disabled  value="{{number_format($info->VendidoA-$info->PagadoA)}}"></td>
                 </tr>
                     
@@ -206,7 +206,7 @@
 
                 var llenado = '';
                 $.each(response, (index, item) => {
-                    llenado += '<tr><td>' + index + '</td><td>' + item.Fecha + '</td><td>' + item.Monto.toLocaleString() + '</td></tr>';
+                    llenado += '<tr><td>' + (index+1) + '</td><td>' + item.Fecha + '</td><td>' + item.Monto.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td></tr>';
 
                 });
                 $('#table-body-deudas').append(llenado);

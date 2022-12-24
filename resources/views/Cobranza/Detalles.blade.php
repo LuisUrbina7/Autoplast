@@ -18,7 +18,7 @@
         <td> <span class="badge bg-warning h4">EN PROCESO</span></td>
         @endif
     </div>
-  
+
     <div class="col-12 col-md-8 d-md-flex">
         <div class="row">
             <div class="col-12 col-md-3 text-center">
@@ -50,70 +50,72 @@
     </div>
     <div class="col-12">
 
+        <div class="table-responsive">
 
-        <table class=" table table-hover table-bordered caption-top" cellspacing="0" style="width:100%">
-            <caption>Detalles..</caption>
-            <thead>
-                <tr>
-                    <th class="tb-detalles">Producto</th>
-                    <th class="tb-cc">Cantidad</th>
-                    <th class="tb-cc">Unidad</th>
-                    <th>Precio</th>
-                    <th>Total</th>
-                </tr>
-                </tr>
-            </thead>
-            <tbody id="tabla-cobranza">
+            <table class=" table table-hover table-bordered caption-top" cellspacing="0" style="width:100%">
+                <caption>Detalles..</caption>
+                <thead>
+                    <tr>
+                        <th class="tb-detalles">Producto</th>
+                        <th class="tb-cc">Cantidad</th>
+                        <th class="tb-cc">Unidad</th>
+                        <th>Precio</th>
+                        <th>Total</th>
+                    </tr>
+                    </tr>
+                </thead>
+                <tbody id="tabla-cobranza">
 
-                @foreach ($productos as $detalle )
-                <tr>
-                    <td> {{$detalle->Producto->Detalles}}</td>
-                    <td> {{$detalle->Cantidad}}</td>
-                    <td> {{$detalle->Producto->Unidad}}</td>
-                    <td> {{number_format($detalle->Precio,2)}}</td>
-                    <td> {{number_format($detalle->Total,2)}}</td>
-                </tr>
-                @endforeach
-            </tbody>
-            <tfoot>
+                    @foreach ($productos as $detalle )
+                    <tr>
+                        <td> {{$detalle->Producto->Detalles}}</td>
+                        <td> {{$detalle->Cantidad}}</td>
+                        <td> {{$detalle->Producto->Unidad}}</td>
+                        <td> {{number_format($detalle->Precio,2)}}</td>
+                        <td> {{number_format($detalle->Total,2)}}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+                <tfoot>
 
-            @if ($info->VendidoA==0)
-                
-            <tr>
-                <td colspan="2"></td>
-                <td>Total :</td>
-                <td>{{number_format($info->VendidoB,2)}}</td>
-            </tr>
-            <tr>
-                <td colspan="2"></td>
-                <td>Pagado :</td>
-                <td>{{number_format($info->PagadoB,2)}}</td>
-            </tr>
-            <tr>
-                <td colspan="2"></td>
-                <td>Diferencia :</td>
-                <td><input type="text" class="form-control" id="deuda" disabled value="{{number_format($info->VendidoB-$info->PagadoB,2)}}"></td>
-            </tr>
-            @else
-            <tr>
-                <td colspan="2"></td>
-                <td>Total :</td>
-                <td>{{number_format($info->VendidoA,2)}}</td>
-            </tr>
-            <tr>
-                <td colspan="2"></td>
-                <td>Pagado :</td>
-                <td>{{number_format($info->PagadoA,2)}}</td>
-            </tr>
-            <tr>
-                <td colspan="2"></td>
-                <td>Diferencia :</td>
-                <td><input type="text" class="form-control" id="deuda" disabled  value="{{number_format($info->VendidoA-$info->PagadoA)}}"></td>
-            </tr>
-                
-            @endif
-            </tfoot>
-        </table>
+                    @if ($info->VendidoA==0)
+
+                    <tr>
+                        <td colspan="3"></td>
+                        <td>Total :</td>
+                        <td>{{number_format($info->VendidoB,2)}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"></td>
+                        <td>Pagado :</td>
+                        <td>{{number_format($info->PagadoB,2)}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"></td>
+                        <td>Resta :</td>
+                        <td><input type="text" class="form-control" id="deuda" disabled value="{{number_format($info->VendidoB-$info->PagadoB,2)}}"></td>
+                    </tr>
+                    @else
+                    <tr>
+                        <td colspan="3"></td>
+                        <td>Total :</td>
+                        <td>{{number_format($info->VendidoA,2)}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"></td>
+                        <td>Pagado :</td>
+                        <td>{{number_format($info->PagadoA,2)}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"></td>
+                        <td>Resta:</td>
+                        <td><input type="text" class="form-control" id="deuda" disabled value="{{number_format($info->VendidoA-$info->PagadoA)}}"></td>
+                    </tr>
+
+                    @endif
+                </tfoot>
+            </table>
+        </div>
     </div>
     <div class="row justify-content-center">
         <div class="col-12 col-md-5 ">
@@ -124,10 +126,10 @@
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">Abonos</h5>
-                    <p class="card-text">Se observa el hstoral de abonos realzados</p>
+                    <p class="card-text">Se observa el historal de abonos realzados</p>
 
                     @if ($info->Estado == 'Credito')
-                        
+
                     <button type="button" class="btn btn-success" onclick="deuda()" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Agregar</button>
                     @endif
 
@@ -158,13 +160,13 @@
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-        
-                
+
+
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Agregar</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-           
+
             <div class="modal-body">
                 <form id="formulario-abono" method="POST" enctype="multipart/form-data" action="{{route('crear.abonos')}}">
                     @csrf
@@ -174,7 +176,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="recipient-name" class="col-form-label">Deuda:</label>
-                        <input type="number" readonly class="form-control" name="Deuda" id="txtDeuda" >
+                        <input type="number" readonly class="form-control" name="Deuda" id="txtDeuda">
                     </div>
                     <div class="mb-3">
                         <label for="message-text" class="col-form-label">Abono:</label>
@@ -214,7 +216,10 @@
 
                 var llenado = '';
                 $.each(response, (index, item) => {
-                    llenado += '<tr><td>' + index + '</td><td>' + item.Fecha + '</td><td>' + item.Monto.toFixed(2) + '</td></tr>';
+                    llenado += '<tr><td>' + (index + 1) + '</td><td>' + item.Fecha + '</td><td>' + item.Monto.toLocaleString('en-US', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }) + '</td></tr>';
 
                 });
                 $('#table-body-deudas').append(llenado);
@@ -227,8 +232,9 @@
             }
         });
     }
-    function deuda(){
-        var deuda =  parseFloat($('#deuda').val().replace(/,/g, ''), 10);
+
+    function deuda() {
+        var deuda = parseFloat($('#deuda').val().replace(/,/g, ''), 10);
         $('#txtDeuda').val(deuda);
 
     }

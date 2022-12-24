@@ -43,42 +43,45 @@
 @endif
 <div aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item active" aria-current="page">Clientes</li>
+        <li class="breadcrumb-item active" aria-current="page">Usuarios</li>
     </ol>
-    </div>
-<div class="row justify-content-center overflow-scroll">
-    <div class="col-md-12">
-        <table class="table" id="tabla">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Usuario</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Rol</th>
-                    <th scope="col">Opciones</th>
+</div>
+<div class="table-responsive">
+    <table class="table" id="tabla">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Usuario</th>
+                <th scope="col">Email</th>
+                <th scope="col">Rol</th>
+                <th scope="col">Opciones</th>
 
-                </tr>
-            </thead>
-            <tbody>
-             
-                @foreach ($Usuarios as $Usuario)
+            </tr>
+        </thead>
+        <tbody>
 
-                <tr>
-                    <th scope="row" class="id">{{$Usuario->id}}</th>
-                    <td class="name">{{$Usuario->name}}</td>
-                    <td class="username">{{$Usuario->username}}</td>
-                    <td class="email">{{$Usuario->email}}</td>
-                    <td class="rol">{{$Usuario->rol}}</td>
-                    <td><a class="btn btn-success"  id="editarr" data-bs-toggle="modal" data-bs-target="#exampleModal">Edtar</a>
-                        <a href="{{ route('borrar.usuario',$Usuario->id) }}" class="btn btn-danger">Borrar</a>
-                    </td>
-                </tr>
-                @endforeach
+            @foreach ($Usuarios as $Usuario)
 
-            </tbody>
-        </table>
-    </div>
+            <tr>
+                <th scope="row" class="id">{{$Usuario->id}}</th>
+                <td class="name">{{$Usuario->name}}</td>
+                <td class="username">{{$Usuario->username}}</td>
+                <td class="email">{{$Usuario->email}}</td>
+                <td class="rol">{{$Usuario->rol}}</td>
+                <td>
+                    <div class="btn-group">
+                        <a class="btn btn-success" id="editarr" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="las la-eye fs-4"></i></a>
+                        <a href="{{ route('borrar.usuario',$Usuario->id) }}" class="btn btn-danger"><i class="las la-trash-alt fs-4"></i></a>
+                    </div>
+
+                </td>
+            </tr>
+            @endforeach
+
+        </tbody>
+    </table>
+
 </div>
 
 
@@ -93,7 +96,7 @@
             <div class="modal-body">
                 <form method="POST" action="{{ route('usuario.actualizar') }}" enctype="multipart/form-data">
                     @csrf
-                    <input class="d-none" type="text" id="id" name="id">     
+                    <input class="d-none" type="text" id="id" name="id">
                     <div class="row mb-3">
                         <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Nombre') }}</label>
 
@@ -134,7 +137,7 @@
                             @enderror
                         </div>
                     </div>
-                   
+
 
                     <div class="row mb-3">
                         <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Rol') }}</label>
@@ -175,7 +178,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                         <button type="submit" class="btn btn-primary">Actualizar</button>
                     </div>
                 </form>
@@ -204,8 +207,5 @@
         $('#rol').val(datos['rol']);
         console.log(datos['id']);
     });
-
-
-  
 </script>
 @endsection

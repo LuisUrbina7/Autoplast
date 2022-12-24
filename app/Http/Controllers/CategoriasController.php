@@ -57,11 +57,11 @@ class CategoriasController extends Controller
     public function listar()
     {
         $datos = Categoria::all();
-        $Tabla = DataTables::of($datos)->addIndexColumn()->addColumn('Prueba', function($row){
-          $btn= '<a data-toggle="modal" data-target="#categorias-modal2" onclick="editar('.$row->id.')" class="btn btn-primary">ver</a>'; 
-          $btn .= '<buttom value="'.$row->id.'"  onclick="borrar('.$row->id.')" class="btn btn-danger" id="btnborrar">Borrar</buttom>'; 
+        $Tabla = DataTables::of($datos)->addIndexColumn()->addColumn('opciones', function($row){
+          $btn= '<div class="btn-group"> <buttom data-toggle="modal" data-target="#categorias-modal2" onclick="editar('.$row->id.')" class="btn btn-primary"><i class="las la-pencil-alt fs-4"></i></buttom>'; 
+          $btn .= '<buttom value="'.$row->id.'"  onclick="borrar('.$row->id.')" class="btn btn-danger" id="btnborrar"><i class="las la-broom fs-4"></i></buttom> </div>'; 
           return $btn;
-        })->rawColumns(['Prueba'])->toJson();
+        })->rawColumns(['opciones'])->toJson();
 
         return $Tabla;
         

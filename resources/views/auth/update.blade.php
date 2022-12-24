@@ -38,11 +38,11 @@
 <div class="row justify-content-center">
     <div class="col-md-8">
         <div class="card">
-            <div class="card-header ">{{ __('Actualizar') }} 
+            <div class="card-header d-flex justify-content-between">Actualizar
                 @if (Auth::user()->rol == 'adm')
-                <div class="  btn-group" role="group">
-
-                    <a href="{{ route('register') }}" class="btn btn-success">Agregar</a> <a href="{{ route('usuarios.lista') }}" class="btn btn-warning">Ver Usuarios</a>
+                <div class="btn-group" role="group">
+                    <a href="{{ route('register') }}" class="btn btn-success"><i class="las la-user-plus fs-4"></i></a> 
+                    <a href="{{ route('usuarios.lista') }}" class="btn btn-warning"><i class="las la-users fs-4"></i></a>
                 </div>
             @endif 
         </div>

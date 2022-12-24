@@ -3,8 +3,6 @@
 @section('css')
 
 <link rel="stylesheet" href="{{ asset('EasyAutocomplete/easy-autocomplete.min.css') }}">
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<meta name="csrf-token" content="{{ csrf_token() }}">
 <title>Proveedores</title>
 @endsection
 
@@ -12,13 +10,18 @@
 
 <div aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item active" aria-current="page">Peddos</li>
+        <li class="breadcrumb-item active" aria-current="page">Pedidos</li>
     </ol>
 </div>
 <div>
     @if ( session('success') )
     <div class="alert alert-success" role="alert">
         <strong>Felicidades!</strong> {{ session('success') }}
+    </div>
+    @endif
+    @if ( session('error') )
+    <div class="alert alert-danger" role="alert">
+        <strong>Error!</strong> {{ session('error') }}
     </div>
     @endif
     <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -48,8 +51,8 @@
                 </div>
                 <div class="text-center mb-3">
                     <div class="btn-group" role="group" aria-label="Basic example">
-                        <button type="button" class="btn btn-primary" onclick="buscarAll()">Buscar</button>
-                        <button type="button" class="btn btn-primary" onclick="Allpdf()">PDF</button>
+                        <button type="button" class="btn btn-primary" onclick="buscarAll()"><i class="las la-crosshairs fs-4"></i></button>
+                        <button type="button" class="btn btn-primary" onclick="Allpdf()"><i class="las la-file-pdf fs-4"></i></button>
                     </div>
                 </div>
             </div>
@@ -75,8 +78,8 @@
                 </div>
                 <div class="text-center">
                     <div class="btn-group" role="group" aria-label="Basic example">
-                        <button type="button" class="btn btn-primary" onclick="buscar()">Buscar</button>
-                        <button type="button" class="btn btn-primary" onclick="buscarPDF()">PDF</button>
+                        <button type="button" class="btn btn-primary" onclick="buscar()"><i class="las la-crosshairs fs-4"></i></button>
+                        <button type="button" class="btn btn-primary" onclick="buscarPDF()"><i class="las la-file-pdf fs-4"></i></button>
                     </div>
                 </div>
             </div>
@@ -108,20 +111,11 @@
         </div>
 
         <div class="tab-pane fade  justify-content-center px-md-5" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-            @if (!$Numero)
-            @php
-            $Factura=0;
-            @endphp
-            @else
-            @php
 
-            $Factura=$Numero;
-            @endphp
-            @endif
-            <form class="mt-3" action="{{route('pedidos.agregar')}}" method="POST" enctype="multipart/form-data">
+            <form class="mt-3 formulario-pedidos" action="{{route('pedidos.agregar')}}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="user" value="{{Auth::user()->id }}">
-                <input type="text" name="numero" value="{{$Factura+1 }}">
+                <input type="hidden" name="numero" value="{{$Numero['indice'] }}">
                 <input type="hidden" id="txtCodigo">
                 <div class="mb-3 row">
                     <label for="staticEmail" class="col-sm-2 col-form-label">Cliente</label>
@@ -135,75 +129,74 @@
                         <input type="date" class="form-control" id="Fecha" name="Fecha">
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-5 mb-3 ">
-                        <div class="input-group">
-                            <label for="txtDetalles">Descripcion</label>
-                            <input type="text" class="form-control form-control-sm" id="txtDetalles" placeholder="Nombre">
+                <div class="row g-2">
 
-                        </div>
+                    <div class="col-md-5 mb-3 ">
+                        <label for="txtDetalles">Descripcion</label>
+                        <input type="text" class="form-control w-100" id="txtDetalles" placeholder="Nombre">
                     </div>
+
                     <div class="col-md-2 mb-3">
                         <label for="txtcantidad">Cantidad</label>
-                        <input type="number" class="form-control form-control-sm" id="txtcantidad">
+                        <input type="number" class="form-control " id="txtcantidad">
                     </div>
                     <div class="col-md-2 mb-3">
                         <label for="txtPrecioVenta">Precio</label>
-                        <input type="text" class="form-control form-control-sm" id="txtPrecioVenta">
+                        <input type="number" class="form-control " id="txtPrecioVenta">
                     </div>
                     <div class="col-md-3 mb-3">
                         <label for="txtTotal">Total</label>
-                        <input type="numer" class="form-control form-control-sm" readonly id="txtTotal">
+                        <input type="numer" class="form-control " readonly id="txtTotal">
                     </div>
                     <div class="col-md-12 mb-3">
-                    <div>
+                        <div>
 
-                        <caption value="">Detalles de la venta</caption>
-                        <table class="table table-striped table-hover table-bordered">
-                            <thead>
-                                <tr>
-                                    <th class="h6">#</th>
-                                    <th class="h6 tb-detalles">Detalles</th>
-                                    <th class="h6 d-none">Codigo</th>
-                                    <th class="h6 tb-cc">Cantidad</th>
-                                    <th class="h6">Precio</th>
-                                    <th class="h6">Total</th>
-                                </tr>
-                            </thead>
-                            <tbody id="table-body">
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                   
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
+                            <caption value="">Detalles de la venta</caption>
+                            <table class="table table-striped table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th class="h6">#</th>
+                                        <th class="h6 tb-detalles">Detalles</th>
+                                        <th class="h6 d-none">Codigo</th>
+                                        <th class="h6 tb-cc">Cantidad</th>
+                                        <th class="h6">Precio</th>
+                                        <th class="h6">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-body">
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
                     </div>
                     <div class="col-12 ">
                         <div class="row mb-3 text-end justify-content-end">
                             <label for="inputEmail3" class="col-sm-2 col-form-label">Subtotal</label>
                             <div class="col-sm-3">
-                            <input type="text" readonly class="form-control" id="valor-suma" value="0">
+                                <input type="text" readonly class="form-control" id="valor-suma" value="0">
                             </div>
                         </div>
                         <div class="row mb-3 text-end justify-content-end">
                             <label for="inputEmail3" class="col-sm-2 col-form-label">%iva :</label>
                             <div class="col-sm-3">
-                            <input type="text" readonly class="form-control" id="valor-iva" value="0">
+                                <input type="text" readonly class="form-control" id="valor-iva" value="0">
                             </div>
                         </div>
                         <div class="row mb-3 text-end justify-content-end">
                             <label for="inputEmail3" class="col-sm-2 col-form-label">Total :</label>
                             <div class="col-sm-3">
-                            <input type="text" readonly class="form-control" id="valor-total" name="valor-total" value="0">
+                                <input type="text" readonly class="form-control" id="valor-total" name="valor-total" value="0">
                             </div>
                         </div>
                     </div>
                     <div class="col-md-12 mb-3 text-center">
                         <div class="btn-group">
-                            <button href="" class="btn-group btn btn-danger">Cancelar</button>
-                            <button type="submit" onclick="submit()" href="" class="btn-group btn btn-success">Guardar</button>
+                            <button class="btn-group btn btn-danger"><i class="las la-window-close fs-4"></i></button>
+                            <button   class="btn-group btn btn-success" onclick="submit()"><i class="lar la-check-square fs-4"></i></button>
                         </div>
                     </div>
                 </div>
@@ -216,7 +209,7 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="proveedores-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="proveedores-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -249,23 +242,20 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                        <button class="btn btn-primary" id="btnactualizar">Actualizar</button>
+                        <button type="button class="btn btn-primary" id="btnactualizar">Actualizar</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-</div>
+</div> -->
+
 @endsection
 
 @section('js')
-<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
-<script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+
 <script src="{{ asset('EasyAutocomplete/jquery.easy-autocomplete.min.js') }}"></script>
 <script>
-    var tasa = 1;
-
     var options = {
         url: function(phrase) {
             return "{{route('autocompletado')}}?nombre=" + phrase;
@@ -292,22 +282,31 @@
     var total = 0;
     var abono = 0;
     var deuda = 0;
+
+
     $(document).ready(function() {
-        $("form").submit(function(e) {
+        $(".formulario-pedidos").submit(function(e) {
             e.preventDefault();
             return false;
         });
         buscarAll();
+    });
 
-        $('#txtcantidad').keyup(function(e) {
-            e.preventDefault();
-            calculo(e);
-        });
-        $('#txtPrecioVenta').keyup(function(e) {
-            e.preventDefault();
-            calculo(e);
-        });
 
+    $('#txtcantidad').keyup(function(e) {
+        e.preventDefault();
+
+        if ($('#txtcantidad').val() != '' && $('#txtPrecioVenta').val() != '' &&  $("#txtDetalles").val() != '') {
+
+            calculo(e);
+        }
+    });
+    $('#txtPrecioVenta').keyup(function(e) {
+        e.preventDefault();
+        if ($('#txtcantidad').val() != '' && $('#txtPrecioVenta').val() != '' &&  $("#txtDetalles").val() != '') {
+
+            calculo(e);
+        }
     });
     $(document).on('click', '.tabla-borra', function(e) {
         Swal.fire({
@@ -338,8 +337,17 @@
 
     });
 
-    function submit() {
-        $("form").submit();
+    function submit(e) {
+        e.preventDefault();
+        if ($("input[name='Codigo[]']").val() == null) {
+            Swal.fire(
+                'Error !',
+                'Los Campos están vacios.',
+                'error'
+            );
+        } else {
+          /*   $("form").submit(); */
+        }
     }
 
     function calculo(event) {
@@ -372,7 +380,7 @@
 
         };
         let tabla = $('#table-body').html();
-        let llenado = '<tr><td><a class="btn btn-danger tabla-borra"><i class="fa fa-window-close-o" aria-hidden="true"></i></a></td><td><input type="text"  readonly class="form-control-plaintext " name="Detalles[]" value="' + datos.Detalles + '"></td><td class="d-none" ><input type="text" name="Codigo[]" readonly class="form-control-plaintext sumar-codigo " value="' + datos.Codigo + '"></td><td><input type="text" name="Cantidad[]" readonly class="form-control-plaintext monto-cantidad" value="' + datos.Cantidad + '"></td><td><input type="text" name="Precio[]" readonly class="form-control-plaintext" value="' + datos.PrecioVenta + '"></td><td><input type="text" name="Total[]" readonly class="form-control-plaintext monto-total" value="' + datos.txtTotal + '"></td></tr>';
+        let llenado = '<tr><td><a class="btn btn-danger tabla-borra"><i class="las la-trash fs-5"></i></a></td><td><input type="text"  readonly class="form-control-plaintext " name="Detalles[]" value="' + datos.Detalles + '"></td><td class="d-none" ><input type="text" name="Codigo[]" readonly class="form-control-plaintext sumar-codigo " value="' + datos.Codigo + '"></td><td><input type="text" name="Cantidad[]" readonly class="form-control-plaintext monto-cantidad" value="' + datos.Cantidad + '"></td><td><input type="text" name="Precio[]" readonly class="form-control-plaintext" value="' + datos.PrecioVenta + '"></td><td><input type="text" name="Total[]" readonly class="form-control-plaintext monto-total" value="' + datos.txtTotal + '"></td></tr>';
         $('#table-body').html(tabla + llenado);
     }
 
@@ -406,7 +414,9 @@
                     card += '   <div class="card mb-3" >\
                 <div class="row g-0">\
                     <div class="col-md-2 bg-' + cardEstado + '">\
-                        <img src="#" class="img-fluid rounded-start" alt="...">\
+                        <div class="d-flex justify-content-center align-items-center h-100">\
+                        <i class="las la-exclamation fs-1"></i>\
+                        </div>\
                     </div>\
                     <div class="col-md-8">\
                         <div class="card-body">\
@@ -416,7 +426,7 @@
                         </div>\
                     </div>\
                     <div class="col-md-2 d-flex justify-content-center align-items-center">\
-                        <a class="btn btn-warning " href="../public/pedidos/actualizar/' + item.id + '">Procesar</a>\
+                        <a class="btn btn-warning " href="../public/pedidos/actualizar/' + item.id + '"><i class="las la-external-link-alt fs-2"></i></a>\
                     </div>\
                 </div>\
             </div>';
@@ -478,14 +488,14 @@
                         tCantidad += item.Cantidad;
                         Costo += item.Total;
 
-                        contenido += '<tr><td>' + index + '</td><td>' + item.DetallesTem + '</td><td>' + item.Cantidad + '</td><td>' + item.Total + '</td><td><a href="../cobranza/zona/detalles/' + item.clientesid + '/' + item.id + '" class="btn btn-info text-white">ver</a></td></tr>';
+                        contenido += '<tr><td>' + index + '</td><td>' + item.DetallesTem + '</td><td>' + item.Cantidad + '</td><td>' + item.Total.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td><a href="../cobranza/zona/detalles/' + item.clientesid + '/' + item.id + '" class="btn btn-info text-white">ver</a></td></tr>';
 
                         console.log(contenido);
                     });
 
                     $('#tabla').html(contenido);
                     $('#tCantidad').text(tCantidad);
-                    $('#tCosto').text(Costo.toFixed(2))
+                    $('#tCosto').text(Costo.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}))
 
                 },
                 error: function(response) {
@@ -513,12 +523,12 @@
                         tCantidad += item.Cantidad;
                         Costo += item.Total;
 
-                        contenido += '<tr><td>' + index + '</td><td>' + item.DetallesTem + '</td><td>' + item.Cantidad + '</td><td>' + item.Total + '</td><td><a href="../cobranza/zona/detalles/' + item.clientesid + '/' + item.id + '" class="btn btn-info text-white">ver</a></td></tr>';
+                        contenido += '<tr><td>' + index + '</td><td>' + item.DetallesTem + '</td><td>' + item.Cantidad + '</td><td>' + item.Total.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td><a href="../cobranza/zona/detalles/' + item.clientesid + '/' + item.id + '" class="btn btn-info text-white">ver</a></td></tr>';
                     });
 
                     $('#tabla').html(contenido);
                     $('#tCantidad').text(tCantidad);
-                    $('#tCosto').text(Costo.toFixed(2))
+                    $('#tCosto').text(Costo.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}))
 
                 },
                 error: function(response) {

@@ -64,10 +64,10 @@
                         <td>{{$Factura->id}}</td>
                         <td>{{$Factura->Fecha}}</td>
                         <td>{{$Factura->Nombre}}</td>
-                        <td>{{number_format($Factura->VendidoA) }}</td>
-                        <td>{{number_format($Factura->PagadoA) }}</td>
-                        <td>{{number_format($Factura->VendidoB) }}</td>
-                        <td>{{number_format($Factura->PagadoB) }}</td>
+                        <td>{{number_format($Factura->VendidoA,2) }}</td>
+                        <td>{{number_format($Factura->PagadoA,2) }}</td>
+                        <td>{{number_format($Factura->VendidoB,2) }}</td>
+                        <td>{{number_format($Factura->PagadoB,2) }}</td>
                         <td>{{$Factura->Estado}}</td>
                      </tr>   
                     @endforeach

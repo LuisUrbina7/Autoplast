@@ -6,13 +6,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap" rel="stylesheet">
+
     <title>Document</title>
     <style>
         * {
-            font-family: 'Open Sans', sans-serif;
+            font-family:  sans-serif;
         }
 
         .tb-detalles {
@@ -145,12 +143,12 @@
 <body>
 
     <div class="invoice-box">
-        @foreach ($facturas as $factura)
+ 
         <table cellpadding="0" cellspacing="0">
             <tr>
                 <td class="w-25 text-center">
-                    <p><span class="h6"> NUMERO FACTURA :</span> <input type="text" size="10px" class="form-control" id="factura" value="{{$factura->id}}" id="idFactura"></p>
-                    @if (($factura->Estado)=='Cancelada')
+                    <p><span class="h6"> NUMERO FACTURA :</span> <input type="text" size="10px" class="form-control" id="factura" value="{{$factura['id']}}" id="idFactura"></p>
+                    @if (($factura['Estado'])=='Cancelada')
                     <span class="badge bg-secondary h4">CANCELADA</span>
                     @else
                     <span class="badge bg-warning h4">EN PROCESO</span>
@@ -174,25 +172,24 @@
                 </td>
             </tr>
         </table>
-        @foreach ($clientes as $datos)
+     
         <div class="text-center">
-            <h4> **Detalles de la venta realizada** ({{$datos->Zona}})</h4>
+            <h4> **Detalles de la venta realizada** ({{$cliente['Zona']}})</h4>
         </div>
         <table class="mt" cellpadding="0" cellspacing="0">
             <tr>
                 <td class="w-50 px-2 lh-2">
-                    <p><span class="bold"> Nomre :</span>{{$datos->Nombre}}</p>
-                    <p><span class="bold"> Apellido :</span>{{$datos->Apellido}}</p>
-                    <p><span> # :</span>{{$datos->Identificador}}</p>
+                    <p><span class="bold"> Nomre :</span>{{$cliente['Nombre']}}</p>
+                    <p><span class="bold"> Apellido :</span>{{$cliente['Apellido']}}</p>
+                    <p><span> # :</span>{{$cliente['Identificador']}}</p>
                 </td>
 
                 <td class="w-50 px-2 lh-2">
-                    <p><span class="bold"> Direccion:</span>{{$datos->Direccion}}</p>
-                    <p><span class="bold"> Telefono :</span>{{$datos->Telefono}}</p>
-                    <p><span class="bold"> Fecha :</span>{{$factura->Fecha}}</p>
+                    <p><span class="bold"> Direccion:</span>{{$cliente['Direccion']}}</p>
+                    <p><span class="bold"> Telefono :</span>{{$cliente['Telefono']}}</p>
+                    <p><span class="bold"> Fecha :</span>{{$factura['Fecha']}}</p>
                 </td>
             </tr>
-            @endforeach
         </table>
 
         <table class=" table table-hover table-bordered " cellspacing="0" style="width:100%">
@@ -220,38 +217,38 @@
                 @endforeach
             </tbody>
             <tfoot>
-            @if ($factura->VendidoA==0)
+            @if ($factura['VendidoA']==0)
                 
                 <tr>
-                    <td colspan="2"></td>
+                    <td colspan="3"></td>
                     <td>Total :</td>
-                    <td>{{number_format($factura->VendidoB,2)}}</td>
+                    <td>{{number_format($factura['VendidoB'],2)}}</td>
                 </tr>
                 <tr>
-                    <td colspan="2"></td>
+                    <td colspan="3"></td>
                     <td>Pagado :</td>
-                    <td>{{number_format($factura->PagadoB,2)}}</td>
+                    <td>{{number_format($factura['PagadoB'],2)}}</td>
                 </tr>
                 <tr>
-                    <td colspan="2"></td>
-                    <td>Diferencia :</td>
-                    <td><input type="text" class="form-control" id="deuda" disabled value="{{number_format($factura->VendidoB-$factura->PagadoB,2)}}"></td>
+                    <td colspan="3"></td>
+                    <td>Resta :</td>
+                    <td>{{number_format($factura['VendidoB']-$factura['PagadoB'],2)}}</td>
                 </tr>
                 @else
                 <tr>
-                    <td colspan="2"></td>
+                    <td colspan="3"></td>
                     <td>Total :</td>
-                    <td>{{number_format($factura->VendidoA,2)}}</td>
+                    <td>{{number_format($factura['VendidoA'],2)}}</td>
                 </tr>
                 <tr>
-                    <td colspan="2"></td>
+                    <td colspan="3"></td>
                     <td>Pagado :</td>
-                    <td>{{number_format($factura->PagadoA,2)}}</td>
+                    <td>{{number_format($factura['PagadoA'],2)}}</td>
                 </tr>
                 <tr>
-                    <td colspan="2"></td>
-                    <td>Diferencia :</td>
-                    <td><input type="text" class="form-control" id="deuda" disabled  value="{{number_format($factura->VendidoA-$factura->PagadoA)}}"></td>
+                    <td colspan="3"></td>
+                    <td>Resta :</td>
+                    <td>{{number_format($factura['VendidoA']-$factura['PagadoA'],2)}}</td>
                 </tr>
                     
                 @endif
@@ -263,8 +260,6 @@
             <hr class="w-50 bold">
         </div>
     </div>
-    
-    @endforeach
 </body>
 
 </html>

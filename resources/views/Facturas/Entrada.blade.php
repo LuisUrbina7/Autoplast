@@ -9,17 +9,10 @@
 
 @section('contenido')
 
-@if (!$Numero)
 @php
 $Fecha =date("Y-m-d");
-$Factura=0;
 @endphp
-@else
-@php
-$Fecha =date("Y-m-d");
-$Factura=$Numero;
-@endphp
-@endif
+
 <div>
     <h3>Compras...</h3>
 </div>
@@ -28,7 +21,7 @@ $Factura=$Numero;
         @csrf
         <div class="col-md-5 mb-3">
             <label for="txtProveedor">Proveedor</label>
-            <select class="form-select form-control-sm" id="txtProveedor" name="idProveedor" required>
+            <select class="form-select " id="txtProveedor" name="idProveedor" required>
                 <option selected value="0">--Proveedor genérico.--</option>
                 @foreach ($proveedores as $proveedor )
                 <option value="{{$proveedor->id}}">{{$proveedor->Nombre}}</option>
@@ -39,35 +32,35 @@ $Factura=$Numero;
             <label for="txtFecha">Fecha</label>
             <div class="input-group input-group-sm">
                 <div class="input-group-prepend">
-                    <span class="input-group-text" id="inputGroupPrepend2">1</span>
+                    <span class="input-group-text" ><i class="las la-calendar fs-4"></i></span>
                 </div>
-                <input type="date" class="form-control form-control-sm" id="txtFecha" name="Fecha" value="{{$Fecha}}">
+                <input type="date" class="form-control " id="txtFecha" name="Fecha" value="{{$Fecha}}">
             </div>
         </div>
         <div class="col-md-2 mb-3">
             <label for="txtFactura">Factura #:</label>
-            <input type="text" class="form-control " id="txtFactura" name="Factura" readonly value="{{$Factura + 1 }}">
+            <input type="text" class="form-control " id="txtFactura" name="Factura" readonly value="{{$Numero['indice'] }}">
 
         </div>
         <div class="col-md-5 mb-3 ">
             <label for="txtDetalles">Descripcion</label>
-            <input type="text" class="form-control form-control-sm" id="txtDetalles" placeholder="Nombre">
+            <input type="text" class="form-control" id="txtDetalles" placeholder="Nombre">
         </div>
         <div class="col-md-1 mb-3">
             <label for="txtStock">Stock</label>
-            <input type="text" class="form-control form-control-sm" readonly id="txtStock" placeholder="Stock">
+            <input type="text" class="form-control " readonly id="txtStock" placeholder="Stock">
         </div>
         <div class="col-md-2 mb-3">
             <label for="txtcantidad">Cantidad</label>
-            <input type="number" class="form-control form-control-sm" id="txtcantidad">
+            <input type="number" class="form-control " id="txtcantidad">
         </div>
         <div class="col-md-2 mb-3">
             <label for="txtPrecioVenta">Precio</label>
-            <input type="text" class="form-control form-control-sm" id="txtPrecio">
+            <input type="text" class="form-control " id="txtPrecio">
         </div>
         <div class="col-md-2 mb-3">
             <label for="txtTotal">Total</label>
-            <input type="numer" class="form-control form-control-sm" readonly id="txtTotal">
+            <input type="numer" class="form-control " readonly id="txtTotal">
         </div>
 
         <input type="hidden" class="form-control form-control-sm" name="idUsuario" value="{{Auth::user()->id }}">

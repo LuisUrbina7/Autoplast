@@ -41,10 +41,10 @@ class HomeController extends Controller
         ->select(DB::raw('sum(VendidoA) as TotalA,sum(VendidoB) as TotalB, Estado as estado'))
         ->groupBy('Estado')
         ->get();
-        $inventario = DB::table('productos')
-        ->select(DB::raw('sum(PrecioCompra*Stock) as Inventario'))
+      /*   dd($ventas); */
+        $inventario = Producto::select(DB::raw('sum(PrecioCompra*Stock) as Inventario'))
         ->get();
-      
+      /* dd($inventario); */
         return response()->json(['ventas'=>$ventas,'inventario'=>$inventario]);
     }
     public function grafico()

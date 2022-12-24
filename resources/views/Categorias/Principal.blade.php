@@ -10,10 +10,13 @@
 @endsection
 
 @section('contenido')
-<div class="row">
-    <div class="col-3">
-        <a data-toggle="modal" data-target="#categorias-modal1" class="btn btn-primary">Agregar</a>
+<div class="d-flex py-3 justify-content-between">
+    <div aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">Categorías </li>
+        </ol>
     </div>
+    <button data-toggle="modal" data-target="#categorias-modal1" class="btn btn-primary"><i class="las la-plus-circle fs-3"></i></button>
 </div>
 <table id="example" class="table table-striped display nowrap" cellspacing="0" style="width:100%">
     <thead>
@@ -27,21 +30,19 @@
     </tbody>
 </table>
 <!-- Modal Insertar-->
-<div class="modal fade" id="categorias-modal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="categorias-modal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Agregar</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="formulario-categorias" class="form-row">
                     <div class="row">
                         <div class="col-md-12 mb-3">
                             <label for="intCategoria">Nombre de la Categoria</label>
-                            <input type="text" class="form-control" id="intCategoria" placeholder="Nombre" name="Descripcion" required>
+                            <input type="text" class="form-control" id="nombre_categoria" placeholder="Nombre" name="Descripcion" required>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -54,15 +55,14 @@
     </div>
 </div>
 
+
 <!-- Modal Actualizar-->
-<div class="modal fade" id="categorias-modal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="categorias-modal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Actualizar</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="d-none">
@@ -84,6 +84,7 @@
         </div>
     </div>
 </div>
+
 @endsection
 
 @section('js')
@@ -99,8 +100,6 @@
         });
         $('#example').DataTable({
             responsive: true,
-            /*  processing:true,
-              serveSider:true,*/
             "ajax": "{{route('categorias-tabla')}}",
             "columns": [{
                     data: 'id',
@@ -109,7 +108,7 @@
                     data: 'Descripcion'
                 },
                 {
-                    data: 'Prueba'
+                    data: 'opciones'
                 },
 
             ],
@@ -126,13 +125,72 @@
 
                 },
             }
-
-
         });
-
     });
 </script>
 <script>
+    $('#btnguardar').on('click', function(e) {
+        e.preventDefault();
+        let datos = $('#formulario-categorias').serialize();
+
+        $.ajax({
+            type: 'POST',
+            url: 'categorias/agregar',
+            data: datos,
+            success: function(response) {
+                $('#intCategoria').val('');
+                $('#example').DataTable().ajax.reload();
+                cerrar_modal('#categorias-modal1');
+                Swal.fire(
+                    'Excelente!',
+                    'Modificado correctamente.',
+                    'success',
+                );
+
+            },
+            error: function(response) {
+                Swal.fire(
+                    'Ops!',
+                    'Ocurrió un error',
+                    'error',
+                );
+            }
+        });
+    })
+
+
+    $('#btnactualizar').on('click', function(e) {
+        e.preventDefault();
+        let id = $('#txtId').val();
+        let update = $('#formulario-categorias-editar').serialize();
+
+        console.log(id);
+        console.log(update);
+        $.ajax({
+            type: 'POST',
+            url: 'categorias/actualizar/' + id,
+            data: update,
+            success: function(response) {
+                console.log(response.Mensaje);
+                $('#example').DataTable().ajax.reload();
+                cerrar_modal('#categorias-modal2');
+                limpiar();
+                Swal.fire(
+                    'Excelente!',
+                    'Modificado correctamente.',
+                    'success',
+                );
+            },
+            error: function(response) {
+                Swal.fire(
+                    'Ops!',
+                    'Ocurrió un error',
+                    'error',
+                );
+            }
+        });
+    });
+
     function editar(d) {
         let id = d;
         $.ajax({
@@ -154,76 +212,8 @@
         });
     }
 
-
-    $('#btnguardar').on('click', function(ex) {
-
-        ex.preventDefault();
-        // let formurl = $('#formulario-categorias').attr('action');
-        let datos = $('#formulario-categorias').serialize();
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $.ajax({
-            type: 'POST',
-            url: 'categorias/agregar',
-            data: datos,
-            success: function(response) {
-                $('#intCategoria').val('');
-                $('intCategoria').focus();
-                $('#example').DataTable().ajax.reload();
-                console.log(response.Mensaje);
-
-            },
-            error: function(response) {
-                Swal.fire(
-                    'Ops!',
-                    'Ocurrió un error',
-                    'error',
-                );
-            }
-        });
-    })
-
-
-
-    $('#btnactualizar').on('click', function(e) {
-        e.preventDefault();
-        let id = $('#txtId').val();
-        let update = $('#formulario-categorias-editar').serialize();
-
-        console.log(id);
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        console.log(update);
-        $.ajax({
-            type: 'POST',
-            url: 'categorias/actualizar/' + id,
-            data: update,
-            success: function(response) {
-                console.log(response.Mensaje);
-                $('#example').DataTable().ajax.reload();
-                limpiar();
-            },
-            error: function(response) {
-                Swal.fire(
-                    'Ops!',
-                    'Ocurrió un error',
-                    'error',
-                );
-            }
-        });
-
-    })
-
-
-
-    function borrar(d) {
-        let id = d;
+    function borrar(e) {
+        let id = e;
         Swal.fire({
             title: 'Seguro?',
             text: "Borrar categorias !",
@@ -231,7 +221,8 @@
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Si, quiero hacerlo!'
+            confirmButtonText: 'Si, quiero hacerlo!',
+            cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
@@ -239,7 +230,12 @@
                     url: 'categorias/eliminar/' + id,
                     success: function(response) {
                         $('#example').DataTable().ajax.reload();
-                        console.log(response.Mensaje);
+                        Swal.fire(
+                            'Excelente!',
+                            'Borrado correctamente.',
+                            'success',
+                        );
+                        
                     },
                     error: function(response) {
                         Swal.fire(
@@ -250,13 +246,19 @@
                     }
                 });
             }
-        })
+        });
 
     }
 
     function limpiar() {
-        $('#actCategoria').val('');
+        $('#nombre_categoria').val('');
+    }
 
+    function cerrar_modal(modal) {
+        $(modal).hide();
+        $('.modal-backdrop').remove();
+        $('body').css('padding-right', '');
+        $('body').removeClass('modal-open');
     }
 </script>
 @endsection

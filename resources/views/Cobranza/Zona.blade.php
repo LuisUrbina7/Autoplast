@@ -14,38 +14,34 @@
     </ol>
 </div>
 
-<div class="d-flex justify-content-center px-md-5">
-    <ol class="list-group list-group-numbered">
-        <li class="list-group-item d-flex justify-content-between align-items-start">
-            <div class="ms-2 me-auto">
-                <div class="fw-bold">Panamericana</div>
-                Cras justo odio
+<div class="justify-content-center px-md-3">
+
+    <div class="row text-center">
+        <div class="col-md-6 border">
+            <div class="py-3">
+                <span class="text-muted">Ruta A</span>
+                <h2>Panamericana</h2>
+              
+                <a href="{{ route('cobranza.zona','Panamericana')}}" class="badge bg-primary rounded text-decoration-none">  <i class="las la-th-list fs-4 d-block"></i> Revisar</a>
             </div>
-            <a href="{{ route('cobranza.zona','Panamericana')}}" class="badge bg-primary rounded-pill">Revsar</a>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-start">
-            <div class="ms-2 me-auto">
-                <div class="fw-bold">Barinas</div>
-                Cras justo odio
+        </div>
+        <div class="col-md-6 border">
+            <div class="py-3">
+            <span class="text-muted">Ruta B</span>
+                <h3>Barinas</h3>
+           
+                <a href="{{ route('cobranza.zona','Barinas')}}" class="badge bg-primary rounded text-decoration-none">   <i class="las la-th-list fs-4 d-block"></i>Revisar</a>
             </div>
-            <a href="{{ route('cobranza.zona','Barinas')}}" class="badge bg-primary rounded-pill">Revsar</a>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-start">
-            <div class="ms-2 me-auto">
-                <div class="fw-bold">Otro</div>
-                Cras justo odio
-            </div>
-            <a href="" class="badge bg-primary rounded-pill">Revsar</a>
-        </li>
-    </ol>
+        </div>
+        <div class="col-md-12 border">
+        <div class="py-3">
+        <span class="text-muted">Ruta C</span>
+            <h3>Otro</h3>
+           
+            <a href="{{ route('cobranza.zona','Barinas')}}" class="badge bg-primary rounded text-decoration-none">  <i class="las la-th-list fs-4 d-block"></i>Revisar</a>
+        </div>
+        </div>
+    </div>
+
 </div>
-@endsection
-
-@section('js')
-
-
-
-<script>
-</script>
-
 @endsection

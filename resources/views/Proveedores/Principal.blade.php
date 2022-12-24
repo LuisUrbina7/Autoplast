@@ -5,7 +5,6 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css">
 <meta name="csrf-token" content="{{ csrf_token() }}">
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <title>Proveedores</title>
 @endsection
 
@@ -31,22 +30,18 @@
     </tbody>
 </table>
 
-<!-- Modal -->
-<div class="modal fade" id="proveedores-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<!-- Modal Actualizar -->
+<div class="modal fade" id="proveedores-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Actualizar</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="d-none">
-                    <input type="text" id="txtId" value="0">
-                </div>
-
                 <form id="formulario-proveedores-editar" class="form-row">
+                    @csrf
+                    <input type="hidden" id="txtId" value="0">
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="validationDefault01">Nombre</label>
@@ -54,7 +49,7 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="validationDefault04">Telefono</label>
-                            <input type="text" class="form-control" id="txtTelefono" placeholder="Telefono" name="Telefono" required>
+                            <input type="number" class="form-control" id="txtTelefono" placeholder="Telefono" name="Telefono" required>
                         </div>
                     </div>
                     <div class="row">
@@ -72,6 +67,7 @@
         </div>
     </div>
 </div>
+
 @endsection
 
 @section('js')
@@ -87,8 +83,6 @@
         });
         $('#example').DataTable({
             responsive: true,
-            /*  processing:true,
-              serveSider:true,*/
             "ajax": "{{route('proveedores-tabla')}}",
             "columns": [{
                     data: 'id',
@@ -119,8 +113,6 @@
 
                 },
             }
-
-
         });
 
     });
@@ -132,8 +124,8 @@
             type: 'GET',
             url: 'proveedores/modal/' + id,
             success: function(response) {
-                console.log(response);
-                console.log(response.Mensaje.Nombre);
+              /*   console.log(response);
+                console.log(response.Mensaje.Nombre); */
                 $('#txtId').val(id);
                 $('#txtNombre').val(response.Mensaje.Nombre);
                 $('#txtDireccion').val(response.Mensaje.Direccion);
@@ -147,13 +139,6 @@
         let id = $('#txtId').val();
         let update = $('#formulario-proveedores-editar').serialize();
 
-        console.log(id);
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
         $.ajax({
             type: 'POST',
             url: 'proveedores/actualizar/' + id,
@@ -161,6 +146,12 @@
             success: function(response) {
                 $('#example').DataTable().ajax.reload();
                 limpiar();
+                cerrar_modal('#proveedores-modal')
+                Swal.fire(
+                            'Excelente!',
+                            'Modificado correctamente.',
+                            'success',
+                        );
             },
             error: function(response) {
                 console.log(response);
@@ -178,16 +169,17 @@
         let id = d;
         Swal.fire({
             title: 'Seguro?',
-            text: "Borrar proveedores !",
+            text: "Borrar proveedor!",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Si, quiero hacerlo!'
+            confirmButtonText: 'Si, quiero hacerlo!',
+            cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    type: 'POST',
+                    type: 'GET',
                     url: 'proveedores/eliminar/' + id,
                     success: function(response) {
                         $('#example').DataTable().ajax.reload();
@@ -205,6 +197,13 @@
             }
         })
 
+    }
+
+    function cerrar_modal(modal) {
+        $(modal).hide();
+        $('.modal-backdrop').remove();
+        $('body').css('padding-right', '');
+        $('body').removeClass('modal-open');
     }
 
     function limpiar() {

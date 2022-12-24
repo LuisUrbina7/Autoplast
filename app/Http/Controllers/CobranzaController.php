@@ -30,6 +30,7 @@ class CobranzaController extends Controller
        
         return view('Cobranza.Facturas',compact('Factura'));
     }
+    
     public function destroy($id)
     {
         try {
@@ -50,7 +51,7 @@ class CobranzaController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'titulo' => 'Datos',
-                'Mensaje' => 'Error',
+                'Mensaje' => $e,
             ]);
         }
       
@@ -69,10 +70,10 @@ class CobranzaController extends Controller
     public function generarpdf($idCliente, $idFactura){
         
         $detalles = Detalles::where('idfactura',$idFactura)->get();
-        $clientes = Cliente::where('id',$idCliente)->get();
-        $facturas = Factura::where('id',$idFactura)->get();
+        $cliente = Cliente::where('id',$idCliente)->first();
+        $factura = Factura::where('id',$idFactura)->first();
      
-       $pdf = Pdf::loadView('Cobranza.Cobranzapdf',compact('facturas','clientes','detalles'));
+       $pdf = Pdf::loadView('Cobranza.Cobranzapdf',compact('factura','cliente','detalles'));
      /*   return view('Cobranza.Cobranzapdf',compact('facturas','clientes','detalles')); */
            return $pdf->stream('prueba.pdf');
       }

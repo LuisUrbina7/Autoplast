@@ -64,12 +64,12 @@ class DeudaController extends Controller
     public function generarpdf($idCliente, $idFactura)
     {
 
-        $detallesC = Detalles_compras::where('idfactura', $idFactura)->get();
-        $proveedors = Proveedor::where('id', $idCliente)->get();
-        $Compras = Compras::where('id', $idFactura)->get();
-
-        $pdf = Pdf::loadView('Deuda.Deudapdf', compact('Compras', 'proveedors', 'detallesC'));
-        /*   return view('Cobranza.Cobranzapdf',compact('facturas','clientes','detalles')); */
+        $detalles = Detalles_compras::select('idfactura','idProducto','Cantidad','Precio','Total')->where('idfactura', $idFactura)->get();
+        $proveedores = Proveedor::select('Nombre','Direccion','Telefono')->where('id', $idCliente)->get();
+        $factura = Compras::where('id', $idFactura)->first();
+/* dd($factura['id']); */
+        $pdf = Pdf::loadView('Deuda.Deudapdf', compact('factura', 'proveedores', 'detalles'));
+         /*  return view('Deuda.Deudapdf',compact('factura','proveedores','detalles')); */
         return $pdf->stream('Compras.pdf');
     }
 }

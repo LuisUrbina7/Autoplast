@@ -2,23 +2,16 @@
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('EasyAutocomplete/easy-autocomplete.min.css') }}">
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <title>Productos</title>
 @endsection
 
 @section('contenido')
-@if (!$Numero)
-@php
-$Factura=0;
-$Fecha =date("Y-m-d");
-@endphp
-@else
+
 @php
 $Fecha =date("Y-m-d");
-$Factura=$Numero;
 @endphp
-@endif
+
 
 <div>
     <h3 class="text-dark">Ventas</h3>
@@ -28,52 +21,52 @@ $Factura=$Numero;
         @csrf
         <div class="col-md-5 mb-3">
             <label for="txtCliente">Cliente</label>
-            <select class="form-select form-control-sm" id="txtCliente" name="idCliente" required>
+            <select class="form-select " id="txtCliente" name="idCliente" required>
                 <option selected value="0">--Cliente genérico.--</option>
                 @foreach ($Clientes as $cliente )
-                <option value="{{$cliente->id}}">{{$cliente->Nombre}}</option>
+                <option value="{{$cliente->id}}">{{$cliente->Nombre}} || {{$cliente->Identificador}}</option>
                 @endforeach
             </select>
         </div>
         <div class="col-md-5 mb-3">
             <label for="txtFecha">Fecha</label>
-            <div class="input-group input-group-sm">
+            <div class="input-group ">
                 <div class="input-group-prepend">
-                    <span class="input-group-text" id="inputGroupPrepend2">1</span>
+                    <span class="input-group-text" id="inputGroupPrepend2"><i class="las la-calendar fs-4"></i></span>
                 </div>
-                <input type="date" class="form-control form-control-sm" id="txtFecha" name="Fecha" value="{{$Fecha}}">
+                <input type="date" class="form-control " id="txtFecha" name="Fecha" value="{{$Fecha}}">
             </div>
         </div>
 
         <div class="col-md-2 mb-3">
             <label for="txtFactura">Factura #:</label>
-            <input type="text" class="form-control " id="txtFactura" name="Factura" readonly value="{{$Factura + 1 }}">
+            <input type="text" class="form-control " id="txtFactura" name="Factura" readonly value="{{$Numero['indice']}}">
 
         </div>
         <div class="col-md-5 mb-3 ">
             <label for="txtDetalles">Descripcion</label>
-            <input type="text" class="form-control form-control-sm" id="txtDetalles" placeholder="Nombre">
+            <input type="text" class="form-control" id="txtDetalles" placeholder="Nombre">
         </div>
         <div class="col-md-1 mb-3">
             <label for="txtStock">Stock</label>
-            <input type="text" class="form-control form-control-sm" readonly id="txtStock" placeholder="Stock">
+            <input type="text" class="form-control " readonly id="txtStock" placeholder="Stock">
         </div>
         <div class="col-md-2 mb-3">
             <label for="txtcantidad">Cantidad</label>
-            <input type="number" class="form-control form-control-sm" id="txtcantidad">
+            <input type="number" class="form-control " id="txtcantidad">
         </div>
         <div class="col-md-2 mb-3">
             <label for="txtPrecioVenta">Precio</label>
-            <input type="text" class="form-control form-control-sm" readonly id="txtPrecioVenta">
+            <input type="text" class="form-control " readonly id="txtPrecioVenta">
         </div>
         <div class="col-md-2 mb-3">
             <label for="txtTotal">Total</label>
-            <input type="numer" class="form-control form-control-sm" readonly id="txtTotal">
+            <input type="numer" class="form-control " readonly id="txtTotal">
         </div>
 
-        <input type="hidden" class="form-control form-control-sm" id="txtCodigo">
-        <input type="hidden" class="form-control form-control-sm" id="txtunidad">
-        <input type="hidden" class="form-control form-control-sm" name="idUsuario" value="{{Auth::user()->id }}">
+        <input type="hidden" class="form-control" id="txtCodigo">
+        <input type="hidden" class="form-control" id="txtunidad">
+        <input type="hidden" class="form-control" name="idUsuario" value="{{Auth::user()->id }}">
         <div class="col-6 text-center">
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="Estado" id="Debito" value="Debito" onclick="debito()" checked>
@@ -166,7 +159,6 @@ $Factura=$Numero;
 <script src="{{ asset('EasyAutocomplete/jquery.easy-autocomplete.min.js') }}"></script>
 <script>
     var tasa = 1;
-
     var options = {
         url: function(phrase) {
             return "{{route('autocompletado')}}?nombre=" + phrase;
@@ -249,11 +241,13 @@ $Factura=$Numero;
 
     $('#btn-submit').click(function(e) {
         e.preventDefault();
-
-        if ($('#Credito').is(':checked')) {
-            alert($('#Credito').val());
-            guardar();
-
+       
+        if ($("input[name='Codigo[]']").val() == null) {
+            Swal.fire(
+                'Error !',
+                'Los Campos están vacios.',
+                'error'
+            );
         } else {
             guardar();
         }
@@ -320,7 +314,7 @@ $Factura=$Numero;
         };
         console.log(datos.txtTotal);
         let tabla = $('#table-body').html();
-        let llenado = '<tr><td><a class="btn btn-danger tabla-borra"><i class="fa fa-window-close-o" aria-hidden="true"></i></a></td><td><input type="text"  readonly class="form-control-plaintext " value="' + datos.Detalles + '"></td><td class="d-none" ><input type="text" name="Codigo[]" readonly class="form-control-plaintext sumar-codigo " value="' + datos.Codigo + '"></td><td><input type="text" name="Cantidad[]" readonly class="form-control-plaintext monto-cantidad" value="' + datos.Cantidad + '"></td><td><input type="text" name="Unidad[]" readonly class="form-control-plaintext" value="' + datos.Unidad + '"></td><td><input type="text" name="Precio[]" readonly class="form-control-plaintext" value="' + datos.PrecioVenta + '"></td><td><input type="text" name="Total[]" readonly class="form-control-plaintext monto-total" value="' + datos.txtTotal + '"></td></tr>';
+        let llenado = '<tr><td><a class="btn btn-danger tabla-borra"><i class="las la-trash fs-5"></i></a></td><td><input type="text"  readonly class="form-control-plaintext " value="' + datos.Detalles + '"></td><td class="d-none" ><input type="text" name="Codigo[]" readonly class="form-control-plaintext sumar-codigo " value="' + datos.Codigo + '"></td><td><input type="text" name="Cantidad[]" readonly class="form-control-plaintext monto-cantidad" value="' + datos.Cantidad + '"></td><td><input type="text" name="Unidad[]" readonly class="form-control-plaintext" value="' + datos.Unidad + '"></td><td><input type="text" name="Precio[]" readonly class="form-control-plaintext" value="' + datos.PrecioVenta + '"></td><td><input type="text" name="Total[]" readonly class="form-control-plaintext monto-total" value="' + datos.txtTotal + '"></td></tr>';
         $('#table-body').html(tabla + llenado);
         limpiar();
     }
@@ -331,13 +325,15 @@ $Factura=$Numero;
         let url = $('#formulario-salida').attr('action');
         let datos = $('#formulario-salida').serialize();
 
+
+       
         $.ajax({
             type: 'POST',
             url: url,
             data: datos,
             dataType: 'json',
             success: function(response) {
-                console.log(response.Mensaje);
+                console.log(response);
                 Swal.fire(
                     'Guardado!',
                     'La factura ha sido cargada',
@@ -349,7 +345,7 @@ $Factura=$Numero;
                 limpiarTabla();
             },
             error: function(response) {
-                console.log(response.Mensaje);
+                console.log(response);
                 Swal.fire(
                     'Error!',
                     'Datos inválidos, inténtalo de nuevo',
@@ -447,24 +443,24 @@ $Factura=$Numero;
             vCantidad: Cantidad,
             vCodigo: Codigo
         };
-       
+
         if (Cantidad[0] >= 0) {
-        Swal.fire({
-            title: 'Seguro?',
-            text: "Borrar los detalles  regresará los productos !",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Si, quiero hacerlo!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-              
+            Swal.fire({
+                title: 'Seguro?',
+                text: "Borrar los detalles  regresará los productos !",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si, quiero hacerlo!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+
 
                     $.ajax({
                         type: 'POST',
@@ -483,11 +479,11 @@ $Factura=$Numero;
                             );
                         }
                     });
-             
-            }
-        })
 
-    }
+                }
+            })
+
+        }
     }
 
     function limpiar() {

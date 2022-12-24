@@ -18,7 +18,7 @@
 <table id="example" class="table table-striped display nowrap" cellspacing="0" style="width:100%">
     <thead class="bg-primary text-light">
         <tr>
-            <th>Codigo</th>
+            <th>#</th>
             <th>Detalles</th>
             <th>Stock</th>
             <th>Costo</th>
@@ -35,14 +35,12 @@
     </tbody>
 </table>
 <!-- Modal -->
-<div class="modal fade" id="productos-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="productos-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Aztualizar</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h5 class="modal-title" id="exampleModalLabel">Actualizar</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="d-none">
@@ -94,16 +92,20 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="idProveedor">Proveedor</label>
-                            <select class="form-select" aria-label="Default select example" id="txtProveedor" name="idProveedor" disabled>
-                                <option selected>Open this select menu</option>
+                            <select class="form-select" aria-label="Default select example" id="txtProveedor" name="idProveedor">
+                                @foreach ($Proveedores as $Proveedor )
+                                <option value="{{$Proveedor->id}}">{{$Proveedor->Nombre}}</option>
+                                @endforeach
 
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="idProveedor">Categoria</label>
-                            <select class="form-select" aria-label="Default select example" id="txtCategoria" name="idCategoria" disabled>
-                                <option selected>Open this select menu</option>
+                            <select class="form-select" aria-label="Default select example" id="txtCategoria" name="idCategoria">
 
+                                @foreach ($Categorias as $Categoria )
+                                <option value="{{$Categoria->id}}">{{$Categoria->Descripcion}}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -113,9 +115,12 @@
                     </div>
                 </form>
             </div>
+
         </div>
     </div>
 </div>
+
+
 @endsection
 
 @section('js')
@@ -131,8 +136,6 @@
         });
         $('#example').DataTable({
             responsive: true,
-            /*  processing:true,
-              serveSider:true,*/
             "ajax": "{{route('productos-tabla')}}",
             "columns": [{
                     data: 'id',
@@ -159,10 +162,11 @@
                     data: 'Descripcion'
                 },
                 {
-                    data: 'op'
+                    data: 'opciones'
                 },
             ],
             "language": {
+                
                 "lengthMenu": "Mostrar _MENU_ registros por página",
                 "zeroRecords": "No hay datos - Disculpa",
                 "info": "Página _PAGE_ de _PAGES_",
@@ -174,7 +178,7 @@
                     "previous": "Anterior"
 
                 },
-            }
+            },
 
 
         });
@@ -199,7 +203,7 @@
                 $('#txtProveedor').val(response.Mensaje.idProveedor);
                 $('#txtCategoria').val(response.Mensaje.idCategoria);
                 $('#idUnidad').val(response.Mensaje.Unidad);
-                
+
             },
             error: function(response) {
                 console.log(response);
@@ -218,7 +222,7 @@
         let update = $('#formulario-productos-editar').serialize();
 
         console.log(id);
-       
+
         $.ajax({
             type: 'POST',
             url: 'productos/actualizar/' + id,
@@ -226,11 +230,16 @@
             success: function(response) {
                 console.log(response);
                 $('#example').DataTable().ajax.reload();
-                $('#productos-modal').modal('hide');
+                cerrar_modal('#productos-modal');
+                Swal.fire(
+                            'Excelente!',
+                            'Modificado correctamente.',
+                            'success',
+                        );
                 limpiar();
             },
             error: function(response) {
-                 console.log(response);
+                console.log(response);
                 Swal.fire(
                     'Error!',
                     'Algo ocurrió. ',
@@ -241,27 +250,49 @@
 
     })
 
-
-
     function borrar(d) {
         let id = d;
-        $.ajax({
-            type: 'POST',
-            url: 'productos/eliminar/' + id,
-            success: function(response) {
-                $('#example').DataTable().ajax.reload();
-                console.log(response.Mensaje);
-            },
-            error: function(response) {
-                Swal.fire(
-                    'Error!',
-                    'Algo ocurrió. ',
-                    'error'
-                );
+
+        Swal.fire({
+            title: 'Éstas Seguro?',
+            text: "Se borrarán los datos.!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminar!',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: 'POST',
+                    url: 'productos/eliminar/' + id,
+                    success: function(response) {
+                        $('#example').DataTable().ajax.reload();
+                        Swal.fire(
+                            'Excelente!',
+                            'Se borraron con éxito.',
+                            'success'
+                        );
+                    },
+                    error: function(response) {
+                        Swal.fire(
+                            'Error!',
+                            'Algo ocurrió. ',
+                            'error'
+                        );
+                    }
+                });
             }
         });
-    }
 
+    }
+    function cerrar_modal(modal) {
+        $(modal).hide();
+        $('.modal-backdrop').remove();
+        $('body').css('padding-right', '');
+        $('body').removeClass('modal-open');
+    }
     function limpiar() {
         $('#txtNombre').val('');
         $('#txtApellido').val('');

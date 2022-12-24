@@ -14,8 +14,13 @@ class ComprasController extends Controller
     public function indexEntrada()
     {
         $proveedores = Proveedor::select('id', 'Nombre')->get();
-        $numFactura = Compras::select('id')->orderBy('id', 'desc')->first();
-        $Numero = $numFactura['id'];
+        $compra = Compras::select('id')->latest('id')->first();
+        $Numero = ['indice' => 1];
+
+        /*  dd($Factura); */
+        if ($compra) {
+            $Numero = ['indice' => $compra->id + 1];
+        }
         return view('Facturas.Entrada', compact('proveedores', 'Numero'));
     }
     public function createEntrada(Request $request)
@@ -107,19 +112,17 @@ class ComprasController extends Controller
             'Mensaje' => $update,
         ]);
     }
-    public function devolver(Request $request){
-        $Codigo =$request->input('vCodigo');
-        $Cantidad =$request->input('vCantidad');
-        
-        for($x=0;$x<count($Codigo);$x++){
+    public function devolver(Request $request)
+    {
+        $Codigo = $request->input('vCodigo');
+        $Cantidad = $request->input('vCantidad');
+
+        for ($x = 0; $x < count($Codigo); $x++) {
             $devolver = Producto::find($Codigo[$x]);
-            $devolver->Stock -=$Cantidad[$x]; 
+            $devolver->Stock -= $Cantidad[$x];
             $devolver->save();
         }
-        
-        return response()->json(['Estado'=>0,'Mensaje'=>$request->all()]);
-  
-        
-   
-}
+
+        return response()->json(['Estado' => 0, 'Mensaje' => $request->all()]);
+    }
 }

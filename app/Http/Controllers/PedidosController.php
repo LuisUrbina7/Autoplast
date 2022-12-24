@@ -16,10 +16,14 @@ class PedidosController extends Controller
 {
     public function index()
     {
+
         $Pedidos = Pedido::all();
-        $Pref = Pedido::select('id')->orderBy('id', 'desc')->first();
-        $Numero = $Pref['id'];
-        
+        $referencia = Pedido::select('id')->latest('id')->first();
+
+        $Numero = ['indice' => 1];
+        if ($referencia) {
+            $Numero = ['indice' => $referencia->id + 1];
+        }
         /*  dd($Numero); */
         return view('Pedidos.Principal', compact('Pedidos', 'Numero'));
     }
@@ -42,46 +46,39 @@ class PedidosController extends Controller
         $Codigo = $request->input('Codigo');
         $Estado = 'Espera';
 
+
         try {
-            try {
 
-                $pedido = [
-                    'Cliente' => $Cliente,
-                    'Fecha' => $Fecha,
-                    'Estado' => $Estado,
-                    'idUsuario' => $User
-                ];
+            $pedido = [
+                'Cliente' => $Cliente,
+                'Fecha' => $Fecha,
+                'Estado' => $Estado,
+                'idUsuario' => $User
+            ];
 
-                Pedido::create($pedido);
-            } catch (Exception $e) {
-                return redirect()->back()->with(['resultado' => 'Error en el Pedido']);
-            }
-
-            try {
-
-
-                for ($x = 0; $x < count($Detalles); $x++) {
-                    $detalle = [
-                        'idPedido' => $idPedido,
-                        'DetallesTem' => $Detalles[$x],
-                        'idProducto' => $Codigo[$x],
-                        'Cantidad' => $Cantidad[$x],
-                        'Precio' => $Precio[$x],
-                        'Total' => $TotalArt[$x],
-                        'Fecha' => $Fecha,
-                    ];
-
-                    PedidoDetalle::create($detalle);
-                }
-            } catch (Exception $e) {
-                return redirect()->back()->with(['resultado' => 'Error en los detalles']);
-            }
+            Pedido::create($pedido);
         } catch (Exception $e) {
-            return redirect()->back()->with(['resultado' => 'Error en Todo']);
+            return redirect()->back()->with(['error' => 'Error en el Pedido']);
         }
 
+        try {
 
+            for ($x = 0; $x < count($Detalles); $x++) {
+                $detalle = [
+                    'idPedido' => $idPedido,
+                    'DetallesTem' => $Detalles[$x],
+                    'idProducto' => $Codigo[$x],
+                    'Cantidad' => $Cantidad[$x],
+                    'Precio' => $Precio[$x],
+                    'Total' => $TotalArt[$x],
+                    'Fecha' => $Fecha,
+                ];
 
+                PedidoDetalle::create($detalle);
+            }
+        } catch (Exception $e) {
+            return redirect()->back()->with(['error' => 'Error en los detalles']);
+        }
 
         return redirect()->back()->with(['success' => 'Pedido agregado correctamente']);
     }
@@ -110,9 +107,9 @@ class PedidosController extends Controller
     public function buscarAll($Fecha1, $Fecha2)
     {
         if ($Fecha1 != 'fecha1' && $Fecha1 != 'fecha2') {
-            $data = Pedido::whereBetween('Fecha', [$Fecha1, $Fecha2])->orderBy('id','desc')->get();
+            $data = Pedido::whereBetween('Fecha', [$Fecha1, $Fecha2])->orderBy('id', 'desc')->get();
         } else {
-            $data = Pedido::orderBy('id','desc')->get();
+            $data = Pedido::orderBy('id', 'desc')->get();
         }
 
         return response()->json($data);
@@ -149,7 +146,7 @@ class PedidosController extends Controller
     {
         try {
             $borrarElemento = PedidoDetalle::find($id);
-              $borrarElemento->delete();
+            $borrarElemento->delete();
 
             return response()->json(['resultado' => 'Borrado correctamente.']);
         } catch (Exception $e) {
@@ -243,9 +240,9 @@ class PedidosController extends Controller
         }
     }
 
-    public function validarCantidad($refCantidad,$refCodigo){
+    public function validarCantidad($refCantidad, $refCodigo)
+    {
 
         /* $validar = Producto::select('id','Stock')->where($ref[$x],) */
-
     }
 }

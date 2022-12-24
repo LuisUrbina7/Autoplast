@@ -119,19 +119,19 @@
                         ventaB += item.VendidoB;
                         abonoB += item.PagadoB;
                         if (item.Estado == 'Cancelada') {
-                            contenido += '<tr><td>' + item.id + '</td><td>' + item.Fecha + '</td><td>' + item.Nombre + '</td><td>' + item.VendidoA + '</td><td>' + item.PagadoA + '</td><td>' + item.VendidoB + '</td><td>' + item.PagadoB + '</td><td ><p class="badge bg-secondary">' + item.Estado + '</p></td><td><a href="../cobranza/zona/detalles/' + item.clientesid + '/' + item.id + '" class="btn btn-info text-white">ver</a></td></tr>';
+                            contenido += '<tr><td>' + item.id + '</td><td>' + item.Fecha + '</td><td>' + item.Nombre + '</td><td>' + item.VendidoA .toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2})+ '</td><td>' + item.PagadoA.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td>' + item.VendidoB.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td>' + item.PagadoB.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td ><p class="badge bg-secondary">' + item.Estado + '</p></td><td><a href="../cobranza/zona/detalles/' + item.clientesid + '/' + item.id + '" class="btn btn-info text-white">ver</a></td></tr>';
                         } else {
-                            contenido += '<tr><td>' + item.id + '</td><td>' + item.Fecha + '</td><td>' + item.Nombre + '</td><td>' + item.VendidoA + '</td><td>' + item.PagadoA + '</td><td>' + item.VendidoB + '</td><td>' + item.PagadoB + '</td><td ><p class="badge bg-warning text-dark">' + item.Estado + '</p></td><td><a href="../cobranza/zona/detalles/' + item.clientesid + '/' + item.id + '" class="btn btn-info text-white">ver</a></td></tr>';
+                            contenido += '<tr><td>' + item.id + '</td><td>' + item.Fecha + '</td><td>' + item.Nombre + '</td><td>' + item.VendidoA.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td>' + item.PagadoA.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td>' + item.VendidoB.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td>' + item.PagadoB.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td ><p class="badge bg-warning text-dark">' + item.Estado + '</p></td><td><a href="../cobranza/zona/detalles/' + item.clientesid + '/' + item.id + '" class="btn btn-info text-white">ver</a></td></tr>';
                         }
 
                         console.log(contenido);
                     });
 
                     $('#tabla').html(contenido);
-                    $('#totalventa').text(ventaA.toFixed(2))
-                    $('#totalabono').text(abonoA.toFixed(2))
-                    $('#totalventaB').text(ventaB.toFixed(2))
-                    $('#totalabonoB').text(abonoB.toFixed(2))
+                    $('#totalventa').text(ventaA.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}))
+                    $('#totalabono').text(abonoA.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}))
+                    $('#totalventaB').text(ventaB.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}))
+                    $('#totalabonoB').text(abonoB.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}))
                 },
                 error: function(response) {
                     $('#spinner').removeClass('spinner-border');  
@@ -167,19 +167,19 @@
                         ventaB += item.VendidoB;
                         abonoB += item.PagadoB;
                         if (item.Estado == 'Cancelada') {
-                            contenido += '<tr><td>' + item.id + '</td><td>' + item.Fecha + '</td><td>' + item.Nombre + '</td><td>' + item.VendidoA + '</td><td>' + item.PagadoA + '</td><td>' + item.VendidoB + '</td><td>' + item.PagadoB + '</td><td ><p class="badge bg-secondary">' + item.Estado + '</p></td><td><a href="../cobranza/zona/detalles/' + item.clientesid + '/' + item.id + '" class="btn btn-info text-white">ver</a></td></tr>';
+                            contenido += '<tr><td>' + item.id + '</td><td>' + item.Fecha + '</td><td>' + item.Nombre + '</td><td>' + item.VendidoA.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td>' + item.PagadoA.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td>' + item.VendidoB.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td>' + item.PagadoB.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td ><p class="badge bg-secondary">' + item.Estado + '</p></td><td><a href="../cobranza/zona/detalles/' + item.clientesid + '/' + item.id + '" class="btn btn-info text-white">ver</a></td></tr>';
                         } else {
-                            contenido += '<tr><td>' + item.id + '</td><td>' + item.Fecha + '</td><td>' + item.Nombre + '</td><td>' + item.VendidoA + '</td><td>' + item.PagadoA + '</td><td>' + item.VendidoB + '</td><td>' + item.PagadoB + '</td><td ><p class="badge bg-warning text-dark">' + item.Estado + '</p></td><td><a href="../cobranza/zona/detalles/' + item.clientesid + '/' + item.id + '" class="btn btn-info text-white">ver</a></td></tr>';
+                            contenido += '<tr><td>' + item.id + '</td><td>' + item.Fecha + '</td><td>' + item.Nombre + '</td><td>' + item.VendidoA.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td>' + item.PagadoA.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td>' + item.VendidoB.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td>' + item.PagadoB.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td ><p class="badge bg-warning text-dark">' + item.Estado + '</p></td><td><a href="../cobranza/zona/detalles/' + item.clientesid + '/' + item.id + '" class="btn btn-info text-white">ver</a></td></tr>';
                         }
 
 
                     });
 
                     $('#tabla').html(contenido);
-                    $('#totalventa').text(ventaA.toFixed(2))
-                    $('#totalabono').text(abonoA.toFixed(2))
-                    $('#totalventaB').text(ventaB.toFixed(2))
-                    $('#totalabonoB').text(abonoB.toFixed(2))
+                    $('#totalventa').text(ventaA.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}))
+                    $('#totalabono').text(abonoA.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}))
+                    $('#totalventaB').text(ventaB.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}))
+                    $('#totalabonoB').text(abonoB.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}))
 
                 },
                 error: function(response) {

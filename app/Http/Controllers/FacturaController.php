@@ -15,9 +15,14 @@ class FacturaController extends Controller
 
     public function indexSalida()
     {
-        $Clientes = Cliente::select('id', 'Nombre')->get();
-        $NumeroFactura = Factura::select('id')->orderBy('id', 'desc')->first();
-        $Numero = $NumeroFactura['id'];
+        $Clientes = Cliente::select('id', 'Nombre','Identificador')->get();
+        $Factura = Factura::select('id')->latest('id')->first();
+        $Numero = ['indice' => 1];
+
+        /*  dd($Factura); */
+        if ($Factura) {
+            $Numero = ['indice' => $Factura->id + 1];
+        }
         return view('Facturas.Salida', compact('Clientes', 'Numero'));
     }
     public function createSalida(Request $request)
@@ -84,9 +89,10 @@ class FacturaController extends Controller
             }
 
             try {
+                $indice = Factura::select('id')->latest('id')->first()->toArray();
                 for ($x = 0; $x < count($Codigo); $x++) {
                     $detalles = [
-                        'idfactura' => $Factura,
+                        'idfactura' => $indice['id'],
                         'idProducto' => $Codigo[$x],
                         'Cantidad' => $Cantidad[$x],
                         'Precio' => str_replace(",", "", $Precio[$x]),
@@ -98,7 +104,7 @@ class FacturaController extends Controller
             } catch (Exception $e) {
                 return  response()->json([
                     'Estado' => 1,
-                    'Mensaje' => 'Algo mal en los detalles',
+                    'Mensaje' => $e,
                 ]);
             }
 
@@ -107,7 +113,7 @@ class FacturaController extends Controller
             }
             return  response()->json([
                 'Estado' => 1,
-                'Mensaje' => 'Todo ben',
+                'Mensaje' => 'Todo bien',
             ]);
         } catch (Exception $e) {
             return  response()->json([
@@ -125,7 +131,7 @@ class FacturaController extends Controller
         $Abonos->save();
     }
 
-   
+
     public function restar(Request $request, $id)
     {
         $update = Producto::where('id', $id)->first();
@@ -146,19 +152,18 @@ class FacturaController extends Controller
         return response()->json(['title' => 'Hola', 'Mensaje' => $datos]);
     }
 
-    public function devolver(Request $request){
-            $Codigo =$request->input('vCodigo');
-            $Cantidad =$request->input('vCantidad');
-       
-             for($x=0;$x<count($Codigo);$x++){
-             $devolver = Producto::find($Codigo[$x]);
-             $devolver->Stock +=$Cantidad[$x]; 
-             $devolver->save();
-           }
-             
-      
-             return response()->json(['Estado'=>0,'Mensaje'=>'Todo ben']);
-            
-       
+    public function devolver(Request $request)
+    {
+        $Codigo = $request->input('vCodigo');
+        $Cantidad = $request->input('vCantidad');
+
+        for ($x = 0; $x < count($Codigo); $x++) {
+            $devolver = Producto::find($Codigo[$x]);
+            $devolver->Stock += $Cantidad[$x];
+            $devolver->save();
+        }
+
+
+        return response()->json(['Estado' => 0, 'Mensaje' => 'Todo ben']);
     }
 }

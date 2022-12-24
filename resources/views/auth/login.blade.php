@@ -2,7 +2,7 @@
 
 @section('content')
 
-<main class="form-signin border rounded-3 p-3 bg-white ">
+<main class="form-signin border rounded-3 p-3 bg-white shadow">
     <form method="POST" action="{{ route('login') }}">
         @csrf
         <div>

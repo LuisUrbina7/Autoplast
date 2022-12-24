@@ -29,9 +29,15 @@
             </tr>
         </thead>
         <tbody id="tabla-cobranza">
+            @php 
+            $contador = 0;
+            @endphp
             @foreach ($datos as $cuentas)
+            @php 
+            $contador += 1;
+            @endphp
             <tr>
-                <td> {{$cuentas->id}}</td>
+                <td> {{$contador}}</td>
                 <td> {{$cuentas->Nombre}}</td>
                 <td> {{$cuentas->Identificador}}</td>
                 <td> {{number_format($cuentas->COL,2)}}</td>
@@ -43,11 +49,21 @@
                 @endif
 
 
-                <td> <a href="{{route('facturas.cobranza',[$cuentas->id])}}" class="btn btn-outline-info btn-sm rounded-5 " id="btneditar"><i class="fa fa-eye" aria-hidden="true"></i>
+                <td> <a href="{{route('facturas.cobranza',[$cuentas->id])}}" class="btn btn-outline-info btn-sm rounded-5 " id="btneditar"><i class="las la-list fs-4"></i>
                     </a>
                 </td>
                 @endforeach
         </tbody>
+        <tfoot class="bg-primary text-white">
+            <tr>
+                <td colspan="2"> Total : </td>
+                <td > </td>
+                <td > </td>
+                <td > </td>
+                <td > </td>
+                <td > </td>
+            </tr>
+        </tfoot>
     </table>
 @endsection
 
@@ -77,6 +93,42 @@
                     "previous": "Anterior"
 
                 },
+            },
+            "footerCallback": function(row, data, start, end, display) {
+
+                total_pesos = this.api()
+                    .column(3) //numero de columna a sumar
+                    //.column(1, {page: 'current'})//para sumar solo la pagina actual
+                    .data()
+                    .reduce(function(a, b) {
+                        if (typeof a === 'string') {
+                            a = a.replace(/[^\d.-]/g, '') * 1;
+                        }
+                        if (typeof b === 'string') {
+                            b = b.replace(/[^\d.-]/g, '') * 1;
+                        }
+
+                        return a + b;
+
+                    }, 0);
+                total_dolar = this.api()
+                    .column(4) 
+                    .data()
+                    .reduce(function(a, b) {
+                        if (typeof a === 'string') {
+                            a = a.replace(/[^\d.-]/g, '') * 1;
+                        }
+                        if (typeof b === 'string') {
+                            b = b.replace(/[^\d.-]/g, '') * 1;
+                        }
+
+                        return a + b;
+
+                    }, 0);
+
+                $(this.api().column(3).footer()).html(total_pesos.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}));
+                $(this.api().column(4).footer()).html(total_dolar.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}));
+
             }
         });
 

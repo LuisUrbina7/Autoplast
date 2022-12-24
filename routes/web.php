@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 Route::get('/nada', function () {
@@ -37,7 +37,7 @@ Route::get('/proveedores', [ProveedoresController::class,'index'])->name('provee
 Route::get('/proveedores/vista', [ProveedoresController::class,'view'])->name('agregar-proveedores-vista');
 Route::get('/proveedores/lista', [ProveedoresController::class,'listar'])->name('proveedores-tabla');
 Route::post('/proveedores/agregar', [ProveedoresController::class,'create'])->name('agregar-proveedores');
-Route::post('/proveedores/eliminar/{id}', [ProveedoresController::class,'destroy'])->name('eliminar-proveedores');
+Route::get('/proveedores/eliminar/{id}', [ProveedoresController::class,'destroy'])->name('eliminar-proveedores');
 Route::get('/proveedores/modal/{id}', [ProveedoresController::class,'edit'])->name('modal-proveedores');
 Route::post('/proveedores/actualizar/{id}', [ProveedoresController::class,'update'])->name('actualizar-proveedores');
 
@@ -62,7 +62,7 @@ Route::get('/cobranza', [CobranzaController::class ,'index'])->name('cobranza');
 Route::get('/cobranza/{zona}', [CobranzaController::class ,'zona'])->name('cobranza.zona');
 Route::get('/cobranza/zona/{id}', [CobranzaController::class,'show'])->name('facturas.cobranza');
 Route::get('/cobranza/zona/detalles/{idFactura}/{idCliente}', [CobranzaController::class,'buscarDetalles'])->name('detalles.cobranza');
-Route::post('/cobranza/eliminar/{id}', [CobranzaController::class,'destroy'])->name('eliminar-cobranza');
+Route::get('/cobranza/eliminar/{id}', [CobranzaController::class,'destroy'])->name('eliminar.cobranza');
 Route::get('/pdf/{idCliente}/{idFactura}', [CobranzaController::class ,'generarpdf'])->name('generarpdf');
 
 Route::get('/deuda', [DeudaController::class ,'index'])->name('deuda');
@@ -114,6 +114,6 @@ Route::get('/pedidos/actualizar/{id}', [PedidosController::class ,'vistaActualiz
 Route::get('/pedidos/elemento/borrar/{id}', [PedidosController::class ,'borrarElemento'])->name('pedidos.borrarElemento');
 Route::post('/pedidos/procesar', [PedidosController::class ,'procesar'])->name('pedidos.procesar');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/inicio', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/ventas', [App\Http\Controllers\HomeController::class, 'ventas'])->name('home.ventas');
 Route::get('/grafico', [App\Http\Controllers\HomeController::class, 'grafico'])->name('home.grafico');

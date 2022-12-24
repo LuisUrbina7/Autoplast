@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Proveedor;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
@@ -27,23 +28,25 @@ class ProveedoresController extends Controller
     public function create(Request $request)
     {
         $validado = Validator::make($request->all(), [
-            'Nombre' => 'unique:proveedores|required',
-            'Direccion' => 'required',
-            'Telefono' => 'required',
+            'Nombre' => 'unique:proveedores'
         ]);
 
         if ($validado->fails()) {
-            return response()->json($validado->errors(), 422);
+            /* dd($validado->errors()); */
+            return redirect()->back()->withErrors($validado->errors());
         } else {
-            $data = new Proveedor;
-            $data->Nombre = $request->input('Nombre');
-            $data->Direccion = $request->input('Direccion');
-            $data->Telefono = $request->input('Telefono');
-            $data->save();
-            return response()->json([
-                'titulo' => 'Datos',
-                'Mensaje' => $data,
-            ]);
+
+            try {
+
+                $data = new Proveedor;
+                $data->Nombre = $request->input('Nombre');
+                $data->Direccion = $request->input('Direccion');
+                $data->Telefono = $request->input('Telefono');
+                $data->save();
+                return redirect()->back()->with(['Excelente' => 'Datos guardado con éxito.']);
+            } catch (Exception $e) {
+                return redirect()->back()->with(['Error' => 'Algo ocurrió, inténato más tarde.']);
+            }
         }
     }
     /**
@@ -56,8 +59,8 @@ class ProveedoresController extends Controller
     {
         $datos = Proveedor::all();
         $Tabla = DataTables::of($datos)->addIndexColumn()->addColumn('Prueba', function ($row) {
-            $btn = '<a data-toggle="modal" data-target="#proveedores-modal" onclick="editar(' . $row->id . ')" class="btn btn-primary">ver</a>';
-            $btn .= '<buttom value="' . $row->id . '"  onclick="borrar(' . $row->id . ')" class="btn btn-danger" id="btnborrar">Borrar</buttom>';
+            $btn = '<div class="btn-group"> <buttom data-toggle="modal" data-target="#proveedores-modal" onclick="editar(' . $row->id . ')" class="btn btn-primary"><i class="las la-pencil-alt fs-4"></i></buttom>';
+            $btn .= '<buttom value="' . $row->id . '"  onclick="borrar(' . $row->id . ')" class="btn btn-danger" id="btnborrar"><i class="las la-broom fs-4"></i></buttom> </div>';
             return $btn;
         })->rawColumns(['Prueba'])->toJson();
 

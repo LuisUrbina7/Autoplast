@@ -10,6 +10,11 @@
 @endsection
 
 @section('contenido')
+<div aria-label="breadcrumb">
+    <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{route('deuda')}}">Deudas</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Facturas</li>
+</div>
 
 <div>
     <table id="example" class="table table-striped display nowrap" cellspacing="0" style="width:100%">
@@ -27,7 +32,7 @@
         <tbody id="tabla-cobranza">
             @foreach ($Factura as $factura )
             <tr>
-                <td>00{{$factura->id}}</td>
+                <td>{{$factura->id}}</td>
                 <td> {{$factura->Fecha}}</td>
                 <td> {{number_format ($factura->VendidoA,2)}}</td>
                 <td> {{number_format ($factura->VendidoB,2)}}</td>
@@ -39,9 +44,9 @@
 
                 <td> <div class="btn-group">
 
-                    <a href="{{route('eliminar.deuda',[$factura->id])}}" class="btn-group btn btn-danger" value="{{$factura->id}}" id="btnborrar">Borrar</a>
-                    <a href="{{route('detalles.deuda',[$factura->idProveedor,$factura->id])}}" class="btn btn-info btn-group" value="{{$factura->id}}" id="btnver">Ver</a>
-                    <a href="{{route('deuda.generarpdf',[$factura->idProveedor,$factura->id])}}" class="btn btn-warning btn-group" value="{{$factura->id}}" target="_blank" id="btnver">Ver</a>
+                    <a href="{{route('detalles.deuda',[$factura->idProveedor,$factura->id])}}" class="btn btn-info btn-group" value="{{$factura->id}}" id="btnver"><i class="las la-eye fs-4"></i></a>
+                    <a href="{{route('deuda.generarpdf',[$factura->idProveedor,$factura->id])}}" class="btn btn-warning btn-group" value="{{$factura->id}}" target="_blank" id="btnver"><i class="las la-file-pdf fs-4"></i></a>
+                    <a href="{{route('eliminar.deuda',[$factura->id])}}" class="btn-group btn btn-danger" value="{{$factura->id}}" id="btnborrar"><i class="las la-trash-alt fs-4"></i></a>
                 </div>
                 </td>
             </tr>
@@ -49,7 +54,9 @@
         </tbody>
     </table>
 </div>
-< @endsection @section('js') <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js">
+ @endsection 
+ @section('js') 
+ <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js">
     </script>
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
