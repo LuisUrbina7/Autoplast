@@ -167,7 +167,7 @@
         const myChart = new Chart(ctx, {
             type: 'doughnut',
             data: {
-                labels: ['Inventario', 'CobranzaCOL', 'CobranzaUSD'],
+                labels: ['Inventario', 'Cobranza en COL'],
                 datasets: [{
                     data: capital,
                     backgroundColor: [

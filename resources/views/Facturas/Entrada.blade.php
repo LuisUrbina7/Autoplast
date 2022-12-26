@@ -198,10 +198,11 @@ $Fecha =date("Y-m-d");
             $('#txtTotal').val(pxc.toFixed(2));
 
             if (e.key == 'Enter') {
-                if ($('#txtCodigo').val() == '') {
+                alert(precio);
+                 if ($('#txtDetalles').val() == '' || parseInt( $('#txtTotal').val()) == 0) {
                     Swal.fire(
                         'Error!',
-                        'No existe el producto!',
+                        'Revisa los datos.!',
                         'warning'
                     );
                 } else {
@@ -215,7 +216,7 @@ $Fecha =date("Y-m-d");
                     $('#txtcantidad').val(0);
                     $(this).val(0);
 
-                }
+                } 
             };
         });
 
@@ -292,7 +293,7 @@ $Fecha =date("Y-m-d");
 
         };
         let tabla = $('#table-body').html();
-        let llenado = '<tr><td><a class="btn btn-danger tabla-borra"><i class="fa fa-window-close-o" aria-hidden="true"></i></a></td><td><input type="text"  readonly class="form-control-plaintext " value="' + datos.Detalles + '"></td><td class="d-none" ><input type="text" name="Codigo[]" readonly class="form-control-plaintext sumar-codigo " value="' + datos.Codigo + '"></td><td><input type="text" name="Cantidad[]" readonly class="form-control-plaintext monto-cantidad" value="' + datos.Cantidad + '"></td><td><input type="text" readonly class="form-control-plaintext monto-cantidad" value="' + datos.Unidad + '"></td><td><input type="text" name="Precio[]" readonly class="form-control-plaintext" value="' + datos.Precio + '"></td><td><input type="text" name="Total[]" readonly class="form-control-plaintext monto-total" value="' + datos.txtTotal + '"></td></tr>';
+        let llenado = '<tr><td><a class="btn btn-danger tabla-borra"><i class="las la-trash fs-5"></i></a></td><td><input type="text"  readonly class="form-control-plaintext " value="' + datos.Detalles + '"></td><td class="d-none" ><input type="text" name="Codigo[]" readonly class="form-control-plaintext sumar-codigo " value="' + datos.Codigo + '"></td><td><input type="text" name="Cantidad[]" readonly class="form-control-plaintext monto-cantidad" value="' + datos.Cantidad + '"></td><td><input type="text" readonly class="form-control-plaintext monto-cantidad" value="' + datos.Unidad + '"></td><td><input type="text" name="Precio[]" readonly class="form-control-plaintext" value="' + datos.Precio + '"></td><td><input type="text" name="Total[]" readonly class="form-control-plaintext monto-total" value="' + datos.txtTotal + '"></td></tr>';
         $('#table-body').html(tabla + llenado);
         limpiar();
     }
@@ -343,11 +344,6 @@ $Fecha =date("Y-m-d");
         var urlsumar = "{{route('restar.salida',['codigo'])}}";
         urlsumar = urlsumar.replace('codigo', nuevaCodigo);
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
         $.ajax({
             type: 'GET',
             url: urlsumar,
@@ -368,11 +364,6 @@ $Fecha =date("Y-m-d");
         let urlrestar = "{{route('sumar.entrada',['codigo'])}}";
         urlrestar = urlrestar.replace('codigo', codigo);
         console.log(dato.Cantidad);
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
         $.ajax({
             type: 'GET',
             url: urlrestar,

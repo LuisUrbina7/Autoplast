@@ -210,15 +210,17 @@ $Fecha =date("Y-m-d");
 
 
             if (e.key == 'Enter') {
-                if ($('#txtCodigo').val() == '') {
+               
+               if ($('#txtDetalles').val() == '') {
                     Swal.fire(
                         'Error!',
                         'No existe el producto!',
                         'warning'
                     );
-                } else {
-
-                    if (parseInt(cantidad) > parseInt(Stock) && parseInt(Stock) == 0) {
+                }else {
+                  /*   alert(parseInt(Stock) );
+                    alert(parseInt(cantidad) ); */
+                    if (parseInt(Stock) < parseInt(cantidad) || parseInt(Stock) == 0) {
                         Swal.fire(
                             'Error!',
                             'La cantidad es mayor!',
@@ -231,7 +233,7 @@ $Fecha =date("Y-m-d");
                         restar();
                         agregarfila();
                     }
-                }
+                } 
 
 
             };

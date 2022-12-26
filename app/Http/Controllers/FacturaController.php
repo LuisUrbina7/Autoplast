@@ -15,7 +15,7 @@ class FacturaController extends Controller
 
     public function indexSalida()
     {
-        $Clientes = Cliente::select('id', 'Nombre','Identificador')->get();
+        $Clientes = Cliente::select('id', 'Nombre', 'Identificador')->get();
         $Factura = Factura::select('id')->latest('id')->first();
         $Numero = ['indice' => 1];
 
@@ -52,75 +52,69 @@ class FacturaController extends Controller
             $Estado = 'Cancelada';
             $Abono = $IndividualTotal;
         }
+
         try {
-            try {
 
-                if ($Moneda == 'COL') {
-                    $factura = [
-                        'idCliente' => $idCliente,
-                        'Fecha' => $Fecha,
-                        'Estado' => $Estado,
-                        'VendidoA' => str_replace(",", "", $IndividualTotal),
-                        'PagadoA' => str_replace(",", "", $Abono),
-                        'VendidoB' => 0,
-                        'PagadoB' => 0,
-                        'idUsuario' => $user,
-                    ];
-                } else {
+            if ($Moneda == 'COL') {
+                $factura = [
+                    'idCliente' => $idCliente,
+                    'Fecha' => $Fecha,
+                    'Estado' => $Estado,
+                    'VendidoA' => str_replace(",", "", $IndividualTotal),
+                    'PagadoA' => str_replace(",", "", $Abono),
+                    'VendidoB' => 0,
+                    'PagadoB' => 0,
+                    'idUsuario' => $user,
+                ];
+            } else {
 
-                    $factura = [
-                        'idCliente' => $idCliente,
-                        'Fecha' => $Fecha,
-                        'Estado' => $Estado,
-                        'VendidoA' => 0,
-                        'PagadoA' => 0,
-                        'VendidoB' => str_replace(",", "", $IndividualTotal),
-                        'PagadoB' => str_replace(",", "", $Abono),
-                        'idUsuario' => $user,
-                    ];
-                }
-
-                Factura::create($factura);
-            } catch (Exception $e) {
-                return  response()->json([
-                    'Estado' => 1,
-                    'Mensaje' => 'Algo mal en la factura factura',
-                ]);
+                $factura = [
+                    'idCliente' => $idCliente,
+                    'Fecha' => $Fecha,
+                    'Estado' => $Estado,
+                    'VendidoA' => 0,
+                    'PagadoA' => 0,
+                    'VendidoB' => str_replace(",", "", $IndividualTotal),
+                    'PagadoB' => str_replace(",", "", $Abono),
+                    'idUsuario' => $user,
+                ];
             }
 
-            try {
-                $indice = Factura::select('id')->latest('id')->first()->toArray();
-                for ($x = 0; $x < count($Codigo); $x++) {
-                    $detalles = [
-                        'idfactura' => $indice['id'],
-                        'idProducto' => $Codigo[$x],
-                        'Cantidad' => $Cantidad[$x],
-                        'Precio' => str_replace(",", "", $Precio[$x]),
-                        'Total' => str_replace(",", "", $Total[$x]),
-
-                    ];
-                    Detalles::create($detalles);
-                };
-            } catch (Exception $e) {
-                return  response()->json([
-                    'Estado' => 1,
-                    'Mensaje' => $e,
-                ]);
-            }
-
-            if ($request->input('valor-abono') != 0) {
-                $this->agregarAbono($Fecha, $Abono, $Factura);
-            }
-            return  response()->json([
-                'Estado' => 1,
-                'Mensaje' => 'Todo bien',
-            ]);
+            Factura::create($factura);
         } catch (Exception $e) {
             return  response()->json([
                 'Estado' => 1,
-                'Mensaje' => 'Todo mal',
+                'Mensaje' => 'Algo mal en la factura factura',
             ]);
         }
+
+        try {
+            $indice = Factura::select('id')->latest('id')->first()->toArray();
+            for ($x = 0; $x < count($Codigo); $x++) {
+                $detalles = [
+                    'idfactura' => $indice['id'],
+                    'idProducto' => $Codigo[$x],
+                    'Cantidad' => $Cantidad[$x],
+                    'Precio' => str_replace(",", "", $Precio[$x]),
+                    'Total' => str_replace(",", "", $Total[$x]),
+
+                ];
+                Detalles::create($detalles);
+            };
+        } catch (Exception $e) {
+            return  response()->json([
+                'Estado' => 1,
+                'Mensaje' => $e,
+            ]);
+        }
+
+        if ($request->input('valor-abono') != 0) {
+            $this->agregarAbono($Fecha, $Abono, $Factura);
+        }
+        return  response()->json([
+            'Estado' => 1,
+            'Mensaje' => 'Todo bien',
+        ]);
     }
     public function agregarAbono($date, $valor, $idFactura)
     {
