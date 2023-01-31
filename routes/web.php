@@ -24,15 +24,18 @@ Route::get('/', function () {
 Route::get('/nada', function () {
     return view('Maestra');
 });
+Auth::routes();
 
-
-Route::get('/clientes', [ClienteController::class,'index'])->name('clientes')->middleware('auth');
+Route::group(['middleware' => 'auth'], function () {  
+Route::get('/clientes', [ClienteController::class,'index'])->name('clientes');
 Route::get('/clientes/vista', [ClienteController::class,'view'])->name('agregar-cliente-vista');
 Route::get('/clientes/lista', [ClienteController::class,'listar'])->name('clientes-tabla');
 Route::post('/clientes/agregar', [ClienteController::class,'create'])->name('agregar-cliente');
 Route::get('/clientes/eliminar/{id}', [ClienteController::class,'destroy'])->name('eliminar-cliente');
 Route::post('/clientes/actualizar/{id}', [ClienteController::class,'update'])->name('actualizar-cliente');
- 
+Route::post('/clientes/importar',[ClienteController::class,'importar'])->name('clientes.importar');
+Route::get('/clientes/modal/{id}', [ClienteController::class,'modal'])->name('modal.cliente');
+
 Route::get('/proveedores', [ProveedoresController::class,'index'])->name('proveedores');
 Route::get('/proveedores/vista', [ProveedoresController::class,'view'])->name('agregar-proveedores-vista');
 Route::get('/proveedores/lista', [ProveedoresController::class,'listar'])->name('proveedores-tabla');
@@ -40,6 +43,7 @@ Route::post('/proveedores/agregar', [ProveedoresController::class,'create'])->na
 Route::get('/proveedores/eliminar/{id}', [ProveedoresController::class,'destroy'])->name('eliminar-proveedores');
 Route::get('/proveedores/modal/{id}', [ProveedoresController::class,'edit'])->name('modal-proveedores');
 Route::post('/proveedores/actualizar/{id}', [ProveedoresController::class,'update'])->name('actualizar-proveedores');
+Route::post('/proveedores/importar',[ProveedoresController::class,'importar'])->name('proveedores.importar');
 
 Route::get('/categorias', [CategoriasController::class,'index'])->name('categorias');
 Route::get('/categorias/lista', [CategoriasController::class,'listar'])->name('categorias-tabla');
@@ -50,13 +54,14 @@ Route::post('/categorias/actualizar/{id}', [CategoriasController::class,'update'
 
 Route::get('/productos', [ProductoController::class ,'index'])->name('productos');
 Route::get('/productos/vista', [ProductoController::class,'view'])->name('agregar-productos-vista');
-Route::get('/productos/lista', [ProductoController::class,'listar'])->name('productos-tabla');
+Route::get('/productos/lista/{id}', [ProductoController::class,'listar'])->name('productos-tabla');
 Route::post('/productos/agregar', [ProductoController::class,'create'])->name('agregar-productos');
-Route::post('/productos/eliminar/{id}', [ProductoController::class,'destroy'])->name('eliminar-productos');
+Route::get('/productos/eliminar/{id}', [ProductoController::class,'destroy'])->name('eliminar-productos');
 Route::get('/productos/modal/{id}', [ProductoController::class,'edit'])->name('modal-productos');
 Route::post('/productos/actualizar/{id}', [ProductoController::class,'update'])->name('actualizar-productos');
-Route::get('/autocompletado', [ProductoController::class ,'autocompletado'])->name('autocompletado');
+Route::get('/autocompletado/{id}', [ProductoController::class ,'autocompletado'])->name('autocompletado');
 Route::get('/productos/minimo', [ProductoController::class ,'stockminimo'])->name('productos.Minimo');
+Route::post('/productos/importar',[ProductoController::class,'importar'])->name('productos.importar');
 
 Route::get('/cobranza', [CobranzaController::class ,'index'])->name('cobranza');
 Route::get('/cobranza/{zona}', [CobranzaController::class ,'zona'])->name('cobranza.zona');
@@ -96,7 +101,6 @@ Route::post('/cobranza/abonos/agregar', [AbonosController::class ,'agregarA'])->
 Route::get('/deuda/abonos/{id}', [AbonosController::class ,'cargarB'])->name('abonos.compra');
 Route::post('/deuda/abonos/agregar', [AbonosController::class ,'agregarB'])->name('crear.abonos.compra');
 
-Auth::routes();
 Route::get('/usuarios', [UsuariosController::class ,'index'])->name('usuario');
 Route::post('/usuarios/actualizar', [UsuariosController::class ,'actualizarPerfil'])->name('usuarioPerfil.actualizar');
 Route::post('/usuarios/agregar', [UsuariosController::class ,'crear'])->name('registrar');
@@ -117,3 +121,5 @@ Route::post('/pedidos/procesar', [PedidosController::class ,'procesar'])->name('
 Route::get('/inicio', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/ventas', [App\Http\Controllers\HomeController::class, 'ventas'])->name('home.ventas');
 Route::get('/grafico', [App\Http\Controllers\HomeController::class, 'grafico'])->name('home.grafico');
+Route::get('/movimientos-facturas', [App\Http\Controllers\HomeController::class, 'grafico_barras'])->name('home.grafico.barras');
+});

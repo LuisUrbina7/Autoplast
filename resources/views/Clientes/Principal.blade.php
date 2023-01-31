@@ -3,21 +3,32 @@
 @section('css')
 
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css">
-
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.bootstrap.min.css">
 <title>Clientes</title>
 @endsection
 @section('contenido')
-<div aria-label="breadcrumb">
+<div aria-label="breadcrumb" class="d-flex justify-content-between mb-3">
     <ol class="breadcrumb">
         <li class="breadcrumb-item active" aria-current="page">Clientes</li>
     </ol>
+    <button class="btn btn-success" type="button" data-toggle="modal" data-target="#modal_importar"><i class="las la-file-csv fs-4"></i></button>
 </div>
+@if ( session('Excelente') )
+<div class="alert alert-success" role="alert">
+    <strong>Felicitaciones, </strong>
+    Datos agregados correctamente..
+</div>
+@endif
+@if ( session('Error') )
+<div class="alert alert-danger" role="alert">
+    <strong>Error, </strong>
+    ocurrió un error en la carga.
+</div>
+@endif
 <table id="example" class="table table-striped display nowrap" cellspacing="0" style="width:100%">
     <thead class="bg-primary bg-gradient text-light">
         <tr>
-            <th>Id</th>
+            <th></th>
             <th>Nombre</th>
             <th>Apellido</th>
             <th>Identificador</th>
@@ -95,17 +106,42 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="modal_importar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-light">
+                <h5 class="modal-title" id="exampleModalLabel">Archivo</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
 
+                </button>
+
+            </div>
+            <div class="modal-body">
+                <form action="{{route('clientes.importar')}}" method="post" enctype="multipart/form-data">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="importar" class="form-label">Selecciona el Archivo : </label>
+                        <input type="file" class="form-control" name="importar">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('js')
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
-<script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.min.js"></script>
 <script>
     $(document).ready(function() {
 
-        $('#example').DataTable({
+        var t = $('#example').DataTable({
             responsive: true,
             /*  processing:true,
               serveSider:true,*/
@@ -144,6 +180,10 @@
                     class: 'opciones'
                 },
             ],
+            order: [
+                [1, 'asc']
+            ],
+
             "language": {
                 "lengthMenu": "Mostrar _MENU_ registros por página",
                 "zeroRecords": "No hay datos - Disculpa",
@@ -160,29 +200,31 @@
 
 
         });
+        t.on('order.dt search.dt', function() {
+            let i = 1;
 
+            t.cells(null, 0, {
+                search: 'applied',
+                order: 'applied'
+            }).every(function(cell) {
+                this.data(i++);
+            });
+        }).draw();
     });
 </script>
 <script>
     $('#tabla-clientes').on('click', '#btnver', function() {
         var fila = $(this).parents('tr');
         var datos = {
-            Id: fila.find('.id').html(),
-            Nombre: fila.find('.Nombre').html(),
-            Apellido: fila.find('.Apellido').html(),
-            identificador: fila.find('.Identificador').html(),
-            zona: fila.find('.Zona').html(),
+            Id: fila.find('.id').text(),
+            Nombre: fila.find('.Nombre').text(),
+            Apellido: fila.find('.Apellido').text(),
+            identificador: fila.find('.Identificador').text(),
+            zona: fila.find('.Zona').text(),
             direccion: fila.find('.Direccion').html(),
             telefono: fila.find('.Telefono').html()
         };
-        $('#txtId').val(datos.Id);
-        $('#txtNombre').val(datos.Nombre);
-        $('#txtApellido').val(datos.Apellido);
-        $('#txtZona').val(datos.zona);
-        $('#txtIdentificador').val(datos.identificador);
-        $('#txtDireccion').val(datos.direccion);
-        $('#txtTelefono').val(datos.telefono);
-        console.log(datos);
+
     });
 
 
@@ -196,13 +238,14 @@
             url: 'clientes/actualizar/' + id,
             data: update,
             success: function(response) {
+                console.log(response)
                 $('#example').DataTable().ajax.reload();
                 cerrar_modal('#clientes-modal');
                 Swal.fire(
-                            'Excelente!',
-                            'Modificado correctamente.',
-                            'success',
-                        );
+                    'Excelente!',
+                    'Modificado correctamente.',
+                    'success',
+                );
                 limpiar();
             },
             error: function(response) {
@@ -216,6 +259,24 @@
         });
 
     })
+
+    function editar(d) {
+        let id = d;
+        $.ajax({
+            type: 'GET',
+            url: 'clientes/modal/' + id,
+            success: function(response) {
+                $('#txtId').val(response.Mensaje.id);
+                $('#txtNombre').val(response.Mensaje.Nombre);
+                $('#txtApellido').val(response.Mensaje.Apellido);
+                $('#txtZona').val(response.Mensaje.Zona);
+                $('#txtIdentificador').val(response.Mensaje.Identificador);
+                $('#txtDireccion').val(response.Mensaje.Direccion);
+                $('#txtTelefono').val(response.Mensaje.Telefono);
+                console.log(response);
+            }
+        });
+    }
 
     function borrar(d) {
         let id = d;
@@ -267,6 +328,7 @@
         $('#txtDireccion').val('');
         $('#txtTelefono').val('');
     }
+
     function cerrar_modal(modal) {
         $(modal).hide();
         $('.modal-backdrop').remove();

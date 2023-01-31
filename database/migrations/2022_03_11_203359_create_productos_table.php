@@ -15,12 +15,13 @@ class CreateProductosTable extends Migration
     {
         Schema::create('productos', function (Blueprint $table) {
             $table->id();
-            $table->char('Detalles',150)->unique();
+            $table->char('Detalles',150);
             $table->float('Stock', 5, 2);
             $table->double('PrecioCompra', 12, 2);
             $table->double('PrecioVenta', 12, 2);
             $table->char('Unidad',20);
             $table->date('Fecha');
+            $table->integer('Ruta');
             $table->foreignId('idProveedor')->nullable()->constrained('proveedores')->cascadeOnUpdate()->nullOnDelete();
             $table->foreignId('idCategoria')->nullable()->constrained('categorias')->cascadeOnUpdate()->nullOnDelete();
             $table->timestamps();

@@ -3,9 +3,8 @@
 @section('css')
 
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.bootstrap.min.css">
 <meta name="csrf-token" content="{{ csrf_token() }}">
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <title>Facturas</title>
 @endsection
 
@@ -30,6 +29,7 @@
             </tr>
         </thead>
         <tbody id="tabla-cobranza">
+            
             @foreach ($Factura as $factura )
             <tr>
                 <td>{{$factura->id}}</td>
@@ -59,7 +59,7 @@
  <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js">
     </script>
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.min.js"></script>
     <script>
         $(document).ready(function() {
 

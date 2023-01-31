@@ -1,7 +1,7 @@
 @extends('Maestra')
 
 @section('css')
-<title>Cobranza</title>
+<title>Movimientos</title>
 @endsection
 
 @section('contenido')
@@ -28,7 +28,7 @@
                 <span class="visually-hidden">Loading...</span>
             </div>
         </div>
-        <div id="contendor-tabla" class="col-12">
+        <div id="contendor-tabla" class="col-12 table-responsive">
             <table class="table">
                 <thead>
                     <tr>

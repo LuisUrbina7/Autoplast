@@ -1,9 +1,6 @@
 @extends('Maestra')
 
 @section('css')
-
-
-
 <title>Cobranza</title>
 @endsection
 

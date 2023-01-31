@@ -160,5 +160,4 @@
     </div>
 
 </div>
-</div>
 @endsection

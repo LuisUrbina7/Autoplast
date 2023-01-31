@@ -2,7 +2,6 @@
 
 @section('css')
 <meta name="csrf-token" content="{{ csrf_token() }}">
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <title>Productos</title>
 @endsection
 
@@ -35,17 +34,17 @@
             </div>
             <div class="col-md-2 mb-3">
                 <label for="validationDefault02">Stock</label>
-                <input type="text" class="form-control" id="txtStock" placeholder="Apellido" name="Stock" required>
+                <input type="number" class="form-control" id="txtStock" placeholder="Stock" name="Stock" required>
             </div>
             <div class="col-md-6 mb-3">
                 <label for="validationDefault02">Precio de Compra</label>
-                <input type="text" class="form-control" id="txtPrecioCompra" placeholder="Precio de costo" name="PrecioCompra" required>
+                <input type="number" class="form-control" id="txtPrecioCompra" placeholder="Precio de costo" name="PrecioCompra" required>
             </div>
             <div class="col-md-6 mb-3">
                 <label for="validationDefault02">Precio Venta</label>
-                <input type="text" class="form-control" id="txtPrecioVenta" placeholder="Precio a vender" name="PrecioVenta" required>
+                <input type="number" class="form-control" id="txtPrecioVenta" placeholder="Precio a vender" name="PrecioVenta" required>
             </div>
-            <div class="col-md-12 mb-3">
+            <div class="col-md-6 mb-3">
                 <label for="validationDefaultUsername">Fecha</label>
                 <div class="input-group">
                     <div class="input-group-prepend">
@@ -54,7 +53,14 @@
                     <input type="date" class="form-control" id="txtFecha" name="Fecha" value="{{$Fecha}}">
                 </div>
             </div>
-    
+            <div class="col-md-6 mb-3">
+                <label for="ruta">Ruta</label>
+                <select class="form-select" id="ruta" name="Ruta">
+                    <option disabled selected>--Seleccionar--</option>
+                    <option value="1">Ruta A (Panamericana)</option>
+                    <option value="2">Ruta B (Barinas)</option>
+                </select>
+            </div>
             <div class="col-md-6 mb-3">
                 <label for="idProveedor">Proveedor</label>
                 <select class="form-select" aria-label="Default select example" id="txtProveedor" name="idProveedor">
@@ -107,7 +113,7 @@
                     console.log(response.Mensaje);
                     Swal.fire(
                              'Guardado!',
-                             'La factura ha sido cargada',
+                             'El Producto ha sido cargada',
                              'success'
                          );
                   limpiar(); 
@@ -135,8 +141,6 @@
         $('#txtPrecioCompra').val('');
         $('#txtPrecioVenta').val('');
         $('#txtStock').val('');
-        $('#txtProveedor').val('');
-        $('#txtCategoria').val('');
     }
 </script>
 @endsection

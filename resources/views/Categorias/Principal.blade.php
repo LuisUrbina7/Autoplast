@@ -1,12 +1,10 @@
 @extends('Maestra')
 
 @section('css')
-
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.bootstrap.min.css">
 <meta name="csrf-token" content="{{ csrf_token() }}">
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<title>Proveedores</title>
+<title>Categorias</title>
 @endsection
 
 @section('contenido')
@@ -21,7 +19,7 @@
 <table id="example" class="table table-striped display nowrap" cellspacing="0" style="width:100%">
     <thead>
         <tr>
-            <th>Id</th>
+            <th>#</th>
             <th>Descripcion</th>
             <th>Opciones</th>
         </tr>
@@ -90,7 +88,7 @@
 @section('js')
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
-<script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.min.js"></script>
 <script>
     $(document).ready(function() {
         $.ajaxSetup({
@@ -98,7 +96,7 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        $('#example').DataTable({
+      var t=  $('#example').DataTable({
             responsive: true,
             "ajax": "{{route('categorias-tabla')}}",
             "columns": [{
@@ -124,8 +122,16 @@
                     "previous": "Anterior"
 
                 },
-            }
+            },
+            "order": [[1, 'asc']],
         });
+        t.on('order.dt search.dt', function () {
+        let i = 1;
+ 
+        t.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+            this.data(i++);
+        });
+    }).draw();
     });
 </script>
 <script>
@@ -143,7 +149,7 @@
                 cerrar_modal('#categorias-modal1');
                 Swal.fire(
                     'Excelente!',
-                    'Modificado correctamente.',
+                    'Agregado correctamente.',
                     'success',
                 );
 

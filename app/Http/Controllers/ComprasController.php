@@ -42,10 +42,14 @@ class ComprasController extends Controller
         if ($request->input('Estado') == 'Credito') {
             $Estado = 'Credito';
             $Abono = $request->input('valor-abono');
+            if($Abono == null){
+                $Abono=0;
+            }
         } else {
             $Estado = 'Cancelada';
             $Abono = $IndividualTotal;
         }
+
         if ($Moneda == 'COL') {
             $compra = [
                 'idProveedor' => $idProveedor,
@@ -70,12 +74,11 @@ class ComprasController extends Controller
             ];
         }
 
-
         Compras::create($compra);
-
+        $indice = Compras::select('id')->latest('id')->first()->toArray();
         for ($x = 0; $x < count($Codigo); $x++) {
             $detalles = [
-                'idfactura' => $Factura,
+                'idfactura' => $indice['id'],
                 'idProducto' => $Codigo[$x],
                 'Cantidad' => $Cantidad[$x],
                 'Precio' => str_replace(",", "", $Precio[$x]),

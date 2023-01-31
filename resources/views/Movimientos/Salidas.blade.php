@@ -1,14 +1,13 @@
 @extends('Maestra')
 
 @section('css')
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <title>Cobranza</title>
 @endsection
 
 @section('contenido')
 <div aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item active" aria-current="page">Cobranza</li>
+        <li class="breadcrumb-item active" aria-current="page">Movimientos</li>
     </ol>
 </div>
 
@@ -29,7 +28,7 @@
                 <span class="visually-hidden">Loading...</span>
             </div>
         </div>
-        <div id="contendor-tabla" class="col-12">
+        <div id="contendor-tabla" class="col-12 table-responsive">
             <table class="table">
                 <thead>
                     <tr>

@@ -17,7 +17,7 @@ class CreateProveedoresTable extends Migration
             $table->id();
             $table->string('Nombre')->unique();
             $table->string('Direccion');
-            $table->string('Telefono')->nullable();
+            $table->bigInteger('Telefono')->nullable();
             $table->timestamps();
         });
     }

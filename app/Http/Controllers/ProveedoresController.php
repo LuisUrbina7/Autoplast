@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\ProveedoresImport;
 use App\Models\Proveedor;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
 
 class ProveedoresController extends Controller
@@ -134,5 +136,16 @@ class ProveedoresController extends Controller
         $delete = Proveedor::find($id);
         $delete->delete();
         return response()->json(['Error' => 0, 'Mensaje' => 'Borrado']);
+    }
+    public function importar(Request $request)
+    {
+          try{ 
+            $datos = Excel::import(new ProveedoresImport, $request->file('importar'));
+      /*   dd($datos); */
+             return redirect()->back()->with(['Excelente'=>'Datos subidos correctamente']); 
+         }catch(Exception $e){
+            return redirect()->back()->with(['Error'=>'Datos subidos correctamente']); 
+            /* return $e; */
+        } 
     }
 }

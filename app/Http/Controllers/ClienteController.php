@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\ClientesImport;
 use App\Models\Cliente;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
 
 
@@ -54,7 +56,7 @@ class ClienteController extends Controller
     {
         $datos = Cliente::all();
         $Tabla = DataTables::of($datos)->addIndexColumn()->addColumn('opciones', function ($row) {
-            $btn = '<buttom data-toggle="modal" data-target="#clientes-modal" class="text-success" id="btnver" >ver</buttom> | ';
+            $btn = '<buttom data-toggle="modal" data-target="#clientes-modal" class="text-success"  onclick="editar(' . $row->id . ')" >ver</buttom> | ';
             $btn .= '<buttom value="' . $row->id . '"  onclick="borrar(' . $row->id . ')" class="text-danger" id="btnborrar">Borrar</buttom>';
             return $btn;
         })->rawColumns(['opciones'])->toJson();
@@ -81,7 +83,9 @@ class ClienteController extends Controller
 
         if ($validado->fails()) {
             return response()->json($validado->errors(), 422);
-        } else {
+        } 
+        try{
+
             $update = Cliente::find($id);
             $update->Nombre = $request->input('Nombre');
             $update->Apellido = $request->input('Apellido');
@@ -92,15 +96,20 @@ class ClienteController extends Controller
             $update->update();
 
             return response()->json(['Estado' => 0, 'Mensaje' => $update]);
+        }catch(Exception $e){
+            return response()->json(['Estado' => 0, 'Mensaje' => $e]);
         }
+        
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    public function modal($id)
+    {
+        $datos = Cliente::find($id);
+        return response()->json([
+            'hola' => 0,
+            'Mensaje' => $datos,
+        ]);
+    }
     public function destroy($id)
     {
         $delete = Cliente::find($id);
@@ -109,4 +118,17 @@ class ClienteController extends Controller
 
         return response()->json(['Error' => 0, 'Mensaje' => 'Borrado']);
     }
+
+    public function importar(Request $request)
+    {
+          try{ 
+            $datos = Excel::import(new ClientesImport, $request->file('importar')->store('temp'));
+      /*   dd($datos); */
+             return redirect()->back()->with(['Excelente'=>'Datos subidos correctamente']); 
+         }catch(Exception $e){
+            return redirect()->back()->with(['Error'=>'Datos subidos correctamente']); 
+            /* return $e; */
+        } 
+    }
+
 }

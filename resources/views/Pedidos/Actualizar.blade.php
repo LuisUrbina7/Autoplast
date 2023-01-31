@@ -3,7 +3,6 @@
 @section('css')
 
 <link rel="stylesheet" href="{{ asset('EasyAutocomplete/easy-autocomplete.min.css') }}">
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <title>Proveedores</title>
 @endsection

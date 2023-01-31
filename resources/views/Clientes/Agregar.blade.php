@@ -1,8 +1,6 @@
 @extends('Maestra')
 
 @section('css')
-
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <title>Clientes</title>
 @endsection
 

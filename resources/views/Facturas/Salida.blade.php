@@ -3,7 +3,7 @@
 @section('css')
 <link rel="stylesheet" href="{{ asset('EasyAutocomplete/easy-autocomplete.min.css') }}">
 <meta name="csrf-token" content="{{ csrf_token() }}">
-<title>Productos</title>
+<title>Salida</title>
 @endsection
 
 @section('contenido')
@@ -13,8 +13,15 @@ $Fecha =date("Y-m-d");
 @endphp
 
 
-<div>
-    <h3 class="text-dark">Ventas</h3>
+<div class="d-flex">
+    <h3 class="text-dark">Ventas</h3> 
+    <div class="px-2">
+        <select class="form-select" id="ruta" onchange="autocompletado(value)">
+            <option selected disabled>--Seleccione--</option>
+            <option value="1" onclick="autocompletado(1)"> Ruta A</option>
+            <option value="2" onclick="autocompletado(2)"> Ruta B</option>
+        </select>
+    </div>
 </div>
 <form id="formulario-salida" method="POST" enctype="multipart/form-data" action="{{ route('agregar-salida')}}">
     <div class="row g-2">
@@ -22,7 +29,7 @@ $Fecha =date("Y-m-d");
         <div class="col-md-5 mb-3">
             <label for="txtCliente">Cliente</label>
             <select class="form-select " id="txtCliente" name="idCliente" required>
-                <option selected value="0">--Cliente genérico.--</option>
+                <option selected disabled>--Seleccione--</option>
                 @foreach ($Clientes as $cliente )
                 <option value="{{$cliente->id}}">{{$cliente->Nombre}} || {{$cliente->Identificador}}</option>
                 @endforeach
@@ -45,7 +52,7 @@ $Fecha =date("Y-m-d");
         </div>
         <div class="col-md-5 mb-3 ">
             <label for="txtDetalles">Descripcion</label>
-            <input type="text" class="form-control" id="txtDetalles" placeholder="Nombre">
+            <input type="text" class="form-control" id="txtDetalles" placeholder="Nombre" disabled>
         </div>
         <div class="col-md-1 mb-3">
             <label for="txtStock">Stock</label>
@@ -53,11 +60,11 @@ $Fecha =date("Y-m-d");
         </div>
         <div class="col-md-2 mb-3">
             <label for="txtcantidad">Cantidad</label>
-            <input type="number" class="form-control " id="txtcantidad">
+            <input type="number" class="form-control " id="txtcantidad" disabled>
         </div>
         <div class="col-md-2 mb-3">
             <label for="txtPrecioVenta">Precio</label>
-            <input type="text" class="form-control " readonly id="txtPrecioVenta">
+            <input type="number" class="form-control "  id="txtPrecioVenta" disabled>
         </div>
         <div class="col-md-2 mb-3">
             <label for="txtTotal">Total</label>
@@ -154,42 +161,58 @@ $Fecha =date("Y-m-d");
         </div>
     </div>
 </form>
+
 @endsection
 @section('js')
 <script src="{{ asset('EasyAutocomplete/jquery.easy-autocomplete.min.js') }}"></script>
 <script>
     var tasa = 1;
-    var options = {
-        url: function(phrase) {
-            return "{{route('autocompletado')}}?nombre=" + phrase;
-        },
-
-        getValue: "Detalles",
-        list: {
-
-            onSelectItemEvent: function() {
-                var value = {
-                    texto: $("#txtDetalles").getSelectedItemData().Stock,
-                    precio: $("#txtDetalles").getSelectedItemData().PrecioVenta,
-                    codigo: $("#txtDetalles").getSelectedItemData().id,
-                    unidad: $("#txtDetalles").getSelectedItemData().Unidad,
-                }
-
-                $("#txtStock").val(value.texto).trigger("change");
-                if ($('#USD').is(':checked')) {
-                    $("#txtPrecioVenta").val((value.precio / tasa).toFixed(2)).trigger("change");
-                } else {
-                    $("#txtPrecioVenta").val(value.precio).trigger("change");
-                }
-
-                $("#txtunidad").val(value.unidad).trigger("change");
-                $("#txtCodigo").val(value.codigo).trigger("change");
-
+    
+    function autocompletado(id_ruta) {
+        
+        var url_inicial_autocompletado = "{{route('autocompletado',1)}}?nombre=";
+        var url_final_autocompletado = url_inicial_autocompletado.replace('1', id_ruta);
+        var options = {
+            url: function(phrase) {
+                return url_final_autocompletado + phrase;
             },
-        }
-    };
 
-    $("#txtDetalles").easyAutocomplete(options);
+            getValue: "Detalles",
+            list: {
+
+                onSelectItemEvent: function() {
+                    var value = {
+                        texto: $("#txtDetalles").getSelectedItemData().Stock,
+                        precio: $("#txtDetalles").getSelectedItemData().PrecioVenta,
+                        codigo: $("#txtDetalles").getSelectedItemData().id,
+                        unidad: $("#txtDetalles").getSelectedItemData().Unidad,
+                    }
+
+                    $("#txtStock").val(value.texto).trigger("change");
+                    if ($('#USD').is(':checked')) {
+                        $("#txtPrecioVenta").val((value.precio / tasa).toFixed(2)).trigger("change");
+                    } else {
+                        $("#txtPrecioVenta").val(value.precio).trigger("change");
+                    }
+
+                    $("#txtunidad").val(value.unidad).trigger("change");
+                    $("#txtCodigo").val(value.codigo).trigger("change");
+
+                },
+            }
+        };
+     
+        $("#txtDetalles").prop('disabled', false);
+        $("#txtcantidad").prop('disabled', false);
+        $("#txtPrecioVenta").prop('disabled', false);
+        $("#txtDetalles").easyAutocomplete(options);
+        
+        if(id_ruta == 2){
+            document.querySelector('#USD').checked = true;
+        }else{
+            document.querySelector('#COL').checked = true;
+        }
+    }
 </script>
 <script>
     var total = 0;
@@ -210,16 +233,15 @@ $Fecha =date("Y-m-d");
 
 
             if (e.key == 'Enter') {
-               
-               if ($('#txtDetalles').val() == '') {
+
+                if ($('#txtDetalles').val() == '') {
                     Swal.fire(
                         'Error!',
                         'No existe el producto!',
                         'warning'
                     );
-                }else {
-                  /*   alert(parseInt(Stock) );
-                    alert(parseInt(cantidad) ); */
+                } else {
+                  
                     if (parseInt(Stock) < parseInt(cantidad) || parseInt(Stock) == 0) {
                         Swal.fire(
                             'Error!',
@@ -233,7 +255,47 @@ $Fecha =date("Y-m-d");
                         restar();
                         agregarfila();
                     }
-                } 
+                }
+
+
+            };
+        });
+        $('#txtPrecioVenta').keyup(function(e) {
+            e.preventDefault();
+            let pxc = 0;
+            let cantidad = 0;
+            let precio = 0;
+            let Stock = $('#txtStock').val();
+            cantidad = $('#txtcantidad').val();
+            precio = $(this).val();
+            pxc = cantidad * precio;
+            $('#txtTotal').val(pxc.toFixed(2));
+
+
+            if (e.key == 'Enter') {
+
+                if ($('#txtDetalles').val() == '') {
+                    Swal.fire(
+                        'Error!',
+                        'No existe el producto!',
+                        'warning'
+                    );
+                } else {
+                  
+                    if (parseInt(Stock) < parseInt(cantidad) || parseInt(Stock) == 0) {
+                        Swal.fire(
+                            'Error!',
+                            'La cantidad es mayor!',
+                            'error'
+                        );
+                    } else {
+                        total += pxc;
+                        $('#valor-suma').val(total.toFixed(2));
+                        $('#valor-total').val(total.toFixed(2));
+                        restar();
+                        agregarfila();
+                    }
+                }
 
 
             };
@@ -243,8 +305,8 @@ $Fecha =date("Y-m-d");
 
     $('#btn-submit').click(function(e) {
         e.preventDefault();
-       
-        if ($("input[name='Codigo[]']").val() == null) {
+
+        if ($("input[name='Codigo[]']").val() == null || $('#txtCliente').val() == null) {
             Swal.fire(
                 'Error !',
                 'Los Campos están vacios.',
@@ -328,7 +390,7 @@ $Fecha =date("Y-m-d");
         let datos = $('#formulario-salida').serialize();
 
 
-       
+
         $.ajax({
             type: 'POST',
             url: url,

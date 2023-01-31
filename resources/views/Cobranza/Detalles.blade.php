@@ -1,8 +1,6 @@
 @extends('Maestra')
 
 @section('css')
-
-
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <title>Facturas</title>
 @endsection
@@ -108,8 +106,8 @@
                     </tr>
                     <tr>
                         <td colspan="3"></td>
-                        <td>Resta:</td>
-                        <td><input type="text" class="form-control" id="deuda" disabled value="{{number_format($info->VendidoA-$info->PagadoA)}}"></td>
+                        <td>Resta :</td>
+                        <td><input type="text" class="form-control" id="deuda" disabled value="{{number_format($info->VendidoA-$info->PagadoA,2)}}"></td>
                     </tr>
 
                     @endif

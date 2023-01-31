@@ -14,7 +14,7 @@
             <label for="text" class="floatingInput">{{ __('Usuario ') }}</label>
             @error('username')
             <span class="invalid-feedback" role="alert">
-                <strong>{{ $message }}</strong>
+                <strong>Error, clave o usuario incorrecto.</strong>
             </span>
             @enderror
         </div>

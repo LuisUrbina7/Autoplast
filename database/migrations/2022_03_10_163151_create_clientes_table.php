@@ -20,7 +20,7 @@ class CreateClientesTable extends Migration
             $table->char('Identificador',12)->unique();
             $table->char('Zona',20);
             $table->string('Direccion');
-            $table->integer('Telefono')->nullable();
+            $table->bigInteger('Telefono')->nullable();
             $table->timestamps();
         });
     }

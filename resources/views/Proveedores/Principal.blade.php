@@ -3,22 +3,35 @@
 @section('css')
 
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.bootstrap.min.css">
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <title>Proveedores</title>
 @endsection
 
 @section('contenido')
 
-<div aria-label="breadcrumb">
+<div aria-label="breadcrumb" class="d-flex justify-content-between mb-3">
     <ol class="breadcrumb">
         <li class="breadcrumb-item active" aria-current="page">Proveedores</li>
     </ol>
+    <button class="btn btn-success" type="button" data-toggle="modal" data-target="#modal_importar"><i class="las la-file-csv fs-4"></i></button>
 </div>
+@if ( session('Excelente') )
+<div class="alert alert-success" role="alert">
+    <strong>Felicitaciones, </strong>
+    Datos agregados correctamente..
+</div>
+@endif
+@if ( session('Error') )
+<div class="alert alert-danger" role="alert">
+    <strong>Error, </strong>
+    ocurrió un error en la carga.
+</div>
+@endif
 <table id="example" class="table table-striped display nowrap" cellspacing="0" style="width:100%">
     <thead class="bg-dark text-light">
         <tr>
-            <th>Id</th>
+            <th></th>
             <th>Nombre</th>
             <th>Direccion</th>
             <th>Teléfono</th>
@@ -67,13 +80,39 @@
         </div>
     </div>
 </div>
+<!-- ----Modal importar --------- -->
+<div class="modal fade" id="modal_importar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-light">
+                <h5 class="modal-title" id="exampleModalLabel">Archivo</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
 
+                </button>
+
+            </div>
+            <div class="modal-body">
+                <form action="{{route('proveedores.importar')}}" method="post" enctype="multipart/form-data">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="importar" class="form-label">Selecciona el Archivo : </label>
+                        <input type="file" class="form-control" name="importar">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('js')
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
-<script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.min.js"></script>
 <script>
     $(document).ready(function() {
         $.ajaxSetup({
@@ -81,7 +120,7 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        $('#example').DataTable({
+       var t = $('#example').DataTable({
             responsive: true,
             "ajax": "{{route('proveedores-tabla')}}",
             "columns": [{
@@ -112,9 +151,21 @@
                     "previous": "Anterior"
 
                 },
-            }
+            },
+            "order": [
+                [1, 'asc']
+            ],
         });
+        t.on('order.dt search.dt', function() {
+            let i = 1;
 
+            t.cells(null, 0, {
+                search: 'applied',
+                order: 'applied'
+            }).every(function(cell) {
+                this.data(i++);
+            });
+        }).draw();
     });
 </script>
 <script>
@@ -124,8 +175,8 @@
             type: 'GET',
             url: 'proveedores/modal/' + id,
             success: function(response) {
-              /*   console.log(response);
-                console.log(response.Mensaje.Nombre); */
+                /*   console.log(response);
+                  console.log(response.Mensaje.Nombre); */
                 $('#txtId').val(id);
                 $('#txtNombre').val(response.Mensaje.Nombre);
                 $('#txtDireccion').val(response.Mensaje.Direccion);
@@ -148,10 +199,10 @@
                 limpiar();
                 cerrar_modal('#proveedores-modal')
                 Swal.fire(
-                            'Excelente!',
-                            'Modificado correctamente.',
-                            'success',
-                        );
+                    'Excelente!',
+                    'Modificado correctamente.',
+                    'success',
+                );
             },
             error: function(response) {
                 console.log(response);

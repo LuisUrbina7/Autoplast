@@ -2,9 +2,8 @@
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('EasyAutocomplete/easy-autocomplete.min.css') }}">
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <meta name="csrf-token" content="{{ csrf_token() }}">
-<title>Productos</title>
+<title>Entrada</title>
 @endsection
 
 @section('contenido')
@@ -13,8 +12,15 @@
 $Fecha =date("Y-m-d");
 @endphp
 
-<div>
-    <h3>Compras...</h3>
+<div class="d-flex">
+    <h3 class="text-dark">Compras..</h3>
+    <div class="px-2">
+        <select class="form-select" id="ruta" onchange="autocompletado(value)">
+            <option selected disabled>--Seleccione--</option>
+            <option value="1"> Ruta A</option>
+            <option value="2"> Ruta B</option>
+        </select>
+    </div>
 </div>
 <form id="formulario-entrada" method="POST" enctype="multipart/form-data" action="{{ route('agregar-entrada')}}">
     <div class="row g-2">
@@ -22,7 +28,7 @@ $Fecha =date("Y-m-d");
         <div class="col-md-5 mb-3">
             <label for="txtProveedor">Proveedor</label>
             <select class="form-select " id="txtProveedor" name="idProveedor" required>
-                <option selected value="0">--Proveedor genérico.--</option>
+                <option selected disabled>--Seleccione--</option>
                 @foreach ($proveedores as $proveedor )
                 <option value="{{$proveedor->id}}">{{$proveedor->Nombre}}</option>
                 @endforeach
@@ -32,7 +38,7 @@ $Fecha =date("Y-m-d");
             <label for="txtFecha">Fecha</label>
             <div class="input-group input-group-sm">
                 <div class="input-group-prepend">
-                    <span class="input-group-text" ><i class="las la-calendar fs-4"></i></span>
+                    <span class="input-group-text"><i class="las la-calendar fs-4"></i></span>
                 </div>
                 <input type="date" class="form-control " id="txtFecha" name="Fecha" value="{{$Fecha}}">
             </div>
@@ -44,19 +50,19 @@ $Fecha =date("Y-m-d");
         </div>
         <div class="col-md-5 mb-3 ">
             <label for="txtDetalles">Descripcion</label>
-            <input type="text" class="form-control" id="txtDetalles" placeholder="Nombre">
+            <input type="text" class="form-control" id="txtDetalles" placeholder="Nombre" disabled>
         </div>
         <div class="col-md-1 mb-3">
             <label for="txtStock">Stock</label>
-            <input type="text" class="form-control " readonly id="txtStock" placeholder="Stock">
+            <input type="text" class="form-control " readonly id="txtStock" placeholder="Stock" disabled>
         </div>
         <div class="col-md-2 mb-3">
             <label for="txtcantidad">Cantidad</label>
-            <input type="number" class="form-control " id="txtcantidad">
+            <input type="number" class="form-control " id="txtcantidad" disabled>
         </div>
         <div class="col-md-2 mb-3">
             <label for="txtPrecioVenta">Precio</label>
-            <input type="text" class="form-control " id="txtPrecio">
+            <input type="text" class="form-control " id="txtPrecio" disabled>
         </div>
         <div class="col-md-2 mb-3">
             <label for="txtTotal">Total</label>
@@ -155,31 +161,53 @@ $Fecha =date("Y-m-d");
 @section('js')
 <script src="{{ asset('EasyAutocomplete/jquery.easy-autocomplete.min.js') }}"></script>
 <script>
-    tasa = 1;
-    var options = {
-        url: function(phrase) {
-            return "{{route('autocompletado')}}?nombre=" + phrase;
-        },
+    var tasa = 1;
 
-        getValue: "Detalles",
-        list: {
+    function autocompletado(id_ruta) {
 
-            onSelectItemEvent: function() {
-                var value = {
-                    texto: $("#txtDetalles").getSelectedItemData().Stock,
-                    codigo: $("#txtDetalles").getSelectedItemData().id,
-                    Unidad: $("#txtDetalles").getSelectedItemData().Unidad,
-                }
-
-                $("#txtStock").val(value.texto).trigger("change");
-                $("#txtCodigo").val(value.codigo).trigger("change");
-                $("#txtunidad").val(value.Unidad).trigger("change");
-
+        var url_inicial_autocompletado = "{{route('autocompletado',1)}}?nombre=";
+        var url_final_autocompletado = url_inicial_autocompletado.replace('1', id_ruta);
+        var options = {
+            url: function(phrase) {
+                return url_final_autocompletado + phrase;
             },
-        }
-    };
 
-    $("#txtDetalles").easyAutocomplete(options);
+            getValue: "Detalles",
+            list: {
+
+                onSelectItemEvent: function() {
+                    var value = {
+                        texto: $("#txtDetalles").getSelectedItemData().Stock,
+                        precio: $("#txtDetalles").getSelectedItemData().PrecioVenta,
+                        codigo: $("#txtDetalles").getSelectedItemData().id,
+                        unidad: $("#txtDetalles").getSelectedItemData().Unidad,
+                    }
+
+                    $("#txtStock").val(value.texto).trigger("change");
+                    if ($('#USD').is(':checked')) {
+                        $("#txtPrecioVenta").val((value.precio / tasa).toFixed(2)).trigger("change");
+                    } else {
+                        $("#txtPrecioVenta").val(value.precio).trigger("change");
+                    }
+
+                    $("#txtunidad").val(value.unidad).trigger("change");
+                    $("#txtCodigo").val(value.codigo).trigger("change");
+
+                },
+            }
+        };
+
+        $("#txtPrecio").prop('disabled', false);
+        $("#txtDetalles").prop('disabled', false);
+        $("#txtcantidad").prop('disabled', false);
+        $("#txtDetalles").easyAutocomplete(options);
+
+        if (id_ruta == 2) {
+            document.querySelector('#USD').checked = true;
+        } else {
+            document.querySelector('#COL').checked = true;
+        }
+    }
 </script>
 <script>
     var total = 0;
@@ -199,7 +227,7 @@ $Fecha =date("Y-m-d");
 
             if (e.key == 'Enter') {
                 alert(precio);
-                 if ($('#txtDetalles').val() == '' || parseInt( $('#txtTotal').val()) == 0) {
+                if ($('#txtDetalles').val() == '' || parseInt($('#txtTotal').val()) == 0) {
                     Swal.fire(
                         'Error!',
                         'Revisa los datos.!',
@@ -216,7 +244,7 @@ $Fecha =date("Y-m-d");
                     $('#txtcantidad').val(0);
                     $(this).val(0);
 
-                } 
+                }
             };
         });
 
@@ -225,9 +253,12 @@ $Fecha =date("Y-m-d");
     $('#btn-submit').click(function(e) {
         e.preventDefault();
 
-        if ($('#Credito').is(':checked')) {
-            guardar();
-
+        if ($("input[name='Codigo[]']").val() == null || $('#txtProveedor').val() == null) {
+            Swal.fire(
+                'Error !',
+                'Los Campos están vacios.',
+                'error'
+            );
         } else {
             guardar();
         }
@@ -392,22 +423,22 @@ $Fecha =date("Y-m-d");
         };
         /*   console.log(datos); */
         if (Cantidad[0] >= 0) {
-        Swal.fire({
-            title: 'Seguro?',
-            text: "Borrar los detalles restará los productos  !",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Si, quiero hacerlo!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-              
+            Swal.fire({
+                title: 'Seguro?',
+                text: "Borrar los detalles restará los productos  !",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si, quiero hacerlo!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+
 
                     $.ajax({
                         type: 'POST',
@@ -427,10 +458,10 @@ $Fecha =date("Y-m-d");
                             );
                         }
                     });
-                
-            }
-        });
-    }
+
+                }
+            });
+        }
 
     }
 
