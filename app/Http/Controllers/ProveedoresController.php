@@ -61,7 +61,7 @@ class ProveedoresController extends Controller
     {
         $datos = Proveedor::all();
         $Tabla = DataTables::of($datos)->addIndexColumn()->addColumn('Prueba', function ($row) {
-            $btn = '<div class="btn-group"> <buttom data-toggle="modal" data-target="#proveedores-modal" onclick="editar(' . $row->id . ')" class="btn btn-primary"><i class="las la-pencil-alt fs-4"></i></buttom>';
+            $btn = '<div class="btn-group"> <buttom data-bs-toggle="modal" data-bs-target="#proveedores-modal" onclick="editar(' . $row->id . ')" class="btn btn-primary"><i class="las la-pencil-alt fs-4"></i></buttom>';
             $btn .= '<buttom value="' . $row->id . '"  onclick="borrar(' . $row->id . ')" class="btn btn-danger" id="btnborrar"><i class="las la-broom fs-4"></i></buttom> </div>';
             return $btn;
         })->rawColumns(['Prueba'])->toJson();

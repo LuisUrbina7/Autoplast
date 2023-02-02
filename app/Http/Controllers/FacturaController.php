@@ -48,6 +48,9 @@ class FacturaController extends Controller
         if ($request->input('Estado') == 'Credito') {
             $Estado = 'Credito';
             $Abono = $request->input('valor-abono');
+            if($Abono == null){
+                $Abono=0;
+            }
         } else {
             $Estado = 'Cancelada';
             $Abono = $IndividualTotal;

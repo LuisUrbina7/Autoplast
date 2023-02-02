@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{asset('bootstrap/css/bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{ asset('css/Style.css') }}">
     <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -52,7 +52,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-3 col-12 pb-sm-0 border-end" style="background-color: #001950;">
-                <div class="p-md-1">
+                <div class="p-md-1" id="alto-panel">
                     <nav class="py-0 px-md-3 navbar navbar-expand-lg  text-center text-md-start">
 
                         <button class="navbar-toggler w-100 h-25 text-light" type="button" data-bs-toggle="collapse" data-bs-target="#menu-general" aria-controls="menu-general" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,6 +64,12 @@
                                 <li>
                                     <a href="{{ route('home')}}" class="nav-link text-light px-2">
                                         <i class="las la-home"></i> <span>Inicio</span>
+                                        @if(Auth::user()->rol == 'adm')
+                                        <small class="text-muted mx-3">Administrador</small>
+                                        @else
+                                        <small class="text-muted mx-3">Vendedor</small>
+                                        @endif
+                                        
                                     </a>
                                 </li>
                                 <li class="w-100">
@@ -162,9 +168,9 @@
                     </nav>
                 </div>
             </div>
-            <main class="col-sm-9 col-12 pt-4 px-0 ">
+            <main class="col-sm-9 col-12 pt-4 px-0" id="color-fondo-panel">
                 <div class="px-3">
-                    <div class="border overflow-hidden rounded-3 p-2 bg-white ">
+                    <div class="border overflow-hidden rounded-3 p-4 bg-white shadow-sm">
                         @yield('contenido')
 
                     </div>
@@ -182,11 +188,14 @@
             contenedor.style.visibility = 'hidden';
         });
     </script>
-    <script src="{{ asset('js/Menu.js')}}"></script>
+   <!--  <script src="{{ asset('js/Menu.js')}}"></script> -->
     @yield('js')
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  
+    <script src="{{asset('bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+   
+
+    <!--  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
 </body>
 
 </html>

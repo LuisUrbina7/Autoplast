@@ -15,8 +15,8 @@
     </ol>
 </div>
 
-<table id="example" class="table table-striped display nowrap" cellspacing="0" style="width:100%">
-    <thead class="bg-primary text-white">
+<table id="example" class="table table-hover" cellspacing="0" style="width:100%">
+    <thead class="table-light">
         <tr>
             <th>#</th>
             <th>Proveedor</th>
@@ -41,9 +41,9 @@
             <td> {{number_format($Proveedor->COL,2) }}</td>
             <td> {{number_format($Proveedor->USD,2)}}</td>
             @if ($Proveedor->COL == 0 && $Proveedor->USD == 0 )
-            <td> <span class="badge bg-primary h4">Solvente</span></td>
+            <td> <span class="badge bg-success h4 etiqueta-uno">Solvente</span></td>
             @else
-            <td> <span class="badge bg-success h4">Pendiente</span></td>
+            <td> <span class="badge bg-danger h4 etiqueta-dos">Pendiente</span></td>
             @endif
 
 

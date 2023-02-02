@@ -12,10 +12,11 @@ body.thumb {
     box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15) !important;
 }
 
-main {
+/* -------------- Estilos Generales---------- */
+/* main {
     min-height: 80vh;
 }
-
+ */
 [class*='container'] {
     background-clip: content-box;
 }
@@ -34,6 +35,31 @@ main {
     font-weight: 700;
 }
 
+#color-fondo-panel {
+    background-color: #f0f1f7;
+}
+
+.etiqueta-uno {
+    -webkit-box-shadow: 0px 0px 7px 0px rgba(25, 135, 84, 1);
+    -moz-box-shadow: 0px 0px 7px 0px rgba(25, 135, 84, 1);
+    box-shadow: 0px 0px 7px 0px rgba(25, 135, 84, 1);
+}
+.etiqueta-dos{
+    -webkit-box-shadow: 0px 0px 7px 0px rgba(220,53,69,1);
+-moz-box-shadow: 0px 0px 7px 0px rgba(220,53,69,1);
+box-shadow: 0px 0px 7px 0px rgba(220,53,69,1);
+}
+
+.etiqueta-tres{
+    -webkit-box-shadow: 0px 0px 7px 0px rgba(108,117,125,1);
+-moz-box-shadow: 0px 0px 7px 0px rgba(108,117,125,1);
+box-shadow: 0px 0px 7px 0px rgba(108,117,125,1);
+}
+.etiqueta-cuatro{
+    -webkit-box-shadow: 0px 0px 7px 0px rgba(255,193,7,1);
+-moz-box-shadow: 0px 0px 7px 0px rgba(255,193,7,1);
+box-shadow: 0px 0px 7px 0px rgba(255,193,7,1);
+}
 
 
 .nav-item {
@@ -47,13 +73,14 @@ main {
 }
 
 .nav-menu li a:hover {
-    background-color: #7220fe;
+    background-color: #033093;
     color: #eee;
 }
 
 .submenu {
     background-color: #ffff;
     color: #6e6e6ede;
+    border-radius: 11px;
 }
 
 .submenu a {
@@ -61,9 +88,14 @@ main {
 }
 
 .submenu li a:hover {
-    background-color: #130231;
+    background-color: transparent;
+    color: black;
 }
 
+#alto-panel {
+    height: calc(100vh - 8.6vh);
+    overflow: hidden;
+}
 
 
 /* ------------------- Pedidos----------*/
@@ -143,4 +175,10 @@ main {
 
 .tb-cc {
     width: 8%;
+}
+
+@media (min-height:700px) {
+    #alto-panel {
+        height: 100%;
+    }
 }

@@ -56,7 +56,7 @@ class ClienteController extends Controller
     {
         $datos = Cliente::all();
         $Tabla = DataTables::of($datos)->addIndexColumn()->addColumn('opciones', function ($row) {
-            $btn = '<buttom data-toggle="modal" data-target="#clientes-modal" class="text-success"  onclick="editar(' . $row->id . ')" >ver</buttom> | ';
+            $btn = '<buttom data-bs-toggle="modal" data-bs-target="#clientes-modal" class="text-success"  onclick="editar(' . $row->id . ')" >ver</buttom> | ';
             $btn .= '<buttom value="' . $row->id . '"  onclick="borrar(' . $row->id . ')" class="text-danger" id="btnborrar">Borrar</buttom>';
             return $btn;
         })->rawColumns(['opciones'])->toJson();

@@ -87,7 +87,7 @@ class ProductoController extends Controller
             ->select('productos.id', 'productos.Detalles', 'productos.Stock', 'productos.PrecioCompra', 'productos.Unidad', 'productos.PrecioVenta', 'proveedores.Nombre', 'categorias.Descripcion')->where('productos.Ruta',$ruta)->get();
 
         $Tabla = DataTables::of($datos)->addIndexColumn()->addColumn('opciones', function ($row) {
-            $btn = '<div class="btn-group"><buttom data-toggle="modal" data-target="#productos-modal" onclick="editar(' . $row->id . ')" class="btn btn-primary"><i class="las la-pencil-alt fs-4"></i></buttom>';
+            $btn = '<div class="btn-group"><buttom data-bs-toggle="modal" data-bs-target="#productos-modal" onclick="editar(' . $row->id . ')" class="btn btn-primary"><i class="las la-pencil-alt fs-4"></i></buttom>';
             $btn .= '<buttom value="' . $row->id . '"  onclick="borrar(' . $row->id . ')" class="btn btn-danger" id="btnborrar"><i class="las la-broom fs-4"></i></buttom> </div>';
             return $btn;
         })->rawColumns(['opciones'])->toJson();

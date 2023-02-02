@@ -14,7 +14,7 @@
             <li class="breadcrumb-item active" aria-current="page">Categorías </li>
         </ol>
     </div>
-    <button data-toggle="modal" data-target="#categorias-modal1" class="btn btn-primary"><i class="las la-plus-circle fs-3"></i></button>
+    <button data-bs-toggle="modal" data-bs-target="#categorias-modal1" class="btn btn-primary"><i class="las la-plus-circle fs-3"></i></button>
 </div>
 <table id="example" class="table table-striped display nowrap" cellspacing="0" style="width:100%">
     <thead>
@@ -33,7 +33,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Agregar</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="formulario-categorias" class="form-row">
@@ -44,7 +44,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                         <button class="btn btn-primary" id="btnguardar">Guardar</button>
                     </div>
                 </form>
@@ -60,7 +60,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Actualizar</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="d-none">
@@ -74,7 +74,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                         <button class="btn btn-primary" id="btnactualizar">Actualizar</button>
                     </div>
                 </form>
@@ -142,6 +142,7 @@
         $.ajax({
             type: 'POST',
             url: 'categorias/agregar',
+            dataType:'json',
             data: datos,
             success: function(response) {
                 $('#intCategoria').val('');
@@ -175,6 +176,7 @@
         $.ajax({
             type: 'POST',
             url: 'categorias/actualizar/' + id,
+            dataType:'json',
             data: update,
             success: function(response) {
                 console.log(response.Mensaje);
@@ -202,6 +204,7 @@
         $.ajax({
             type: 'GET',
             url: 'categorias/modal/' + id,
+            dataType:'json',
             success: function(response) {
                 console.log(response.Mensaje);
                 console.log(response.Mensaje.Nombre);
@@ -234,6 +237,7 @@
                 $.ajax({
                     type: 'GET',
                     url: 'categorias/eliminar/' + id,
+                    dataType:'json',
                     success: function(response) {
                         $('#example').DataTable().ajax.reload();
                         Swal.fire(

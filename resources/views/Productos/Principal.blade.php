@@ -13,7 +13,7 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item active" aria-current="page">Productos</li>
     </ol>
-    <button class="btn btn-success" type="button" data-toggle="modal" data-target="#modal_importar"><i class="las la-file-csv fs-4"></i></button>
+    <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#modal_importar"><i class="las la-file-csv fs-4"></i></button>
 </div>
 @if ( session('Excelente') )
 <div class="alert alert-success" role="alert">
@@ -37,8 +37,8 @@
         </select>
     </div>
 </div>
-<table id="example" class="table table-striped display nowrap" cellspacing="0" style="width:100%">
-    <thead class="bg-primary text-light">
+<table id="example" class="table table-hover" cellspacing="0" style="width:100%">
+    <thead class="table-light">
         <tr>
             <th>#</th>
             <th>Detalles</th>
@@ -55,6 +55,18 @@
     <tbody id="tabla-productos">
 
     </tbody>
+    <tfoot>
+        <tr class="bg-primary text-white">
+            <td colspan="2">Total : </td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+        </tr>
+    </tfoot>
 </table>
 <!-- Modal -->
 <div class="modal fade" id="productos-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -62,7 +74,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Actualizar</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="d-none">
@@ -133,7 +145,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                         <button class="btn btn-primary" id="btnactualizar">Actualizar</button>
                     </div>
                 </form>
@@ -149,7 +161,7 @@
         <div class="modal-content">
             <div class="modal-header bg-success text-light">
                 <h5 class="modal-title" id="exampleModalLabel">Archivo</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
 
                 </button>
 
@@ -162,7 +174,7 @@
                         <input type="file" class="form-control" name="importar">
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                         <button type="submit" class="btn btn-primary">Guardar</button>
                     </div>
                 </form>
@@ -241,6 +253,48 @@
             "order": [
                 [1, 'asc']
             ],
+            "footerCallback": function(row, data, start, end, display) {
+
+                total_pesos = this.api()
+                    .column(3) //numero de columna a sumar
+                    //.column(1, {page: 'current'})//para sumar solo la pagina actual
+                    .data()
+                    .reduce(function(a, b) {
+                        if (typeof a === 'string') {
+                            a = a.replace(/[^\d.-]/g, '') * 1;
+                        }
+                        if (typeof b === 'string') {
+                            b = b.replace(/[^\d.-]/g, '') * 1;
+                        }
+
+                        return a + b;
+
+                    }, 0);
+                total_dolar = this.api()
+                    .column(4)
+                    .data()
+                    .reduce(function(a, b) {
+                        if (typeof a === 'string') {
+                            a = a.replace(/[^\d.-]/g, '') * 1;
+                        }
+                        if (typeof b === 'string') {
+                            b = b.replace(/[^\d.-]/g, '') * 1;
+                        }
+
+                        return a + b;
+
+                    }, 0);
+
+                $(this.api().column(3).footer()).html(total_pesos.toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }));
+                $(this.api().column(4).footer()).html(total_dolar.toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }));
+
+            }
 
 
         });
@@ -263,6 +317,7 @@
         $.ajax({
             type: 'GET',
             url: 'productos/modal/' + id,
+            dataType: 'json',
             success: function(response) {
                 console.log(response.Mensaje);
                 console.log(response.Mensaje.Nombre);
@@ -298,6 +353,7 @@
         $.ajax({
             type: 'POST',
             url: 'productos/actualizar/' + id,
+            dataType: 'json',
             data: update,
             success: function(response) {
                 console.log(response);
@@ -339,6 +395,7 @@
                 $.ajax({
                     type: 'GET',
                     url: 'productos/eliminar/' + id,
+                    dataType: 'json',
                     success: function(response) {
                         $('#example').DataTable().ajax.reload();
                         Swal.fire(

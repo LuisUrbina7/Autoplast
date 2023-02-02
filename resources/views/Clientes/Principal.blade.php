@@ -11,7 +11,7 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item active" aria-current="page">Clientes</li>
     </ol>
-    <button class="btn btn-success" type="button" data-toggle="modal" data-target="#modal_importar"><i class="las la-file-csv fs-4"></i></button>
+    <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#modal_importar"><i class="las la-file-csv fs-4"></i></button>
 </div>
 @if ( session('Excelente') )
 <div class="alert alert-success" role="alert">
@@ -25,8 +25,8 @@
     ocurrió un error en la carga.
 </div>
 @endif
-<table id="example" class="table table-striped display nowrap" cellspacing="0" style="width:100%">
-    <thead class="bg-primary bg-gradient text-light">
+<table id="example" class="table table-hover" cellspacing="0" style="width:100%">
+    <thead class="table-light">
         <tr>
             <th></th>
             <th>Nombre</th>
@@ -47,7 +47,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Actualizar</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="d-none">
@@ -97,7 +97,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                         <button class="btn btn-primary" id="btnactualizar">Actualizar</button>
                     </div>
                 </form>
@@ -111,7 +111,7 @@
         <div class="modal-content">
             <div class="modal-header bg-success text-light">
                 <h5 class="modal-title" id="exampleModalLabel">Archivo</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
 
                 </button>
 
@@ -124,7 +124,7 @@
                         <input type="file" class="form-control" name="importar">
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                         <button type="submit" class="btn btn-primary">Guardar</button>
                     </div>
                 </form>
@@ -236,6 +236,7 @@
         $.ajax({
             type: 'post',
             url: 'clientes/actualizar/' + id,
+            dataType:'json',
             data: update,
             success: function(response) {
                 console.log(response)
@@ -296,6 +297,7 @@
                 $.ajax({
                     type: 'GET',
                     url: 'clientes/eliminar/' + id,
+                    dataType:'json',
                     success: function(response) {
                         $('#example').DataTable().ajax.reload();
                         Swal.fire(

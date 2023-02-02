@@ -16,8 +16,8 @@
     </ol>
 </div>
 
-<table id="example" class="table table-striped display nowrap" cellspacing="0" style="width:100%">
-    <thead class="bg-primary text-white">
+<table id="example" class="table table-hover" cellspacing="0" style="width:100%">
+    <thead class="table-light">
         <tr>
             <th>Factura</th>
             <th>Fecha</th>
@@ -36,9 +36,9 @@
             <td> {{number_format ($factura->VendidoA,2)}}</td>
             <td> {{number_format ($factura->VendidoB,2)}}</td>
             @if (($factura->Estado) == 'Cancelada')
-            <td> <span class="badge bg-secondary h4">Cancelada</span></td>
+            <td> <span class="badge bg-secondary h4 etiqueta-tres">Cancelada</span></td>
             @else
-            <td> <span class="badge bg-success h4">Credito</span></td>
+            <td> <span class="badge bg-warning h4 etiqueta-cuatro">Credito</span></td>
             @endif
             <td>
                 <div class="btn-group">
@@ -106,6 +106,7 @@
                 $.ajax({
                     type: 'GET',
                     url: link,
+                    dataType:'json',
                     success: function(response) {
 
                         Swal.fire(
