@@ -104,11 +104,11 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="validationDefault02">Costo</label>
-                            <input type="text" class="form-control" id="txtPrecioCompra" placeholder="Precio de costo" name="PrecioCompra" required>
+                            <input type="text" class="form-control" id="txtPrecioCompra" placeholder="Precio de costo" name="Costo" required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="validationDefault02">Precio </label>
-                            <input type="text" class="form-control" id="txtPrecioVenta" placeholder="Precio de costo" name="PrecioVenta" required>
+                            <input type="text" class="form-control" id="txtPrecioVenta" placeholder="Precio de costo" name="Venta" required>
                         </div>
                     </div>
 
@@ -129,7 +129,7 @@
                             <label for="idProveedor">Proveedor</label>
                             <select class="form-select" aria-label="Default select example" id="txtProveedor" name="idProveedor">
                                 @foreach ($Proveedores as $Proveedor )
-                                <option value="{{$Proveedor->id}}">{{$Proveedor->Nombre}}</option>
+                                <option value="{{$Proveedor->id}}">{{$Proveedor->nombre}}</option>
                                 @endforeach
 
                             </select>
@@ -139,7 +139,7 @@
                             <select class="form-select" aria-label="Default select example" id="txtCategoria" name="idCategoria">
 
                                 @foreach ($Categorias as $Categoria )
-                                <option value="{{$Categoria->id}}">{{$Categoria->Descripcion}}</option>
+                                <option value="{{$Categoria->id}}">{{$Categoria->descripcion}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -211,27 +211,27 @@
                     data: 'id',
                 },
                 {
-                    data: 'Detalles'
+                    data: 'detalles'
                 },
                 {
-                    data: 'Stock'
+                    data: 'stock'
                 },
                 {
-                    data: 'PrecioCompra',
+                    data: 'costo',
                     render: $.fn.dataTable.render.number(',', '.', 2)
                 },
                 {
-                    data: 'PrecioVenta',
+                    data: 'venta',
                     render: $.fn.dataTable.render.number(',', '.', 2)
                 },
                 {
-                    data: 'Unidad'
+                    data: 'unidad'
                 },
                 {
-                    data: 'Nombre'
+                    data: 'nombre'
                 },
                 {
-                    data: 'Descripcion'
+                    data: 'descripcion'
                 },
                 {
                     data: 'opciones'
@@ -255,8 +255,8 @@
             ],
             "footerCallback": function(row, data, start, end, display) {
 
-                total_pesos = this.api()
-                    .column(3) //numero de columna a sumar
+                total_productos = this.api()
+                    .column(2) //numero de columna a sumar
                     //.column(1, {page: 'current'})//para sumar solo la pagina actual
                     .data()
                     .reduce(function(a, b) {
@@ -270,29 +270,9 @@
                         return a + b;
 
                     }, 0);
-                total_dolar = this.api()
-                    .column(4)
-                    .data()
-                    .reduce(function(a, b) {
-                        if (typeof a === 'string') {
-                            a = a.replace(/[^\d.-]/g, '') * 1;
-                        }
-                        if (typeof b === 'string') {
-                            b = b.replace(/[^\d.-]/g, '') * 1;
-                        }
-
-                        return a + b;
-
-                    }, 0);
-
-                $(this.api().column(3).footer()).html(total_pesos.toLocaleString('en-US', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                }));
-                $(this.api().column(4).footer()).html(total_dolar.toLocaleString('en-US', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                }));
+                
+                $(this.api().column(2).footer()).html(total_productos);
+                
 
             }
 
@@ -320,16 +300,16 @@
             dataType: 'json',
             success: function(response) {
                 console.log(response.Mensaje);
-                console.log(response.Mensaje.Nombre);
+                console.log(response.Mensaje.nombre);
                 $('#txtId').val(id);
-                $('#txtDetalles').val(response.Mensaje.Detalles);
-                $('#txtStock').val(response.Mensaje.Stock);
-                $('#txtPrecioCompra').val(response.Mensaje.PrecioCompra);
-                $('#txtPrecioVenta').val(response.Mensaje.PrecioVenta);
-                $('#txtFecha').val(response.Mensaje.Fecha);
+                $('#txtDetalles').val(response.Mensaje.detalles);
+                $('#txtStock').val(response.Mensaje.stock);
+                $('#txtPrecioCompra').val(response.Mensaje.costo);
+                $('#txtPrecioVenta').val(response.Mensaje.venta);
+                $('#txtFecha').val(response.Mensaje.fecha);
                 $('#txtProveedor').val(response.Mensaje.idProveedor);
                 $('#txtCategoria').val(response.Mensaje.idCategoria);
-                $('#idUnidad').val(response.Mensaje.Unidad);
+                $('#idUnidad').val(response.Mensaje.unidad);
 
             },
             error: function(response) {

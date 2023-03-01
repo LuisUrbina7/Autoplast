@@ -10,7 +10,7 @@ class PedidoDetalle extends Model
     use HasFactory;
     protected $table = 'pedido_detalles';
     protected $fillable = [
-        'idPedido','DetallesTem','idProducto','Cantidad','Precio','Total','Fecha'
+        'idPedido','detalles','idProducto','cantidad','precio','total','fecha'
     ];
     public function Pedidos(){
         return $this->belongsTo(Pedido::class,'idPedido');

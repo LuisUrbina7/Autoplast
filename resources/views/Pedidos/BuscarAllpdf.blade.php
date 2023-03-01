@@ -95,12 +95,12 @@
                 <td></td>
             </tr>
             @foreach ($data as $pedidos )
-            @if ($n == $pedidos->Cliente)
+            @if ($n == $pedidos->cliente)
 
             <tr>
 
-                <td>{{$pedidos->DetallesTem}}</td>
-                <td class="text-end">{{$pedidos->Cantidad}}</td>
+                <td>{{$pedidos->detalles}}</td>
+                <td class="text-end">{{$pedidos->cantidad}}</td>
 
             </tr>
             @endif

@@ -74,7 +74,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="inputGroupPrepend2"><i class="las la-feather fs-4"></i></span>
                     </div>
-                    <input type="text" class="form-control @error('Identificador') is-invalid @enderror" id="txtIdentificador"  name="Identificador" required>
+                    <input type="text" class="form-control @error('Identificador') is-invalid @enderror" id="txtIdentificador"  name="Identificador" placeholder="DNI/CODIGO" required>
                     @error('Identificador')
                     <span class="invalid-feedback" role="alert">
                         <strong>Error, éste Identificador ya existe.</strong> 

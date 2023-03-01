@@ -37,6 +37,7 @@
             </div>
             <div class="modal-body">
                 <form id="formulario-categorias" class="form-row">
+                    @csrf
                     <div class="row">
                         <div class="col-md-12 mb-3">
                             <label for="intCategoria">Nombre de la Categoria</label>
@@ -96,14 +97,14 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-      var t=  $('#example').DataTable({
+        var t = $('#example').DataTable({
             responsive: true,
             "ajax": "{{route('categorias-tabla')}}",
             "columns": [{
                     data: 'id',
                 },
                 {
-                    data: 'Descripcion'
+                    data: 'descripcion'
                 },
                 {
                     data: 'opciones'
@@ -123,15 +124,20 @@
 
                 },
             },
-            "order": [[1, 'asc']],
+            "order": [
+                [1, 'asc']
+            ],
         });
-        t.on('order.dt search.dt', function () {
-        let i = 1;
- 
-        t.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
-            this.data(i++);
-        });
-    }).draw();
+        t.on('order.dt search.dt', function() {
+            let i = 1;
+
+            t.cells(null, 0, {
+                search: 'applied',
+                order: 'applied'
+            }).every(function(cell) {
+                this.data(i++);
+            });
+        }).draw();
     });
 </script>
 <script>
@@ -139,31 +145,43 @@
         e.preventDefault();
         let datos = $('#formulario-categorias').serialize();
 
-        $.ajax({
-            type: 'POST',
-            url: 'categorias/agregar',
-            dataType:'json',
-            data: datos,
-            success: function(response) {
-                $('#intCategoria').val('');
-                $('#example').DataTable().ajax.reload();
-                cerrar_modal('#categorias-modal1');
-                Swal.fire(
-                    'Excelente!',
-                    'Agregado correctamente.',
-                    'success',
-                );
-
+      
+     /*    fetch("{{route('agregar-categorias')}}", {
+            headers: {
+                "Content-type": "application/json",
             },
-            error: function(response) {
-                Swal.fire(
-                    'Ops!',
-                    'Ocurrió un error',
-                    'error',
-                );
-            }
-        });
-    })
+                method: "POST",
+                body:JSON.stringify(datos)
+            })
+            .then(response => response.json())
+            .then(json => console.log(json))
+        .catch(err => console.log(err));
+ */
+            $.ajax({
+                type: 'POST',
+                url: "{{route('agregar-categorias')}}",
+                dataType:'json',
+                data: datos,
+                success: function(response) {
+                    $('#intCategoria').val('');
+                    $('#example').DataTable().ajax.reload();
+                    cerrar_modal('#categorias-modal1');
+                    Swal.fire(
+                        'Excelente!',
+                        'Agregado correctamente.',
+                        'success',
+                    );
+
+                },
+                error: function(response) {
+                    Swal.fire(
+                        'Ops!',
+                        'Ocurrió un error',
+                        'error',
+                    );
+                }
+            });
+    });
 
 
     $('#btnactualizar').on('click', function(e) {
@@ -176,7 +194,7 @@
         $.ajax({
             type: 'POST',
             url: 'categorias/actualizar/' + id,
-            dataType:'json',
+            dataType: 'json',
             data: update,
             success: function(response) {
                 console.log(response.Mensaje);
@@ -204,12 +222,12 @@
         $.ajax({
             type: 'GET',
             url: 'categorias/modal/' + id,
-            dataType:'json',
+            dataType: 'json',
             success: function(response) {
                 console.log(response.Mensaje);
-                console.log(response.Mensaje.Nombre);
+                console.log(response.Mensaje.nombre);
                 $('#txtId').val(id);
-                $('#actCategoria').val(response.Mensaje.Descripcion);
+                $('#actCategoria').val(response.Mensaje.descripcion);
             },
             error: function(response) {
                 Swal.fire(
@@ -237,7 +255,7 @@
                 $.ajax({
                     type: 'GET',
                     url: 'categorias/eliminar/' + id,
-                    dataType:'json',
+                    dataType: 'json',
                     success: function(response) {
                         $('#example').DataTable().ajax.reload();
                         Swal.fire(
@@ -245,7 +263,7 @@
                             'Borrado correctamente.',
                             'success',
                         );
-                        
+
                     },
                     error: function(response) {
                         Swal.fire(

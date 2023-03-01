@@ -13,7 +13,7 @@ class ComprasController extends Controller
 {
     public function indexEntrada()
     {
-        $proveedores = Proveedor::select('id', 'Nombre')->get();
+        $proveedores = Proveedor::select('id', 'nombre')->get();
         $compra = Compras::select('id')->latest('id')->first();
         $Numero = ['indice' => 1];
 
@@ -53,23 +53,23 @@ class ComprasController extends Controller
         if ($Moneda == 'COL') {
             $compra = [
                 'idProveedor' => $idProveedor,
-                'Fecha' => $Fecha,
-                'Estado' => $Estado,
-                'VendidoA' => str_replace(",", "", $IndividualTotal),
-                'PagadoA' => str_replace(",", "", $Abono),
-                'VendidoB' => 0,
-                'PagadoB' => 0,
+                'fecha' => $Fecha,
+                'estado' => $Estado,
+                'vendido_A' => str_replace(",", "", $IndividualTotal),
+                'pagado_A' => str_replace(",", "", $Abono),
+                'vendido_B' => 0,
+                'pagado_B' => 0,
                 'idUsuario' => $user,
             ];
         } else {
             $compra = [
                 'idProveedor' => $idProveedor,
-                'Fecha' => $Fecha,
-                'Estado' => $Estado,
-                'VendidoA' => 0,
-                'PagadoA' => 0,
-                'VendidoB' => str_replace(",", "", $IndividualTotal),
-                'PagadoB' => str_replace(",", "", $Abono),
+                'fecha' => $Fecha,
+                'estado' => $Estado,
+                'vendido_A' => 0,
+                'pagado_A' => 0,
+                'vendido_B' => str_replace(",", "", $IndividualTotal),
+                'pagado_B' => str_replace(",", "", $Abono),
                 'idUsuario' => $user,
             ];
         }
@@ -80,9 +80,9 @@ class ComprasController extends Controller
             $detalles = [
                 'idfactura' => $indice['id'],
                 'idProducto' => $Codigo[$x],
-                'Cantidad' => $Cantidad[$x],
-                'Precio' => str_replace(",", "", $Precio[$x]),
-                'Total' => str_replace(",", "", $Total[$x]),
+                'cantidad' => $Cantidad[$x],
+                'precio' => str_replace(",", "", $Precio[$x]),
+                'total' => str_replace(",", "", $Total[$x]),
             ];
 
             Detalles_compras::create($detalles);
@@ -100,15 +100,15 @@ class ComprasController extends Controller
     public function agregarAbono($date, $valor, $idFactura)
     {
         $Abonos = new AbonoCompra;
-        $Abonos->Fecha = $date;
-        $Abonos->Monto = $valor;
+        $Abonos->fecha = $date;
+        $Abonos->monto = $valor;
         $Abonos->idFactura = $idFactura;
         $Abonos->save();
     }
     public function sumar(Request $request, $id)
     {
         $update = Producto::where('id', $id)->first();
-        $update->Stock = $update->Stock + $request->input('Cantidad');
+        $update->stock = $update->stock + $request->input('Cantidad');
         $update->update();
         return response()->json([
             'Estado' => 1,
@@ -122,7 +122,7 @@ class ComprasController extends Controller
 
         for ($x = 0; $x < count($Codigo); $x++) {
             $devolver = Producto::find($Codigo[$x]);
-            $devolver->Stock -= $Cantidad[$x];
+            $devolver->stock -= $Cantidad[$x];
             $devolver->save();
         }
 

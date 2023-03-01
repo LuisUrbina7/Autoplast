@@ -3,7 +3,7 @@
 @section('css')
 
 <link rel="stylesheet" href="{{ asset('EasyAutocomplete/easy-autocomplete.min.css') }}">
-<title>Proveedores</title>
+<title>Pedidos</title>
 @endsection
 
 @section('contenido')
@@ -90,8 +90,7 @@
                             <th scope="col">#</th>
                             <th scope="col">Producto</th>
                             <th scope="col">Cantidad</th>
-                            <th scope="col">Precio</th>
-                            <th scope="col">Total</th>
+                            <th scope="col">Costo Estimado</th>
                         </tr>
                     </thead>
                     <tbody id="tabla">
@@ -99,7 +98,7 @@
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td>Total ;</td>
+                            <td>Total :</td>
                             <td></td>
                             <td id="tCantidad"></td>
                             <td>Costo estimado <span id="tCosto"></span></td>
@@ -111,7 +110,13 @@
         </div>
 
         <div class="tab-pane fade  justify-content-center px-md-5" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-
+            <!-- <div class="px-2">
+                <select class="form-select" id="ruta" onchange="autocompletado(value)">
+                    <option selected disabled>--Seleccione--</option>
+                    <option value="1" onclick="autocompletado(1)"> Ruta A</option>
+                    <option value="2" onclick="autocompletado(2)"> Ruta B</option>
+                </select>
+            </div> -->
             <form class="mt-3 formulario-pedidos" action="{{route('pedidos.agregar')}}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="user" value="{{Auth::user()->id }}">
@@ -180,12 +185,12 @@
                                 <input type="text" readonly class="form-control" id="valor-suma" value="0">
                             </div>
                         </div>
-                        <div class="row mb-3 text-end justify-content-end">
+                        <!--  <div class="row mb-3 text-end justify-content-end">
                             <label for="inputEmail3" class="col-sm-2 col-form-label">%iva :</label>
                             <div class="col-sm-3">
                                 <input type="text" readonly class="form-control" id="valor-iva" value="0">
                             </div>
-                        </div>
+                        </div> -->
                         <div class="row mb-3 text-end justify-content-end">
                             <label for="inputEmail3" class="col-sm-2 col-form-label">Total :</label>
                             <div class="col-sm-3">
@@ -196,7 +201,7 @@
                     <div class="col-md-12 mb-3 text-center">
                         <div class="btn-group">
                             <button class="btn-group btn btn-danger"><i class="las la-window-close fs-4"></i></button>
-                            <button   class="btn-group btn btn-success" onclick="submit()"><i class="lar la-check-square fs-4"></i></button>
+                            <button class="btn-group btn btn-success" onclick="submit()"><i class="lar la-check-square fs-4"></i></button>
                         </div>
                     </div>
                 </div>
@@ -256,17 +261,19 @@
 
 <script src="{{ asset('EasyAutocomplete/jquery.easy-autocomplete.min.js') }}"></script>
 <script>
+    var url_inicial_autocompletado = "{{route('autocompletado',1)}}?nombre=";
+    /*     var url_final_autocompletado = url_inicial_autocompletado.replace('1', id_ruta); */
     var options = {
         url: function(phrase) {
-            return "{{route('autocompletado')}}?nombre=" + phrase;
+            return url_inicial_autocompletado + phrase;
         },
 
-        getValue: "Detalles",
+        getValue: "detalles",
         list: {
 
             onSelectItemEvent: function() {
                 var value = {
-                    precio: $("#txtDetalles").getSelectedItemData().PrecioVenta,
+                    precio: $("#txtDetalles").getSelectedItemData().venta,
                     codigo: $("#txtDetalles").getSelectedItemData().id,
                 }
                 $("#txtStock").val(value.texto).trigger("change");
@@ -296,14 +303,14 @@
     $('#txtcantidad').keyup(function(e) {
         e.preventDefault();
 
-        if ($('#txtcantidad').val() != '' && $('#txtPrecioVenta').val() != '' &&  $("#txtDetalles").val() != '') {
+        if ($('#txtcantidad').val() != '' && $('#txtPrecioVenta').val() != '' && $("#txtDetalles").val() != '') {
 
             calculo(e);
         }
     });
     $('#txtPrecioVenta').keyup(function(e) {
         e.preventDefault();
-        if ($('#txtcantidad').val() != '' && $('#txtPrecioVenta').val() != '' &&  $("#txtDetalles").val() != '') {
+        if ($('#txtcantidad').val() != '' && $('#txtPrecioVenta').val() != '' && $("#txtDetalles").val() != '') {
 
             calculo(e);
         }
@@ -346,7 +353,7 @@
                 'error'
             );
         } else {
-          /*   $("form").submit(); */
+            /*   $("form").submit(); */
         }
     }
 
@@ -408,7 +415,7 @@
                 card = '';
                 $.each(response, (index, item) => {
                     cardEstado = 'success';
-                    if (item.Estado == 'Procesada') {
+                    if (item.estado == 'Procesada') {
                         cardEstado = 'danger';
                     }
                     card += '   <div class="card mb-3" >\
@@ -420,9 +427,9 @@
                     </div>\
                     <div class="col-md-8">\
                         <div class="card-body">\
-                            <h5 class="card-title">Para <span>' + item.Cliente + '</span></h5>\
-                            <p class="card-text">Monto estimado =</p>\
-                            <p class="card-text"> <small class="text-muted">Fecha ; ' + item.Fecha + '</small></p>\
+                            <h5 class="card-title">Para <span>' + item.cliente + '</span></h5>\
+                            <p class="card-text">Estado =</p>\
+                            <p class="card-text"> <small class="text-muted">Fecha ; ' + item.fecha + '</small></p>\
                         </div>\
                     </div>\
                     <div class="col-md-2 d-flex justify-content-center align-items-center">\
@@ -478,24 +485,30 @@
                 url: url,
                 dataType: 'json',
                 success: function(response) {
+                  
                     console.log(response);
-                    var contenido = '',
+                     var contenido = '',
                         tCantidad = 0,
                         Costo = 0;
 
-
                     $.each(response, (index, item) => {
-                        tCantidad += item.Cantidad;
-                        Costo += item.Total;
+                        tCantidad += item.cantidad;
+                        Costo += item.total;
 
-                        contenido += '<tr><td>' + index + '</td><td>' + item.DetallesTem + '</td><td>' + item.Cantidad + '</td><td>' + item.Total.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td><a href="../cobranza/zona/detalles/' + item.clientesid + '/' + item.id + '" class="btn btn-info text-white">ver</a></td></tr>';
+                        contenido += '<tr><td>' + index + '</td><td>' + item.detalles + '</td><td>' + item.cantidad + '</td><td>' + item.total.toLocaleString('en-US', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }) ;
 
                         console.log(contenido);
                     });
 
                     $('#tabla').html(contenido);
                     $('#tCantidad').text(tCantidad);
-                    $('#tCosto').text(Costo.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}))
+                    $('#tCosto').text(Costo.toLocaleString('en-US', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }));
 
                 },
                 error: function(response) {
@@ -514,21 +527,27 @@
                 dataType: 'json',
                 success: function(response) {
                     console.log(response);
-                    var contenido = '',
+                  var contenido = '',
                         tCantidad = 0,
                         Costo = 0;
 
 
                     $.each(response, (index, item) => {
-                        tCantidad += item.Cantidad;
+                        tCantidad += item.cantidad;
                         Costo += item.Total;
 
-                        contenido += '<tr><td>' + index + '</td><td>' + item.DetallesTem + '</td><td>' + item.Cantidad + '</td><td>' + item.Total.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td><a href="../cobranza/zona/detalles/' + item.clientesid + '/' + item.id + '" class="btn btn-info text-white">ver</a></td></tr>';
-                    });
+                        contenido += '<tr><td>' + index + '</td><td>' + item.detalles + '</td><td>' + item.cantidad + '</td><td>' + item.Total.toLocaleString('en-US', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }) 
+                 });
 
                     $('#tabla').html(contenido);
                     $('#tCantidad').text(tCantidad);
-                    $('#tCosto').text(Costo.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}))
+                    $('#tCosto').text(Costo.toLocaleString('en-US', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }));
 
                 },
                 error: function(response) {

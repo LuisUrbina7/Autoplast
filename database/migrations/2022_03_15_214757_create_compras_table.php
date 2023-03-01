@@ -12,12 +12,12 @@ class CreateComprasTable extends Migration
         Schema::create('compras', function (Blueprint $table) {
             $table->id();
             $table->foreignId('idProveedor')->nullable()->constrained('proveedores')->cascadeOnUpdate()->nullOnDelete();
-            $table->date('Fecha');
-            $table->char('Estado',10);
-            $table->double('VendidoA', 12, 2);
-            $table->double('PagadoA', 12, 2);     
-            $table->double('VendidoB', 12, 2);
-            $table->double('PagadoB', 12, 2);
+            $table->date('fecha');
+            $table->char('estado',10);
+            $table->double('vendido_A', 12, 2);
+            $table->double('pagado_A', 12, 2);     
+            $table->double('vendido_B', 12, 2);
+            $table->double('pagado_B', 12, 2);
             $table->foreignId('idUsuario')->constrained('users')->cascadeOnUpdate()->OnDelete('cascade'); 
             $table->timestamps();  
         });

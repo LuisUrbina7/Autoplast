@@ -50,9 +50,9 @@ class PedidosController extends Controller
         try {
 
             $pedido = [
-                'Cliente' => $Cliente,
-                'Fecha' => $Fecha,
-                'Estado' => $Estado,
+                'cliente' => $Cliente,
+                'fecha' => $Fecha,
+                'estado' => $Estado,
                 'idUsuario' => $User
             ];
 
@@ -66,12 +66,12 @@ class PedidosController extends Controller
             for ($x = 0; $x < count($Detalles); $x++) {
                 $detalle = [
                     'idPedido' => $idPedido,
-                    'DetallesTem' => $Detalles[$x],
+                    'detalles' => $Detalles[$x],
                     'idProducto' => $Codigo[$x],
-                    'Cantidad' => $Cantidad[$x],
-                    'Precio' => $Precio[$x],
-                    'Total' => $TotalArt[$x],
-                    'Fecha' => $Fecha,
+                    'cantidad' => $Cantidad[$x],
+                    'precio' => $Precio[$x],
+                    'total' => $TotalArt[$x],
+                    'fecha' => $Fecha,
                 ];
 
                 PedidoDetalle::create($detalle);
@@ -85,9 +85,9 @@ class PedidosController extends Controller
     public function buscar($Fecha1, $Fecha2)
     {
         if ($Fecha1 != 'fecha1' && $Fecha1 != 'fecha2') {
-            $data = PedidoDetalle::select('DetallesTem', PedidoDetalle::raw('SUM(Cantidad) as Cantidad, SUM(Total) as Total'))->whereBetween('Fecha', [$Fecha1, $Fecha2])->groupBy('DetallesTem')->get();
+            $data = PedidoDetalle::select('detalles', PedidoDetalle::raw('SUM(cantidad) as Cantidad, SUM(total) as Total'))->whereBetween('fecha', [$Fecha1, $Fecha2])->groupBy('detalles')->get();
         } else {
-            $data = PedidoDetalle::select('DetallesTem', PedidoDetalle::raw('SUM(Cantidad) as Cantidad, SUM(Total) as Total'))->groupBy('DetallesTem')->get();
+            $data = PedidoDetalle::select('detalles', PedidoDetalle::raw('SUM(cantidad) as cantidad, SUM(total) as Total'))->groupBy('detalles')->get();
         }
 
         return response()->json($data);
@@ -96,10 +96,10 @@ class PedidosController extends Controller
     {
         if ($Fecha1 != 'fecha1' && $Fecha1 != 'fecha2') {
             $Fechas = ['Inicio' => $Fecha1, 'Fin' => $Fecha2];
-            $data = PedidoDetalle::select('DetallesTem', PedidoDetalle::raw('SUM(Cantidad) as Cantidad, SUM(Total) as Total'))->whereBetween('Fecha', [$Fecha1, $Fecha2])->groupBy('DetallesTem')->get();
+            $data = PedidoDetalle::select('detalles', PedidoDetalle::raw('SUM(cantidad) as Cantidad, SUM(total) as Total'))->whereBetween('fecha', [$Fecha1, $Fecha2])->groupBy('detalles')->get();
         } else {
             $Fechas = ['Inicio' => 'TODO', 'Fin' => 'TODO'];
-            $data = PedidoDetalle::select('DetallesTem', PedidoDetalle::raw('SUM(Cantidad) as Cantidad, SUM(Total) as Total'))->groupBy('DetallesTem')->get();
+            $data = PedidoDetalle::select('detalles', PedidoDetalle::raw('SUM(cantidad) as Cantidad, SUM(total) as Total'))->groupBy('detalles')->get();
         }
         $pdf = Pdf::loadView('Pedidos.Buscarpdf', compact('data', 'Fechas'));
         return $pdf->stream('pedidos.pdf');
@@ -107,7 +107,7 @@ class PedidosController extends Controller
     public function buscarAll($Fecha1, $Fecha2)
     {
         if ($Fecha1 != 'fecha1' && $Fecha1 != 'fecha2') {
-            $data = Pedido::whereBetween('Fecha', [$Fecha1, $Fecha2])->orderBy('id', 'desc')->get();
+            $data = Pedido::whereBetween('fecha', [$Fecha1, $Fecha2])->orderBy('id', 'desc')->get();
         } else {
             $data = Pedido::orderBy('id', 'desc')->get();
         }
@@ -118,15 +118,15 @@ class PedidosController extends Controller
     {
         if ($Fecha1 != 'fecha1' && $Fecha1 != 'fecha2') {
             $Fechas = ['Inicio' => $Fecha1, 'Fin' => $Fecha2];
-            $data = Pedido::join('pedido_detalles', 'pedido_detalles.idPedido', '=', 'pedidos.id')->select('pedidos.Cliente', 'pedido_detalles.DetallesTem', 'pedido_detalles.Cantidad')->whereBetween('pedidos.Fecha', [$Fecha1, $Fecha2])->groupBy('pedidos.Cliente', 'pedido_detalles.DetallesTem', 'pedido_detalles.Cantidad')->get();
+            $data = Pedido::join('pedido_detalles', 'pedido_detalles.idPedido', '=', 'pedidos.id')->select('pedidos.cliente', 'pedido_detalles.detalles', 'pedido_detalles.cantidad')->whereBetween('pedidos.fecha', [$Fecha1, $Fecha2])->groupBy('pedidos.cliente', 'pedido_detalles.detalles', 'pedido_detalles.cantidad')->get();
         } else {
             $Fechas = ['Inicio' => 'TODO', 'Fin' => 'TODO'];
-            $data = Pedido::join('pedido_detalles', 'pedido_detalles.idPedido', '=', 'pedidos.id')->select('pedidos.Cliente', 'pedido_detalles.DetallesTem', 'pedido_detalles.Cantidad')->groupBy('pedidos.Cliente', 'pedido_detalles.DetallesTem', 'pedido_detalles.Cantidad')->get();
+            $data = Pedido::join('pedido_detalles', 'pedido_detalles.idPedido', '=', 'pedidos.id')->select('pedidos.cliente', 'pedido_detalles.detalles', 'pedido_detalles.cantidad')->groupBy('pedidos.cliente', 'pedido_detalles.detalles', 'pedido_detalles.cantidad')->get();
         }
         $nombre = [];
 
         for ($x = 0; $x < count($data); $x++) {
-            $nombre[$x] = $data[$x]['Cliente'];
+            $nombre[$x] = $data[$x]['cliente'];
         }
         $nombref = array_unique($nombre);
         $pdf = Pdf::loadView('Pedidos.BuscarAllpdf', compact('data', 'nombref', 'Fechas'));
@@ -137,8 +137,8 @@ class PedidosController extends Controller
     {
         $ref = Factura::select('id')->orderBy('id', 'desc')->first();
         $Numero = $ref['id'];
-        $Clientes = Cliente::select('id', 'Nombre', 'Identificador')->get();
-        $Dinfo = PedidoDetalle::join('pedidos', 'pedidos.id', '=', 'pedido_detalles.idPedido')->select('pedidos.id', 'pedidos.Fecha', 'pedidos.Cliente', 'pedidos.idUsuario', 'pedidos.Estado', 'pedido_detalles.id as idDetalles', 'pedido_detalles.DetallesTem', 'pedido_detalles.Cantidad', 'pedido_detalles.Precio', 'pedido_detalles.Total', 'pedido_detalles.idProducto')->where('idPedido', $id)->get();
+        $Clientes = Cliente::select('id', 'nombre', 'identificador')->get();
+        $Dinfo = PedidoDetalle::join('pedidos', 'pedidos.id', '=', 'pedido_detalles.idPedido')->select('pedidos.id', 'pedidos.fecha', 'pedidos.cliente', 'pedidos.idUsuario', 'pedidos.estado', 'pedido_detalles.id as idDetalles', 'pedido_detalles.detalles', 'pedido_detalles.cantidad', 'pedido_detalles.precio', 'pedido_detalles.total', 'pedido_detalles.idProducto')->where('idPedido', $id)->get();
         /* dd($Dinfo); */
         return view('Pedidos.Actualizar', compact('Dinfo', 'Clientes', 'Numero'));
     }
@@ -192,12 +192,12 @@ class PedidosController extends Controller
 
                 $factura = [
                     'idCliente' => $idCliente,
-                    'Fecha' => $Fecha,
-                    'Estado' => 'Cancelada',
-                    'VendidoA' => str_replace(".", "", $IndividualTotal),
-                    'PagadoA' => str_replace(".", "", $IndividualTotal),
-                    'VendidoB' => 0,
-                    'PagadoB' => 0,
+                    'fecha' => $Fecha,
+                    'estado' => 'Cancelada',
+                    'vendido_A' => str_replace(".", "", $IndividualTotal),
+                    'pagado_A' => str_replace(".", "", $IndividualTotal),
+                    'vendido_B' => 0,
+                    'pagado_B' => 0,
                     'idUsuario' => $user,
                 ];
 
@@ -213,9 +213,9 @@ class PedidosController extends Controller
                     $detalles = [
                         'idfactura' => $Factura,
                         'idProducto' => $Codigo[$x],
-                        'Cantidad' => $Cantidad[$x],
-                        'Precio' => str_replace(",", "", $Precio[$x]),
-                        'Total' => str_replace(",", "", $Total[$x]),
+                        'cantidad' => $Cantidad[$x],
+                        'precio' => str_replace(",", "", $Precio[$x]),
+                        'total' => str_replace(",", "", $Total[$x]),
 
                     ];
 
@@ -226,7 +226,7 @@ class PedidosController extends Controller
             }
             try {
                 $ActualizarP = Pedido::find($idPedido);
-                $ActualizarP->Estado = 'Procesada';
+                $ActualizarP->estado = 'Procesada';
                 $ActualizarP->save();
             } catch (Exception $e) {
                 return response()->json(['resultado' => 'Error en la actualzacion del pedido']);

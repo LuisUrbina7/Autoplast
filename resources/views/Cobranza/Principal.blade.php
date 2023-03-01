@@ -38,8 +38,8 @@
             @endphp
             <tr>
                 <td> {{$contador}}</td>
-                <td> {{$cuentas->Nombre}}</td>
-                <td> {{$cuentas->Identificador}}</td>
+                <td> {{$cuentas->nombre}}</td>
+                <td> {{$cuentas->identificador}}</td>
                 <td> {{number_format($cuentas->COL,2)}}</td>
                 <td> {{number_format($cuentas->USD,2)}}</td>
                 @if ($cuentas->COL == 0 && $cuentas->USD == 0 )

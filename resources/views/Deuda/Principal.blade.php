@@ -37,7 +37,7 @@
         @endphp
         <tr>
             <td> {{$contador}}</td>
-            <td> {{$Proveedor->Nombre}}</td>
+            <td> {{$Proveedor->nombre}}</td>
             <td> {{number_format($Proveedor->COL,2) }}</td>
             <td> {{number_format($Proveedor->USD,2)}}</td>
             @if ($Proveedor->COL == 0 && $Proveedor->USD == 0 )

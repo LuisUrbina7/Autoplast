@@ -65,8 +65,8 @@
                 <label for="idProveedor">Proveedor</label>
                 <select class="form-select" aria-label="Default select example" id="txtProveedor" name="idProveedor">
                     <option selected disabled>--Selecione--</option>
-                    @foreach ($Proveedor as $Pro )
-                    <option value="{{$Pro->id}}">{{$Pro->Nombre}}</option>
+                    @foreach ($Proveedores as $Proveedor )
+                    <option value="{{$Proveedor->id}}">{{$Proveedor->nombre}}</option>
                     @endforeach
                 </select>
             </div>
@@ -74,8 +74,8 @@
                 <label for="idCategoria">Categoria</label>
                 <select class="form-select" aria-label="Default select example" id="txtCategoria" name="idCategoria">
                     <option selected disabled>--Selecione--</option>
-                    @foreach ($Categoria as $C )
-                    <option value="{{$C->id}}">{{$C->Descripcion}}</option>
+                    @foreach ($Categorias as $Categoria )
+                    <option value="{{$Categoria->id}}">{{$Categoria->descripcion}}</option>
                     @endforeach
                 </select>
             </div>

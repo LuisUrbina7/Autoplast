@@ -51,16 +51,16 @@
             <div class="mb-3 row">
                 <label for="staticEmail" class="col-sm-2 col-form-label">Cliente</label>
                 <div class="col-sm-10">
-                    <input type="text" readonly class="form-control" placeholder="Nombre" value="{{$Dinfo[0]->Cliente}}">
+                    <input type="text" readonly class="form-control" placeholder="Nombre" value="{{$Dinfo[0]->cliente}}">
                 </div>
             </div>
             <div class="mb-3 row">
                 <label for="staticEmail" class="col-sm-2 col-form-label">Confirmar Cliente :</label>
                 <div class="col-sm-10">
                     <select class="form-select form-control-sm" id="txtCliente" name="idCliente" required>
-                        <option selected disabled >--General--</option>
+                        <option selected disabled>--General--</option>
                         @foreach ($Clientes as $cliente )
-                        <option value="{{$cliente->id}}">{{$cliente->Nombre}} | {{$cliente->Identificador}}</option>
+                        <option value="{{$cliente->id}}">{{$cliente->nombre}} | {{$cliente->identificador}}</option>
                         @endforeach
                     </select>
 
@@ -70,10 +70,10 @@
             <div class="mb-3 row">
                 <label for="inputPassword" class="col-sm-2 col-form-label">Fecha del Pedido:</label>
                 <div class="col-sm-10">
-                    <input type="date" class="form-control" id="Fecha" name="Fecha" value="{{$Dinfo[0]->Fecha}}">
+                    <input type="date" class="form-control" id="Fecha" name="Fecha" value="{{$Dinfo[0]->fecha}}">
                 </div>
             </div>
-            @if ($Dinfo[0]->Estado == 'Procesada')
+            @if ($Dinfo[0]->estado == 'Procesada')
             <div class="row">
                 <div class="col-12 text-center mb-3">
                     <span class="bg-danger text-white py-2 px-4  border rounded-43"> Pedido Procesado.</span>
@@ -122,10 +122,10 @@
                             <tr>
                                 <td class="d-none"><input class="form-control idDetalles " type="number" readonly name="Codigo[]" value="{{$Detalles->idProducto}}"></td>
                                 <td>{{$x}}</td>
-                                <td><input class="form-control" type="text" readonly name="Detalles[]" value="{{$Detalles->DetallesTem }}"></td>
-                                <td><input class="form-control" type="number" readonly name="Cantidad[]" value="{{$Detalles->Cantidad }}"> </td>
-                                <td><input class="form-control" type="number" readonly name="Precio[]" value="{{$Detalles->Precio }}"></td>
-                                <td> <input type="text" readonly name="Total[]" class="form-control monto-total" value="{{$Detalles->Total }}"></td>
+                                <td><input class="form-control" type="text" readonly name="Detalles[]" value="{{$Detalles->detalles }}"></td>
+                                <td><input class="form-control" type="number" readonly name="Cantidad[]" value="{{$Detalles->cantidad }}"> </td>
+                                <td><input class="form-control" type="number" readonly name="Precio[]" value="{{$Detalles->precio }}"></td>
+                                <td> <input type="text" readonly name="Total[]" class="form-control monto-total" value="{{$Detalles->total }}"></td>
 
                             </tr>
 
@@ -160,7 +160,7 @@
                 <div class="col-md-5 row mb-3 ">
                     <label for="txtDetalles">Descripcion</label>
                     <div class="col-10">
-                            <input type="text" class="form-control form-control-sm" id="txtDetalles" placeholder="Nombre">
+                        <input type="text" class="form-control form-control-sm" id="txtDetalles" placeholder="Nombre">
                     </div>
                     <div class="col-2"><a class="btn btn-info py-1" href="{{route('agregar-productos-vista')}}">v</a></div>
                 </div>
@@ -202,10 +202,10 @@
                                 <td class="d-none"><input class="form-control d-n" type="number" name="Codigo[]" value="{{$Detalles->idProducto}}"></td>
                                 <td class="d-none idDetalles ">{{$Detalles->idDetalles}}</td>
                                 <td>{{$x}}</td>
-                                <td><input class="form-control" type="text" readonly name="Detalles[]" value="{{$Detalles->DetallesTem }}"></td>
-                                <td><input class="form-control itemCantidad" type="number" name="Cantidad[]" value="{{$Detalles->Cantidad }}"> </td>
-                                <td><input class="form-control itemPrecio" type="number" name="Precio[]" value="{{$Detalles->Precio }}"></td>
-                                <td> <input type="text" readonly name="Total[]" class="form-control monto-total" value="{{$Detalles->Total }}"></td>
+                                <td><input class="form-control" type="text" readonly name="Detalles[]" value="{{$Detalles->detalles }}"></td>
+                                <td><input class="form-control itemCantidad" type="number" name="Cantidad[]" value="{{$Detalles->cantidad }}"> </td>
+                                <td><input class="form-control itemPrecio" type="number" name="Precio[]" value="{{$Detalles->precio }}"></td>
+                                <td> <input type="text" readonly name="Total[]" class="form-control monto-total" value="{{$Detalles->total }}"></td>
                                 <td><a class="btn btn-danger tabla-borra">Borrar</a></td>
                             </tr>
 
@@ -215,13 +215,13 @@
                             <tr>
                                 <td colspan="3"></td>
                                 <td>Subtotal :</td>
-                                <td> <input type="text" readonly class="form-control" id="valor-suma" value="{{$Dinfo[0]->Monto}}"></td>
+                                <td> <input type="text" readonly class="form-control" id="valor-suma" value="{{$Dinfo[0]->monto}}"></td>
                             </tr>
-                            <tr>
+                            <!-- <tr>
                                 <td colspan="3"></td>
                                 <td>%iva :</td>
                                 <td><input type="text" readonly class="form-control" id="valor-iva" value="0"></td>
-                            </tr>
+                            </tr> -->
                             <tr>
                                 <td colspan="3"></td>
                                 <td>Total :</td>
@@ -255,15 +255,15 @@
 
     var options = {
         url: function(phrase) {
-            return "{{route('autocompletado')}}?nombre=" + phrase;
+            return "{{route('autocompletado',1)}}?nombre=" + phrase;
         },
 
-        getValue: "Detalles",
+        getValue: "detalles",
         list: {
 
             onSelectItemEvent: function() {
                 var value = {
-                    precio: $("#txtDetalles").getSelectedItemData().PrecioVenta,
+                    precio: $("#txtDetalles").getSelectedItemData().venta,
                     codigo: $("#txtDetalles").getSelectedItemData().id,
                 }
                 $("#txtStock").val(value.texto).trigger("change");
@@ -311,8 +311,8 @@
                 let fila = $(this).parents("tr");
                 let valor = fila.find(".monto-total").val();
                 let id = fila.find(".idDetalles").html();
-                console.log(valor); 
-                 borrarElemento(id);
+                console.log(valor);
+                borrarElemento(id);
                 total -= parseFloat(valor);
                 $('#valor-suma').val(total);
                 $('#valor-total').val(total);
@@ -335,7 +335,7 @@
         let itemPrecio = fila.find(".itemPrecio").val();
         console.log(itemCantidad);
         fila.find(".monto-total").val(itemCantidad * itemPrecio);
-        sumnarTodo() ;
+        sumnarTodo();
     }
 
     function sumnarTodo() {
@@ -344,7 +344,7 @@
             sum += parseFloat($(this).val().replace(/,/g, ''), 10);
         });
         $('#valor-suma').val(sum);
-         $('#valor-total').val(sum);
+        $('#valor-total').val(sum);
     }
 
     function borrarElemento(idDetalles) {
@@ -377,61 +377,61 @@
         var datos = $('#form-procesar').serialize();
         console.log($('#txtCliente').val());
 
-if($('#txtCliente').val()!=null){
-   
-    $.ajax({
-        type: 'POST',
-        url: urlprocesar,
-        data: datos,
-        dataType: 'json',
-        beforeSend: function(response) {
-            $('#btnprocesar').addClass('spinner-border');
+        if ($('#txtCliente').val() != null) {
 
-        },
-        success: function(response) {
-            $('#btnprocesar').removeClass('spinner-border');
+            $.ajax({
+                type: 'POST',
+                url: urlprocesar,
+                data: datos,
+                dataType: 'json',
+                beforeSend: function(response) {
+                    $('#btnprocesar').addClass('spinner-border');
 
-            if (response.Estado == 'Error') {
-                Swal.fire(
-                    'Error!',
-                    response.Mensaje,
-                    'warning'
-                )
-            }
-            if (response.Estado == 'success') {
-                Swal.fire(
-                    'Excelente!',
-                    response.Mensaje,
-                    'success'
-                )
-                window.location.reload() ;
-            }
-            if (response.resultado) {
+                },
+                success: function(response) {
+                    $('#btnprocesar').removeClass('spinner-border');
 
-                Swal.fire(
-                    'Respuesta!',
-                    response.resultado,
-                    'error'
-                )
-            }
-            console.log(response);
-        },
-        error: function(response) {
-            $('#btnprocesar').removeClass('spinner-border');
+                    if (response.Estado == 'Error') {
+                        Swal.fire(
+                            'Error!',
+                            response.Mensaje,
+                            'warning'
+                        )
+                    }
+                    if (response.Estado == 'success') {
+                        Swal.fire(
+                            'Excelente!',
+                            response.Mensaje,
+                            'success'
+                        )
+                        window.location.reload();
+                    }
+                    if (response.resultado) {
+
+                        Swal.fire(
+                            'Respuesta!',
+                            response.resultado,
+                            'error'
+                        )
+                    }
+                    console.log(response);
+                },
+                error: function(response) {
+                    $('#btnprocesar').removeClass('spinner-border');
+                    Swal.fire(
+                        'Error!',
+                        'No hay datos.',
+                        'error'
+                    );
+                }
+            });
+        } else {
             Swal.fire(
-                'Error!',
-                'No hay datos.',
-                'error'
-            );
-        }
-    }); 
-}else{
-    Swal.fire(
                 'Error!',
                 'Confirmar cliente.',
                 'error'
             );
-}
+        }
     }
 </script>
 @endsection

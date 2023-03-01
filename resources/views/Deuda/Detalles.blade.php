@@ -14,7 +14,7 @@
     @foreach ($factura as $info)
     <div class="col-12 col-md-4 text-center">
         <p><span class="h6"> NUMERO FACTURA :</span> <input type="text" size="10px" class="form-control" id="factura" value="{{$info->id}}" id="idFactura"></p>
-        @if ($info->Estado=='Cancelada')
+        @if ($info->estado=='Cancelada')
         <td> <span class="badge bg-secondary h4">CANCELADA</span></td>
         @else
         <td> <span class="badge bg-warning h4">EN PROCESO</span></td>
@@ -38,13 +38,13 @@
     </div>
     @foreach ($proveedor as $datos)
     <div class="col-6 mb-4">
-        <p><span> Nomre :</span>{{$datos->Nombre}}</p>
-        <p><span> Direccion:</span>{{$datos->Direccion}}</p>
-        <p><span> Telefono :</span>{{$datos->Telefono}}</p>
+        <p><span> Nomre :</span>{{$datos->nombre}}</p>
+        <p><span> Direccion:</span>{{$datos->direccion}}</p>
+        <p><span> Telefono :</span>{{$datos->telefono}}</p>
     </div>
     <div class="col-6 mb-4">
         
-        <p><span> Fecha :</span>{{$info->Fecha}}</p>
+        <p><span> Fecha :</span>{{$info->fecha}}</p>
     </div>
     @endforeach
     <div class="col-12">
@@ -66,47 +66,47 @@
 
                 @foreach ($detalles as $detalle )
                 <tr>
-                    <td> {{$detalle->Producto->Detalles}}</td>
-                    <td> {{$detalle->Cantidad}}</td>
-                    <td> {{$detalle->Producto->Unidad}}</td>
-                    <td> {{number_format($detalle->Precio,2)}}</td>
-                    <td> {{number_format($detalle->Total,2)}}</td>
+                    <td> {{$detalle->Producto->detalles}}</td>
+                    <td> {{$detalle->cantidad}}</td>
+                    <td> {{$detalle->Producto->unidad}}</td>
+                    <td> {{number_format($detalle->precio,2)}}</td>
+                    <td> {{number_format($detalle->total,2)}}</td>
                 </tr>
                 @endforeach
             </tbody>
             <tfoot>
-            @if ($info->VendidoA==0)
+            @if ($info->vendido_A==0)
                 
                 <tr>
                     <td colspan="3"></td>
                     <td>Total :</td>
-                    <td>{{number_format($info->VendidoB,2)}}</td>
+                    <td>{{number_format($info->vendido_B,2)}}</td>
                 </tr>
                 <tr>
                     <td colspan="3"></td>
                     <td>Pagado :</td>
-                    <td>{{number_format($info->PagadoB,2)}}</td>
+                    <td>{{number_format($info->pagado_B,2)}}</td>
                 </tr>
                 <tr>
                     <td colspan="3"></td>
                     <td>Resta :</td>
-                    <td><input type="text" class="form-control" id="deuda" disabled value="{{number_format($info->VendidoB-$info->PagadoB,2)}}"></td>
+                    <td><input type="text" class="form-control" id="deuda" disabled value="{{number_format($info->vendido_B-$info->pagado_B,2)}}"></td>
                 </tr>
                 @else
                 <tr>
                     <td colspan="3"></td>
                     <td>Total :</td>
-                    <td>{{number_format($info->VendidoA,2)}}</td>
+                    <td>{{number_format($info->vendido_A,2)}}</td>
                 </tr>
                 <tr>
                     <td colspan="3"></td>
                     <td>Pagado :</td>
-                    <td>{{number_format($info->PagadoA,2)}}</td>
+                    <td>{{number_format($info->pagado_A,2)}}</td>
                 </tr>
                 <tr>
                     <td colspan="3"></td>
                     <td>Resta :</td>
-                    <td><input type="text" class="form-control" id="deuda" disabled  value="{{number_format($info->VendidoA-$info->PagadoA)}}"></td>
+                    <td><input type="text" class="form-control" id="deuda" disabled  value="{{number_format($info->vendido_A-$info->pagado_A)}}"></td>
                 </tr>
                     
                 @endif
@@ -124,7 +124,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Abonos</h5>
                     <p class="card-text">Se observa el hstoral de abonos realzados</p>
-                    @if ($info->Estado=='Credito')
+                    @if ($info->estado=='Credito')
                     <button type="button" onclick="deuda()" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Agregar</button>
                       @endif
 
@@ -206,7 +206,7 @@
 
                 var llenado = '';
                 $.each(response, (index, item) => {
-                    llenado += '<tr><td>' + (index+1) + '</td><td>' + item.Fecha + '</td><td>' + item.Monto.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td></tr>';
+                    llenado += '<tr><td>' + (index+1) + '</td><td>' + item.fecha + '</td><td>' + item.monto.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td></tr>';
 
                 });
                 $('#table-body-deudas').append(llenado);

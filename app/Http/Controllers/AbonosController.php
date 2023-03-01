@@ -13,13 +13,13 @@ class AbonosController extends Controller
 
   public function cargarA($id)
   {
-    $Abonos = Abonos::select('id', 'Fecha', 'Monto')->where('idFactura', $id)->get();
+    $Abonos = Abonos::select('id', 'fecha', 'monto')->where('idFactura', $id)->get();
 
     return response()->json($Abonos);
   }
   public function cargarB($id)
   {
-    $Abonos = AbonoCompra::select('id', 'Fecha', 'Monto')->where('idFactura', $id)->get();
+    $Abonos = AbonoCompra::select('id', 'fecha', 'monto')->where('idFactura', $id)->get();
 
     return response()->json($Abonos);
   }
@@ -45,8 +45,8 @@ class AbonosController extends Controller
         $Estado = 'Credito';
       }
 
-      $Abonos->Fecha = $Fecha;
-      $Abonos->Monto = $Monto;
+      $Abonos->fecha = $Fecha;
+      $Abonos->monto = $Monto;
       $Abonos->idFactura = $idFactura;
       $Abonos->save();
       $this->actualizarA($idFactura, $Monto, $Estado);
@@ -76,8 +76,8 @@ class AbonosController extends Controller
         $Estado = 'Credito';
       }
 
-      $Abonos->Fecha = $Fecha;
-      $Abonos->Monto = $Monto;
+      $Abonos->fecha = $Fecha;
+      $Abonos->monto = $Monto;
       $Abonos->idFactura = $idFactura;
       $Abonos->save();
       $this->actualizarB($idFactura, $Monto, $Estado);
@@ -91,13 +91,13 @@ class AbonosController extends Controller
 
     $factura =  Factura::find($id);
     if ($factura) {
-      if ($factura->VendidoA == 0) {
-        $factura->PagadoB += $monto;
+      if ($factura->vendido_A == 0) {
+        $factura->pagado_B += $monto;
       } else {
-        $factura->PagadoA += $monto;
+        $factura->pagado_A += $monto;
       
       }
-      $factura->Estado = $estado;
+      $factura->estado = $estado;
       $factura->save();
     } else {
       echo 'error';
@@ -109,13 +109,13 @@ class AbonosController extends Controller
   {
     $factura =  Compras::find($id);
     if ($factura) {
-      if ($factura->VendidoA == 0) {
-        $factura->PagadoB += $monto;
+      if ($factura->vendido_A == 0) {
+        $factura->pagado_B += $monto;
       } else {
-        $factura->PagadoA += $monto;
+        $factura->pagado_A += $monto;
       
       }
-      $factura->Estado = $estado;
+      $factura->estado = $estado;
       $factura->save();
     } else {
       echo 'error';

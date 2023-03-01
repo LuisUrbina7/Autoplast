@@ -30,7 +30,7 @@ $Fecha =date("Y-m-d");
             <select class="form-select " id="txtProveedor" name="idProveedor" required>
                 <option selected disabled>--Seleccione--</option>
                 @foreach ($proveedores as $proveedor )
-                <option value="{{$proveedor->id}}">{{$proveedor->Nombre}}</option>
+                <option value="{{$proveedor->id}}">{{$proveedor->nombre}}</option>
                 @endforeach
             </select>
         </div>
@@ -126,12 +126,12 @@ $Fecha =date("Y-m-d");
                     <input type="text" readonly class="form-control" id="valor-suma" value="0">
                 </div>
             </div>
-            <div class="row mb-3 text-end justify-content-end">
+           <!--  <div class="row mb-3 text-end justify-content-end">
                 <label for="inputEmail3" class="col-sm-2 col-form-label">%iva :</label>
                 <div class="col-sm-3">
                     <input type="text" readonly class="form-control" id="valor-iva" value="0">
                 </div>
-            </div>
+            </div> -->
             <div class="row mb-3 text-end justify-content-end">
                 <label for="inputEmail3" class="col-sm-2 col-form-label">Total :</label>
                 <div class="col-sm-3">
@@ -172,15 +172,15 @@ $Fecha =date("Y-m-d");
                 return url_final_autocompletado + phrase;
             },
 
-            getValue: "Detalles",
+            getValue: "detalles",
             list: {
 
                 onSelectItemEvent: function() {
                     var value = {
-                        texto: $("#txtDetalles").getSelectedItemData().Stock,
-                        precio: $("#txtDetalles").getSelectedItemData().PrecioVenta,
+                        texto: $("#txtDetalles").getSelectedItemData().stock,
+                        precio: $("#txtDetalles").getSelectedItemData().costo,
                         codigo: $("#txtDetalles").getSelectedItemData().id,
-                        unidad: $("#txtDetalles").getSelectedItemData().Unidad,
+                        unidad: $("#txtDetalles").getSelectedItemData().unidad,
                     }
 
                     $("#txtStock").val(value.texto).trigger("change");

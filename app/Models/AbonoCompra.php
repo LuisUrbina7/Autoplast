@@ -10,6 +10,6 @@ class AbonoCompra extends Model
     use HasFactory;
     protected $table = 'abono_compras';
     protected $fillable = [
-        'Fecha', 'Monto', 'idFactura'
+        'fecha', 'monto', 'idFactura'
     ];
 }

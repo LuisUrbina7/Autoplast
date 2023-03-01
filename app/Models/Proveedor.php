@@ -10,7 +10,7 @@ class Proveedor extends Model
     use HasFactory;
     protected $table = 'proveedores';
     protected $fillable = [
-        'Nombre','Direccion','Telefono',
+        'nombre','direccion','telefono',
     ];
 
        public function Productos(){

@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Abonos extends Model
 {
     use HasFactory;
-    protected $table = 'abonos';
+    protected $table = 'abono_ventas';
     protected $fillable = [
-        'Fecha', 'Monto', 'idFactura'
+        'fecha', 'monto', 'idFactura'
     ];
     
 }

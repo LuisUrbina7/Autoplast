@@ -51,10 +51,6 @@
                         <td id="totalventaB"></td>
                         <td id="totalabonoB"></td>
                         <td></td>
-
-
-
-
                     </tr>
                 </tfoot>
             </table>
@@ -113,14 +109,14 @@
 
 
                     $.each(response, (index, item) => {
-                        ventaA += item.VendidoA;
-                        abonoA += item.PagadoA;
-                        ventaB += item.VendidoB;
-                        abonoB += item.PagadoB;
-                        if (item.Estado == 'Cancelada') {
-                            contenido += '<tr><td>' + item.id + '</td><td>' + item.Fecha + '</td><td>' + item.Nombre + '</td><td>' + item.VendidoA .toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2})+ '</td><td>' + item.PagadoA.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td>' + item.VendidoB.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td>' + item.PagadoB.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td ><p class="badge bg-secondary">' + item.Estado + '</p></td><td><a href="../cobranza/zona/detalles/' + item.clientesid + '/' + item.id + '" class="btn btn-info text-white">ver</a></td></tr>';
+                        ventaA += item.vendido_A;
+                        abonoA += item.pagado_A;
+                        ventaB += item.vendido_B;
+                        abonoB += item.pagado_B;
+                        if (item.estado == 'Cancelada') {
+                            contenido += '<tr><td>' + item.id + '</td><td>' + item.fecha + '</td><td>' + item.nombre + '</td><td>' + item.vendido_A .toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2})+ '</td><td>' + item.pagado_A.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td>' + item.vendido_B.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td>' + item.pagado_B.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td ><p class="badge bg-secondary">' + item.estado + '</p></td><td><a href="../cobranza/zona/detalles/' + item.clientesid + '/' + item.id + '" class="btn btn-info text-white">ver</a></td></tr>';
                         } else {
-                            contenido += '<tr><td>' + item.id + '</td><td>' + item.Fecha + '</td><td>' + item.Nombre + '</td><td>' + item.VendidoA.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td>' + item.PagadoA.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td>' + item.VendidoB.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td>' + item.PagadoB.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td ><p class="badge bg-warning text-dark">' + item.Estado + '</p></td><td><a href="../cobranza/zona/detalles/' + item.clientesid + '/' + item.id + '" class="btn btn-info text-white">ver</a></td></tr>';
+                            contenido += '<tr><td>' + item.id + '</td><td>' + item.fecha + '</td><td>' + item.nombre + '</td><td>' + item.vendido_A.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td>' + item.pagado_A.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td>' + item.vendido_B.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td>' + item.pagado_B.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td ><p class="badge bg-warning text-dark">' + item.estado + '</p></td><td><a href="../cobranza/zona/detalles/' + item.clientesid + '/' + item.id + '" class="btn btn-info text-white">ver</a></td></tr>';
                         }
 
                         console.log(contenido);
@@ -161,14 +157,14 @@
 
 
                     $.each(response, (index, item) => {
-                        ventaA += item.VendidoA;
-                        abonoA += item.PagadoA;
-                        ventaB += item.VendidoB;
-                        abonoB += item.PagadoB;
-                        if (item.Estado == 'Cancelada') {
-                            contenido += '<tr><td>' + item.id + '</td><td>' + item.Fecha + '</td><td>' + item.Nombre + '</td><td>' + item.VendidoA.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td>' + item.PagadoA.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td>' + item.VendidoB.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td>' + item.PagadoB.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td ><p class="badge bg-secondary">' + item.Estado + '</p></td><td><a href="../cobranza/zona/detalles/' + item.clientesid + '/' + item.id + '" class="btn btn-info text-white">ver</a></td></tr>';
+                        ventaA += item.vendido_A;
+                        abonoA += item.pagado_A;
+                        ventaB += item.vendido_B;
+                        abonoB += item.pagado_B;
+                        if (item.estado == 'Cancelada') {
+                            contenido += '<tr><td>' + item.id + '</td><td>' + item.fecha + '</td><td>' + item.nombre + '</td><td>' + item.vendido_A.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td>' + item.pagado_A.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td>' + item.vendido_B.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td>' + item.pagado_B.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td ><p class="badge bg-secondary">' + item.estado + '</p></td><td><a href="../cobranza/zona/detalles/' + item.clientesid + '/' + item.id + '" class="btn btn-info text-white">ver</a></td></tr>';
                         } else {
-                            contenido += '<tr><td>' + item.id + '</td><td>' + item.Fecha + '</td><td>' + item.Nombre + '</td><td>' + item.VendidoA.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td>' + item.PagadoA.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td>' + item.VendidoB.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td>' + item.PagadoB.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td ><p class="badge bg-warning text-dark">' + item.Estado + '</p></td><td><a href="../cobranza/zona/detalles/' + item.clientesid + '/' + item.id + '" class="btn btn-info text-white">ver</a></td></tr>';
+                            contenido += '<tr><td>' + item.id + '</td><td>' + item.fecha + '</td><td>' + item.nombre + '</td><td>' + item.vendido_A.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td>' + item.pagado_A.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td>' + item.vendido_B.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td>' + item.pagado_B.toLocaleString('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</td><td ><p class="badge bg-warning text-dark">' + item.estado + '</p></td><td><a href="../cobranza/zona/detalles/' + item.clientesid + '/' + item.id + '" class="btn btn-info text-white">ver</a></td></tr>';
                         }
 
 

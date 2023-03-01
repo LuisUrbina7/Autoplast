@@ -10,7 +10,7 @@ class Pedido extends Model
     use HasFactory;
     protected $table = 'pedidos';
     protected $fillable = [
-        'Cliente','Fecha','Estado','idUsuario'
+        'cliente','fecha','estado','idUsuario'
     ];
     public function DetallesPedidos(){
         return $this->hasMany(PedidoDetalle::class,'id');

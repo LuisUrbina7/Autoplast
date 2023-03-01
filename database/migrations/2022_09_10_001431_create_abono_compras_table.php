@@ -15,8 +15,8 @@ class CreateAbonoComprasTable extends Migration
     {
         Schema::create('abono_compras', function (Blueprint $table) {
             $table->id();
-            $table->date('Fecha');
-            $table->double('Monto',12,2);
+            $table->date('fecha');
+            $table->double('monto',12,2);
             $table->foreignId('idFactura')->constrained('compras')->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
         });

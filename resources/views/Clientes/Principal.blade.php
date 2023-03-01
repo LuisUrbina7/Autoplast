@@ -152,27 +152,27 @@
                     class: 'id'
                 },
                 {
-                    data: 'Nombre',
+                    data: 'nombre',
                     class: 'Nombre'
                 },
                 {
-                    data: 'Apellido',
+                    data: 'apellido',
                     class: 'Apellido'
                 },
                 {
-                    data: 'Identificador',
+                    data: 'identificador',
                     class: 'Identificador'
                 },
                 {
-                    data: 'Zona',
+                    data: 'zona',
                     class: 'Zona'
                 },
                 {
-                    data: 'Direccion',
+                    data: 'direccion',
                     class: 'Direccion'
                 },
                 {
-                    data: 'Telefono',
+                    data: 'telefono',
                     class: 'Telefono'
                 },
                 {
@@ -217,12 +217,12 @@
         var fila = $(this).parents('tr');
         var datos = {
             Id: fila.find('.id').text(),
-            Nombre: fila.find('.Nombre').text(),
-            Apellido: fila.find('.Apellido').text(),
-            identificador: fila.find('.Identificador').text(),
-            zona: fila.find('.Zona').text(),
-            direccion: fila.find('.Direccion').html(),
-            telefono: fila.find('.Telefono').html()
+            Nombre: fila.find('.nombre').text(),
+            Apellido: fila.find('.apellido').text(),
+            identificador: fila.find('.identificador').text(),
+            zona: fila.find('.zona').text(),
+            direccion: fila.find('.direccion').html(),
+            telefono: fila.find('.telefono').html()
         };
 
     });
@@ -268,12 +268,12 @@
             url: 'clientes/modal/' + id,
             success: function(response) {
                 $('#txtId').val(response.Mensaje.id);
-                $('#txtNombre').val(response.Mensaje.Nombre);
-                $('#txtApellido').val(response.Mensaje.Apellido);
-                $('#txtZona').val(response.Mensaje.Zona);
-                $('#txtIdentificador').val(response.Mensaje.Identificador);
-                $('#txtDireccion').val(response.Mensaje.Direccion);
-                $('#txtTelefono').val(response.Mensaje.Telefono);
+                $('#txtNombre').val(response.Mensaje.nombre);
+                $('#txtApellido').val(response.Mensaje.apellido);
+                $('#txtZona').val(response.Mensaje.zona);
+                $('#txtIdentificador').val(response.Mensaje.identificador);
+                $('#txtDireccion').val(response.Mensaje.direccion);
+                $('#txtTelefono').val(response.Mensaje.telefono);
                 console.log(response);
             }
         });

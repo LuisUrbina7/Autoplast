@@ -14,25 +14,25 @@ class DeudaController extends Controller
     public function index()
     {
         $Proveedores = Compras::join('proveedores', 'proveedores.id', '=', 'compras.idProveedor')
-            ->select('proveedores.id', 'proveedores.Nombre', Compras::raw('SUM(VendidoA-PagadoA) as COL,SUM(VendidoB-PagadoB) as USD'))
-            ->groupBy('proveedores.id', 'proveedores.Nombre')->get();
+            ->select('proveedores.id', 'proveedores.nombre', Compras::raw('SUM(vendido_A-pagado_A) as COL,SUM(vendido_B-pagado_B) as USD'))
+            ->groupBy('proveedores.id', 'proveedores.nombre')->get();
 
         return view('Deuda.Principal', compact('Proveedores'));
     }
     public function show($id)
     {
-        $Factura = Compras::select('id', 'idProveedor', 'Fecha', 'VendidoA', 'PagadoA', 'VendidoB', 'PagadoB', 'Estado')->where('idProveedor', $id)->get();
+        $Factura = Compras::select('id', 'idProveedor', 'fecha', 'vendido_A', 'pagado_A', 'vendido_B', 'pagado_B', 'estado')->where('idProveedor', $id)->get();
         return view('Deuda.Facturas', compact('Factura'));
     }
     public function destroy($id)
     {
        
         try {
-            $detalles = Detalles_compras::select('idfactura', 'Cantidad', 'idProducto')->where('idfactura', $id)->get();
+            $detalles = Detalles_compras::select('idfactura', 'cantidad', 'idProducto')->where('idfactura', $id)->get();
          
             for ($x = 0; $x < count($detalles); $x++) {
                 $producto = Producto::find($detalles[$x]['idProducto']);
-                $producto->Stock -= $detalles[$x]['Cantidad'];
+                $producto->stock -= $detalles[$x]['Cantidad'];
                 $producto->save();
             }
             $delete = Compras::find($id);
@@ -64,8 +64,8 @@ class DeudaController extends Controller
     public function generarpdf($idCliente, $idFactura)
     {
 
-        $detalles = Detalles_compras::select('idfactura','idProducto','Cantidad','Precio','Total')->where('idfactura', $idFactura)->get();
-        $proveedores = Proveedor::select('Nombre','Direccion','Telefono')->where('id', $idCliente)->get();
+        $detalles = Detalles_compras::select('idfactura','idProducto','cantidad','precio','total')->where('idfactura', $idFactura)->get();
+        $proveedores = Proveedor::select('nombre','direccion','telefono')->where('id', $idCliente)->get();
         $factura = Compras::where('id', $idFactura)->first();
 /* dd($factura['id']); */
         $pdf = Pdf::loadView('Deuda.Deudapdf', compact('factura', 'proveedores', 'detalles'));

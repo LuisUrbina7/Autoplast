@@ -75,13 +75,13 @@
             @foreach ($data as $pedidos )
             @php
             $x++;
-            $Cantidad+=$pedidos->Cantidad;
+            $Cantidad+=$pedidos->Ccantidad;
             $Costo+=$pedidos->Total;
 
             @endphp
             <tr>
                 <td>{{$x}}</td>
-                <td>{{$pedidos->DetallesTem}}</td>
+                <td>{{$pedidos->detalles}}</td>
                 <td class="text-end">{{$pedidos->Cantidad}}</td>
                 <td class="text-end">{{number_format($pedidos->Total) }}</td>
             </tr>

@@ -36,7 +36,7 @@ class CategoriasController extends Controller
         }else{
         $categoria= new Categoria;
 
-        $categoria->Descripcion = $request->input('Descripcion');
+        $categoria->descripcion = $request->input('Descripcion');
       
 
         $categoria->save();
@@ -110,7 +110,7 @@ class CategoriasController extends Controller
             
         }else{
         $update = Categoria::find($id);
-        $update->Descripcion = $request->input('Descripcion');
+        $update->descripcion = $request->input('Descripcion');
         $update->update();
 
         return response()->json(['Estado'=>0,'Mensaje'=>$update]);

@@ -38,12 +38,12 @@ class ClienteController extends Controller
             try{
                 
                 $cliente = new Cliente;
-                $cliente->Nombre = $request->input('Nombre');
-                $cliente->Apellido = $request->input('Apellido');
-                $cliente->Identificador = $request->input('Identificador');
-                $cliente->Zona = $request->input('Zona');
-                $cliente->Direccion = $request->input('Direccion');
-                $cliente->Telefono = $request->input('Telefono');
+                $cliente->nombre = $request->input('Nombre');
+                $cliente->apellido = $request->input('Apellido');
+                $cliente->identificador = $request->input('Identificador');
+                $cliente->zona = $request->input('Zona');
+                $cliente->direccion = $request->input('Direccion');
+                $cliente->telefono = $request->input('Telefono');
                 $cliente->save();
     
                 return redirect()->back()->with(['Excelente' => 'Datos guardado con éxito.']);
@@ -87,12 +87,12 @@ class ClienteController extends Controller
         try{
 
             $update = Cliente::find($id);
-            $update->Nombre = $request->input('Nombre');
-            $update->Apellido = $request->input('Apellido');
-            $update->Identificador = $request->input('Identificador');
-            $update->Zona = $request->input('Zona');
-            $update->Direccion = $request->input('Direccion');
-            $update->Telefono = $request->input('Telefono');
+            $update->nombre = $request->input('Nombre');
+            $update->apellido = $request->input('Apellido');
+            $update->identificador = $request->input('Identificador');
+            $update->zona = $request->input('Zona');
+            $update->direccion = $request->input('Direccion');
+            $update->telefono = $request->input('Telefono');
             $update->update();
 
             return response()->json(['Estado' => 0, 'Mensaje' => $update]);

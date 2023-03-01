@@ -15,11 +15,11 @@ class CreateDetallesComprasTable extends Migration
     {
         Schema::create('detalles_compras', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('idfactura')->constrained('compras')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('idFactura')->constrained('compras')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('idProducto')->nullable()->constrained('productos')->cascadeOnUpdate()->nullOnDelete();
-            $table->float('Cantidad', 5, 2);
-            $table->double('Precio', 12, 2);
-            $table->double('Total', 12, 2);
+            $table->float('cantidad', 5, 2);
+            $table->double('precio', 12, 2);
+            $table->double('total', 12, 2);
             $table->timestamps();
         });
     }

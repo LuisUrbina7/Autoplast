@@ -148,7 +148,7 @@
             <tr>
                 <td class="w-25 text-center">
                     <p><span class="h6"> NUMERO FACTURA :</span> <input type="text" size="10px" class="form-control" id="factura" value="{{$factura['id']}}" id="idFactura"></p>
-                    @if ($factura['Estado']=='Cancelada')
+                    @if ($factura['estado']=='Cancelada')
                     <span class="badge bg-secondary h4">CANCELADA</span>
                     @else
                     <span class="badge bg-warning h4">EN PROCESO</span>
@@ -179,13 +179,13 @@
             @foreach ($proveedores as $proveedor)
             <tr>
                 <td class="w-50 px-2 lh-2">
-                    <p><span class="bold"> Nomre :</span>{{$proveedor->Nombre}}</p>
-                    <p><span class="bold"> Direccion:</span>{{$proveedor->Direccion}}</p>
-                    <p><span class="bold"> Telefono :</span>{{$proveedor->Telefono}}</p>
+                    <p><span class="bold"> Nomre :</span>{{$proveedor->nombre}}</p>
+                    <p><span class="bold"> Direccion:</span>{{$proveedor->direccion}}</p>
+                    <p><span class="bold"> Telefono :</span>{{$proveedor->telefono}}</p>
                 </td>
 
                 <td class="w-50 px-2 lh-2">
-                    <p><span class="bold"> Fecha :</span>{{$factura['Fecha']}}</p>
+                    <p><span class="bold"> Fecha :</span>{{$factura['fecha']}}</p>
                 </td>
             </tr>
             @endforeach
@@ -207,48 +207,48 @@
 
                 @foreach ($detalles as $detalle )
                 <tr>
-                    <td> {{$detalle->Producto->Detalles}}</td>
-                    <td> {{$detalle->Cantidad}}</td>
-                    <td> {{$detalle->Producto->Unidad}}</td>
-                    <td> {{number_format($detalle->Precio,2)}}</td>
-                    <td> {{number_format($detalle->Total,2)}}</td>
+                    <td> {{$detalle->Producto->detalles}}</td>
+                    <td> {{$detalle->cantidad}}</td>
+                    <td> {{$detalle->Producto->unidad}}</td>
+                    <td> {{number_format($detalle->precio,2)}}</td>
+                    <td> {{number_format($detalle->total,2)}}</td>
                 </tr>
                 @endforeach
             </tbody>
 
             <tfoot>
-                @if ($factura['VendidoA']==0)
+                @if ($factura['vendido_A']==0)
 
                 <tr>
                     <td colspan="3"></td>
                     <td>Total :</td>
-                    <td>{{number_format($factura['VendidoB'],2)}}</td>
+                    <td>{{number_format($factura['vendido_B'],2)}}</td>
                 </tr>
                 <tr>
                     <td colspan="3"></td>
                     <td>Pagado :</td>
-                    <td>{{number_format($factura['PagadoB'],2)}}</td>
+                    <td>{{number_format($factura['pagado_B'],2)}}</td>
                 </tr>
                 <tr>
                     <td colspan="3"></td>
                     <td>Diferencia :</td>
-                    <td><input type="text" class="form-control" id="deuda" disabled value="{{number_format($factura['VendidoB']-$factura['PagadoB'],2)}}"></td>
+                    <td><input type="text" class="form-control" id="deuda" disabled value="{{number_format($factura['vendido_B']-$factura['pagado_B'],2)}}"></td>
                 </tr>
                 @else
                 <tr>
                     <td colspan="3"></td>
                     <td>Total :</td>
-                    <td>{{number_format($factura['VendidoA'],2)}}</td>
+                    <td>{{number_format($factura['vendido_A'],2)}}</td>
                 </tr>
                 <tr>
                     <td colspan="3"></td>
                     <td>Pagado :</td>
-                    <td>{{number_format($factura['PagadoA'],2)}}</td>
+                    <td>{{number_format($factura['pagado_A'],2)}}</td>
                 </tr>
                 <tr>
                     <td colspan="3"></td>
                     <td>Resta :</td>
-                    <td>{{number_format($factura['VendidoA']-$factura['PagadoA'],2)}}</td>
+                    <td>{{number_format($factura['vendido_A']-$factura['pagado_A'],2)}}</td>
                 </tr>
 
                 @endif
@@ -257,7 +257,7 @@
         </table>
 
         <div class="text-center" style="margin-top: 30px;">
-            *Lorem ipsum dolor, sit amet consectetur adipisicing elit. Distinctio in quae laborum eligendi soluta hic quas reprehenderit molestiae facilis voluptatibus?*
+        *Los datos aquí presente muestran  información directa de la compra realizada hacia los proveedores, ante una eventualidad de no coincidencia por favor comunicarse con el administrador  y/o responsable.*
             <hr class="w-50 bold">
         </div>
 

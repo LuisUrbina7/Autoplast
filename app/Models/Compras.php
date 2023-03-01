@@ -10,7 +10,7 @@ class Compras extends Model
     use HasFactory;
     protected $table = 'compras';
     protected $fillable = [
-        'idProveedor','Fecha','Estado','VendidoA','PagadoA','VendidoB','PagadoB','idUsuario'
+        'idProveedor','fecha','estado','vendido_A','pagado_A','vendido_B','pagado_B','idUsuario'
     ];
 
     public function Proveedor(){

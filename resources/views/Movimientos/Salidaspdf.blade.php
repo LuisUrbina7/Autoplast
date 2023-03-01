@@ -55,20 +55,20 @@
                     @endphp
                     @foreach ($Facturas as $Factura )
                     @php
-                        $vendidoA+=$Factura->VendidoA;
-                        $abonadoA+=$Factura->PagadoA;
-                        $vendidoB+=$Factura->VendidoB;
-                        $abonadoB+=$Factura->PagadoB;
+                        $vendidoA+=$Factura->vendido_A;
+                        $abonadoA+=$Factura->pagado_A;
+                        $vendidoB+=$Factura->vendido_B;
+                        $abonadoB+=$Factura->pagado_B;
                     @endphp
                      <tr>
                         <td>{{$Factura->id}}</td>
-                        <td>{{$Factura->Fecha}}</td>
-                        <td>{{$Factura->Nombre}}</td>
-                        <td>{{number_format($Factura->VendidoA,2) }}</td>
-                        <td>{{number_format($Factura->PagadoA,2) }}</td>
-                        <td>{{number_format($Factura->VendidoB,2) }}</td>
-                        <td>{{number_format($Factura->PagadoB,2) }}</td>
-                        <td>{{$Factura->Estado}}</td>
+                        <td>{{$Factura->fecha}}</td>
+                        <td>{{$Factura->nombre}}</td>
+                        <td>{{number_format($Factura->vendido_A,2) }}</td>
+                        <td>{{number_format($Factura->pagado_A,2) }}</td>
+                        <td>{{number_format($Factura->vendido_B,2) }}</td>
+                        <td>{{number_format($Factura->pagado_B,2) }}</td>
+                        <td>{{$Factura->estado}}</td>
                      </tr>   
                     @endforeach
                 </tbody>

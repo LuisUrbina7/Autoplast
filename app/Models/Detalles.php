@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Detalles extends Model
 {
     use HasFactory;
-    protected $table = 'detalles';
+    protected $table = 'detalles_ventas';
     protected $fillable = [
-        'idfactura','idProducto','Cantidad','Precio','Total',
+        'idfactura','idProducto','cantidad','precio','total',
     ];
 
     public function Facturas(){

@@ -33,10 +33,10 @@
             @foreach ($Factura as $factura )
             <tr>
                 <td>{{$factura->id}}</td>
-                <td> {{$factura->Fecha}}</td>
-                <td> {{number_format ($factura->VendidoA,2)}}</td>
-                <td> {{number_format ($factura->VendidoB,2)}}</td>
-                @if (($factura->Estado) == 'Cancelada')
+                <td> {{$factura->fecha}}</td>
+                <td> {{number_format ($factura->vendido_A,2)}}</td>
+                <td> {{number_format ($factura->vendido_B,2)}}</td>
+                @if (($factura->estado) == 'Cancelada')
                 <td> <span class="badge bg-secondary h4 etiqueta-tres">Cancelada</span></td>
                 @else
                 <td> <span class="badge bg-warning h4 etiqueta-cuatro">Credito</span></td>

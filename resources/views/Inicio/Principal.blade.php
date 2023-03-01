@@ -105,25 +105,24 @@
         col: 0,
         usd: 0
     };
-    $(document).ready(function() {
+
+    document.addEventListener('DOMContentLoaded', function() {
         cargarventas();
-        facturas();
+           facturas();
     });
 
-    function cargarventas() {
-        $.ajax({
-            type: 'GET',
-            url: "{{route('home.ventas')}}",
-            dataType: 'json',
-            success: function(response) {
-                console.log(response);
-                if (!$.isEmptyObject(response.ventas)) {
-                    contado['col'] = response.ventas[0].Cancelada;
-                    contado['usd'] = response.ventas[0].Credito;
 
-                    if (!$.isEmptyObject(response.ventas[1])) {
-                        credito['col'] = response.ventas[1].Cancelada;
-                        credito['usd'] = response.ventas[1].Credito;
+    function cargarventas() {
+        fetch("{{route('home.ventas')}}")
+            .then(response => response.json())
+            .then(json => {
+                if (!$.isEmptyObject(json.ventas)) {
+                    contado['col'] = json.ventas[0].Cancelada;
+                    contado['usd'] = json.ventas[0].Credito;
+
+                    if (!$.isEmptyObject(json.ventas[1])) {
+                        credito['col'] = json.ventas[1].Cancelada;
+                        credito['usd'] = json.ventas[1].Credito;
                     }
 
                     $('#cancelada_col').html(contado['col'].toLocaleString('en-US', {
@@ -144,30 +143,105 @@
                     }));
 
                 }
-                if (!$.isEmptyObject(response.inventario[0])) {
-                    $('#inventario_col').html(response.inventario[0].Inventario.toLocaleString('en-US', {
+                if (!$.isEmptyObject(json.inventario[0])) {
+                    $('#inventario_col').html(json.inventario[0].Inventario.toLocaleString('en-US', {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2
                     }));
-                    capital_col.push(response.inventario[0].Inventario);
-                    console.log(response.inventario[0].Inventario);
+                    capital_col.push(json.inventario[0].Inventario);
+                    /*   console.log(json.inventario[0].Inventario); */
                 }
-                if (!$.isEmptyObject(response.inventario[1])) {
-                    $('#inventario_usd').html(response.inventario[1].Inventario.toLocaleString('en-US', {
+                if (!$.isEmptyObject(json.inventario[1])) {
+                    $('#inventario_usd').html(json.inventario[1].Inventario.toLocaleString('en-US', {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2
                     }));
-                    capital_usd.push(response.inventario[1].Inventario);
+                    capital_usd.push(json.inventario[1].Inventario);
                 }
 
                 cobranza();
-                /*   console.log(capital); */
-            }
-        });
+            })
+            .catch(err => console.log('Solicitud fallida', err)); // Capturar errores
+
+        /*  $.ajax({
+             type: 'GET',
+             url: "{{route('home.ventas')}}",
+             dataType: 'json',
+             success: function(response) {
+                 console.log(response);
+                 if (!$.isEmptyObject(response.ventas)) {
+                     contado['col'] = response.ventas[0].Cancelada;
+                     contado['usd'] = response.ventas[0].Credito;
+
+                     if (!$.isEmptyObject(response.ventas[1])) {
+                         credito['col'] = response.ventas[1].Cancelada;
+                         credito['usd'] = response.ventas[1].Credito;
+                     }
+
+                     $('#cancelada_col').html(contado['col'].toLocaleString('en-US', {
+                         minimumFractionDigits: 2,
+                         maximumFractionDigits: 2
+                     }));
+                     $('#cancelada_usd').html(contado['usd'].toLocaleString('en-US', {
+                         minimumFractionDigits: 2,
+                         maximumFractionDigits: 2
+                     }));
+                     $('#credito_col').html(credito['col'].toLocaleString('en-US', {
+                         minimumFractionDigits: 2,
+                         maximumFractionDigits: 2
+                     }));
+                     $('#credito_usd').html(credito['usd'].toLocaleString('en-US', {
+                         minimumFractionDigits: 2,
+                         maximumFractionDigits: 2
+                     }));
+
+                 }
+                 if (!$.isEmptyObject(response.inventario[0])) {
+                     $('#inventario_col').html(response.inventario[0].Inventario.toLocaleString('en-US', {
+                         minimumFractionDigits: 2,
+                         maximumFractionDigits: 2
+                     }));
+                     capital_col.push(response.inventario[0].Inventario);
+                     console.log(response.inventario[0].Inventario);
+                 }
+                 if (!$.isEmptyObject(response.inventario[1])) {
+                     $('#inventario_usd').html(response.inventario[1].Inventario.toLocaleString('en-US', {
+                         minimumFractionDigits: 2,
+                         maximumFractionDigits: 2
+                     }));
+                     capital_usd.push(response.inventario[1].Inventario);
+                 }
+
+                 cobranza();
+                 
+             }
+         }); */
     }
 
     function cobranza() {
-        $.ajax({
+
+        fetch("{{route('home.grafico')}}")
+            .then(response => response.json())
+            .then(json => {
+            /*     console.log(response); */
+                capital_col.push(json.grafico[0].CobranzaA);
+                capital_usd.push(json.grafico[0].CobranzaB);
+                grafico(capital_col);
+
+                lista = '';
+                $('#spinner').removeClass('spinner-border');
+                $.each(json.data, (index, item) => {
+
+                    lista += ' <div class="d-flex align-items-center justify-content-between border p-3">\
+                <div> <p class="mb-0"> <span class="fw-bold">Cliente : </span>' + item.Cliente + ' </p>\
+                <p class="mb-0"> <span class="fw-bold">Fecha : </span>' + item.Fecha + ' </p></div>\
+                <span class="badge bg-danger"> ' + item.name + '</span>\
+            </div>';
+                });
+
+                $('#pedidos').html(lista);
+            }).catch(err => console.log('Solicitud fallida', err));
+      /*   $.ajax({
             type: 'GET',
             url: "{{route('home.grafico')}}",
             dataType: 'json',
@@ -178,7 +252,7 @@
                 console.log(response);
                 capital_col.push(response.grafico[0].CobranzaA);
                 capital_usd.push(response.grafico[0].CobranzaB);
-                /* console.log(capital); */
+                console.log(capital); 
                 grafico(capital_col);
 
 
@@ -194,12 +268,9 @@
                 });
 
                 $('#pedidos').html(lista);
-
+ */
             }
-        });
-
-    }
-
+        
     function facturas() {
 
         $.ajax({

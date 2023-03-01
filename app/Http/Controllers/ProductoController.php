@@ -18,7 +18,8 @@ class ProductoController extends Controller
     public function index()
     {
         $Categorias = Categoria::all();
-        $Proveedores = Proveedor::select('id', 'Nombre')->get();
+        $Proveedores = Proveedor::select('id', 'nombre')->get();
+        
         return view('Productos.Principal', compact('Proveedores', 'Categorias'));
     }
 
@@ -48,13 +49,13 @@ class ProductoController extends Controller
             try {
              
                 $Producto = [
-                    'Detalles' => $request->input('Detalles'),
-                    'Stock' => str_replace(",",".",$request->input('Stock')) ,
-                    'PrecioCompra' => str_replace(",",".",$request->input('PrecioCompra')),
-                    'PrecioVenta' => str_replace(",",".",$request->input('PrecioVenta')),
-                    'Unidad' => $request->input('idUnidad'),
-                    'Fecha' => $request->date('Fecha'),
-                    'Ruta' => $request->input('Ruta'),
+                    'detalles' => $request->input('Detalles'),
+                    'stock' => str_replace(",",".",$request->input('Stock')) ,
+                    'costo' => str_replace(",",".",$request->input('PrecioCompra')),
+                    'venta' => str_replace(",",".",$request->input('PrecioVenta')),
+                    'unidad' => $request->input('idUnidad'),
+                    'fecha' => $request->date('Fecha'),
+                    'ruta' => $request->input('Ruta'),
                     'idProveedor' => $request->input('idProveedor'),
                     'idCategoria' => $request->input('idCategoria'),
                 ];
@@ -73,18 +74,13 @@ class ProductoController extends Controller
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    
     public function listar($ruta)
     {
      
         $datos = Producto::join('proveedores', 'proveedores.id', '=', 'productos.idProveedor')
             ->join('categorias', 'categorias.id', '=', 'productos.idCategoria')
-            ->select('productos.id', 'productos.Detalles', 'productos.Stock', 'productos.PrecioCompra', 'productos.Unidad', 'productos.PrecioVenta', 'proveedores.Nombre', 'categorias.Descripcion')->where('productos.Ruta',$ruta)->get();
+            ->select('productos.id', 'productos.detalles', 'productos.stock', 'productos.costo', 'productos.unidad', 'productos.venta', 'proveedores.nombre', 'categorias.descripcion')->where('productos.ruta',$ruta)->get();
 
         $Tabla = DataTables::of($datos)->addIndexColumn()->addColumn('opciones', function ($row) {
             $btn = '<div class="btn-group"><buttom data-bs-toggle="modal" data-bs-target="#productos-modal" onclick="editar(' . $row->id . ')" class="btn btn-primary"><i class="las la-pencil-alt fs-4"></i></buttom>';
@@ -98,24 +94,12 @@ class ProductoController extends Controller
     public function view()
     {
         $Categorias = Categoria::all();
-        $Proveedor = Proveedor::select('id', 'Nombre')->get();
-        return view('Productos.Agregar', ['Proveedor' => $Proveedor, 'Categoria' => $Categorias]);
+        $Proveedor = Proveedor::select('id', 'nombre')->get();
+      
+        return view('Productos.Agregar', ['Proveedores' => $Proveedor, 'Categorias' => $Categorias]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+   
     public function edit($id)
     {
         $datos = Producto::find($id);
@@ -125,20 +109,14 @@ class ProductoController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+   
     public function update(Request $request, $id)
     {
         $validado = Validator::make($request->all(), [
             'Detalles' => 'required',
             'Stock' => 'required',
-            'PrecioCompra' => 'required',
-            'PrecioVenta' => 'required',
+            'Costo' => 'required',
+            'Venta' => 'required',
             'idUnidad' => 'required',
             'Fecha' => 'required',
         ]);
@@ -151,12 +129,12 @@ class ProductoController extends Controller
             try {
 
                 $producto = Producto::find($id);
-                $producto->Detalles = $request->input('Detalles');
-                $producto->Stock = str_replace(",",".",$request->input('Stock'));
-                $producto->PrecioCompra = str_replace(",",".",$request->input('PrecioCompra'));
-                $producto->PrecioVenta = str_replace(",",".",$request->input('PrecioVenta'));
-                $producto->Unidad = $request->input('idUnidad');
-                $producto->Fecha = $request->input('Fecha');
+                $producto->detalles = $request->input('Detalles');
+                $producto->stock = str_replace(",",".",$request->input('Stock'));
+                $producto->costo = str_replace(",",".",$request->input('Costo'));
+                $producto->venta = str_replace(",",".",$request->input('Venta'));
+                $producto->unidad = $request->input('idUnidad');
+                $producto->fecha = $request->input('Fecha');
                /*  $producto->Ruta =  $request->input('Ruta'); */
                 $producto->idProveedor = $request->input('idProveedor');
                 $producto->idCategoria = $request->input('idCategoria');
@@ -186,13 +164,13 @@ class ProductoController extends Controller
 
     public function autocompletado(Request $request, $id)
     {
-        $posts = Producto::select('id', 'Detalles', 'Stock', 'PrecioVenta', 'Unidad')->where('Ruta',$id)->where('Detalles', 'LIKE', '%' . $request->nombre . '%')->get();
+        $posts = Producto::select('id', 'detalles', 'stock', 'venta', 'unidad')->where('ruta',$id)->where('detalles', 'LIKE', '%' . $request->nombre . '%')->get();
         return response()->json($posts);
     }
     public function stockminimo()
     {
         $datosM = Producto::join('proveedores', 'proveedores.id', '=', 'productos.idProveedor')
-            ->select('productos.id', 'productos.Detalles', 'productos.Stock', 'proveedores.Nombre')->where('Stock', '<=', 5)->get();
+            ->select('productos.id', 'productos.detalles', 'productos.stock', 'proveedores.nombre')->where('stock', '<=', 5)->get();
 
 
 

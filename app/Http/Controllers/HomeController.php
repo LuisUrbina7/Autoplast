@@ -38,22 +38,21 @@ class HomeController extends Controller
     }
     public function ventas()
     {
-        $ventas = DB::table('facturas_ventas')
-            ->select(DB::raw('sum(VendidoA)  as Cancelada,sum(VendidoB)  as Credito, Estado as estado'))
-            ->groupBy('Estado')
+        $ventas = DB::table('ventas')
+            ->select(DB::raw('sum(vendido_A)  as Cancelada,sum(vendido_B)  as Credito, estado as estado'))
+            ->groupBy('estado')
             ->get();
 
-        $inventario = Producto::select(DB::raw('sum(PrecioCompra*Stock) as Inventario'))->groupBy('Ruta')
-            ->get();
+        $inventario = Producto::select(DB::raw('sum(costo*stock) as Inventario'))->groupBy('ruta')->get();
        /*  dd($inventario); */
         return response()->json(['ventas' => $ventas, 'inventario' => $inventario]);
     }
     public function grafico()
     {
-        $grafico = DB::table('facturas_ventas')
-            ->select(DB::raw('sum(VendidoA - PagadoA) as CobranzaA, sum(VendidoB - PagadoB) as CobranzaB'))
+        $grafico = DB::table('ventas')
+            ->select(DB::raw('sum(vendido_A - pagado_A) as CobranzaA, sum(vendido_B - pagado_B) as CobranzaB'))
             ->get();
-        $data = Pedido::join('users', 'users.id', '=', 'pedidos.idUsuario')->select('pedidos.Cliente', 'pedidos.Fecha', 'pedidos.id', 'users.username', 'users.name')->orderBy('id', 'desc')->limit(3);
+        $data = Pedido::join('users', 'users.id', '=', 'pedidos.idUsuario')->select('pedidos.cliente', 'pedidos.fecha', 'pedidos.id', 'users.username', 'users.name')->orderBy('id', 'desc')->limit(3);
         return response()->json(['grafico' => $grafico, 'data' => $data]);
     }
     public function grafico_barras(){

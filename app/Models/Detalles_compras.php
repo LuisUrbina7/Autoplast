@@ -10,7 +10,7 @@ class Detalles_compras extends Model
     use HasFactory;
     protected $table = 'detalles_compras';
     protected $fillable = [
-        'idfactura','idProducto','Cantidad','Precio','Total',
+        'idfactura','idProducto','cantidad','precio','total',
     ];
 
    public function Compras(){

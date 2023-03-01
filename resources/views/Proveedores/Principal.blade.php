@@ -127,13 +127,13 @@
                     data: 'id',
                 },
                 {
-                    data: 'Nombre'
+                    data: 'nombre'
                 },
                 {
-                    data: 'Direccion'
+                    data: 'direccion'
                 },
                 {
-                    data: 'Telefono'
+                    data: 'telefono'
                 },
                 {
                     data: 'Prueba'
@@ -179,9 +179,9 @@
                 /*   console.log(response);
                   console.log(response.Mensaje.Nombre); */
                 $('#txtId').val(id);
-                $('#txtNombre').val(response.Mensaje.Nombre);
-                $('#txtDireccion').val(response.Mensaje.Direccion);
-                $('#txtTelefono').val(response.Mensaje.Telefono);
+                $('#txtNombre').val(response.Mensaje.nombre);
+                $('#txtDireccion').val(response.Mensaje.direccion);
+                $('#txtTelefono').val(response.Mensaje.telefono);
             }
         });
     }
